@@ -2,6 +2,7 @@ package ru.rumigor.cookbook.ui
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -11,6 +12,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.databinding.ActivityMain2Binding
 
@@ -27,7 +29,6 @@ class Main2Activity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain2.toolbar)
 
-        
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main2)
@@ -41,7 +42,19 @@ class Main2Activity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_home -> {
+                    navController.navigate(R.id.recipesListFragment)
+                    drawerLayout.close()
+                    true
+                }
+                else -> true
+            }
+        }
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -53,4 +66,5 @@ class Main2Activity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main2)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
 }

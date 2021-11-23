@@ -2,10 +2,15 @@ package ru.rumigor.cookbook.ui.addRecipe
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.github.terrakok.cicerone.Router
@@ -60,6 +65,11 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         ui.chooseCategory.adapter = spinnerAdapter
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recipe = (arguments?.getSerializable(ARG_RECIPE) as RecipeViewModel?)
         recipe?.let{
@@ -94,12 +104,21 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     override fun showAnswer(serverResponse: ServerResponseViewModel) {
         Toast.makeText(requireContext(), "new id: ${serverResponse.id}", Toast.LENGTH_LONG).show()
-        presenter.showRecipe(serverResponse.id)
+        val navController = findNavController()
+        val bundle = Bundle()
+        val navBuilder = NavOptions.Builder()
+        val navOptions: NavOptions = navBuilder.setPopUpTo(R.id.recipesListFragment, true).build()
+        bundle.putString("RecipeID", serverResponse.id.toString())
+        navController.navigate(R.id.recipeDetailsFragment, bundle, navOptions)
     }
 
     override fun showError(error: Throwable) {
         Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
         Log.d("ERROR", error.message.toString())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
     }
 
 

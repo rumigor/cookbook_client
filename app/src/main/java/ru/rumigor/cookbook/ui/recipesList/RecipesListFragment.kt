@@ -2,6 +2,8 @@ package ru.rumigor.cookbook.ui.recipesList
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -41,6 +43,11 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
     private val ui: RecipesFragmentBinding by viewBinding()
     private val recipeAdapter = RecipeAdapter(delegate = this)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
@@ -49,7 +56,6 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
         ui.fab.setOnClickListener {
             navController.navigate(R.id.addRecipeFragment)
         }
-
     }
 
     override fun showRecipes(recipes: List<RecipeViewModel>) {
@@ -69,6 +75,11 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
         val bundle = Bundle()
         bundle.putString("RecipeID", recipe.recipeId)
         navController.navigate(R.id.recipeDetailsFragment, bundle)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.findItem(R.id.action_delete).isVisible = false
+        menu.findItem(R.id.action_edit).isVisible = false
     }
 
 }

@@ -7,4 +7,5 @@
     <string name="top10">Топ-10</string>
     <string name="quickest">10 быстрых рецептов</string>
     <string name="favorites">Закладки</string>
+    <string name="search">Найти рецепт</string>
 </resources>

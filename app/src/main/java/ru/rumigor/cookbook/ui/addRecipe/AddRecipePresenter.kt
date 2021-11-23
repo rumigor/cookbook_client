@@ -78,9 +78,7 @@ class AddRecipePresenter(private val recipeRepository: RecipeRepository,
         }
     }
 
-    fun showRecipe(id: Long){
 
-    }
 
     override fun onDestroy() {
         disposables.dispose()

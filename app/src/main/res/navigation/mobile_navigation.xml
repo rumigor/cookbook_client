@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_addRecipeFragment_to_dialog"
             app:destination="@id/dialog" />
+        <action
+            android:id="@+id/action_addRecipeFragment_to_recipeDetailsFragment"
+            app:destination="@id/recipeDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/dialog"

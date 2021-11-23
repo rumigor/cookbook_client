@@ -50,35 +50,5 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/fab_delete"
-        android:layout_width="53dp"
-        android:layout_height="58dp"
-        android:layout_gravity="end"
-        android:background="#FFCDD2"
-        android:backgroundTintMode="add"
-        android:contentDescription="@string/edit_recipe"
-        android:focusable="true"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:fabSize="normal"
-        app:srcCompat="@drawable/ic_baseline_delete_24" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_update"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="@dimen/fab_magin"
-        android:layout_marginBottom="@dimen/fab_magin"
-        android:backgroundTint="#81D4FA"
-        android:backgroundTintMode="add"
-        android:contentDescription="@string/edit_recipe"
-        android:focusable="true"
-        app:backgroundTint="@color/silver"
-        app:fabSize="normal"
-        app:layout_behavior=".ui.FABBehavior"
-        app:srcCompat="@drawable/ic_baseline_edit_24" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

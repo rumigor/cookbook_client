@@ -1,6 +1,8 @@
 package ru.rumigor.cookbook.ui.recipeDetails
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -61,16 +63,21 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
         ui.authorEmail.text = "E-mail: " + recipe.user.email
 
-        ui.fabUpdate.setOnClickListener {
-            val navController = findNavController()
-            val bundle = Bundle()
-            bundle.putSerializable("RECIPE", recipe)
-            navController.navigate(R.id.addRecipeFragment, bundle)
-        }
+//        ui.fabUpdate.setOnClickListener {
+//            val navController = findNavController()
+//            val bundle = Bundle()
+//            bundle.putSerializable("RECIPE", recipe)
+//            navController.navigate(R.id.addRecipeFragment, bundle)
+//        }
+//
+//        ui.fabDelete.setOnClickListener{
+//            loadDialog()
+//        }
+    }
 
-        ui.fabDelete.setOnClickListener{
-            loadDialog()
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     private val dialogListener: OnDialogListener = object : OnDialogListener {
@@ -93,6 +100,10 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     override fun showError(error: Throwable) {
         Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.findItem(R.id.action_search).isVisible = false
     }
 
 
