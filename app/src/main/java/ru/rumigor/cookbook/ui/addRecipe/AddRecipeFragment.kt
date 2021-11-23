@@ -77,7 +77,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ui.newDescription.setText(recipe.description)
             ui.recipeDetails.setText(recipe.recipe)
             ui.url.setText(recipe.imagePath)
-            ui.chooseCategory.setSelection(categoryId)
+            ui.chooseCategory.setSelection(categoryId-1)
             ui.addRecipeButton.text = "Изменить рецепт"
         }
         ui.loadImage.setOnClickListener {

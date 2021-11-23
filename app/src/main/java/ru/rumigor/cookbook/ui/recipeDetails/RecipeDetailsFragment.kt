@@ -3,6 +3,7 @@ package ru.rumigor.cookbook.ui.recipeDetails
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,12 +24,11 @@ private const val ARG_RECIPE_ID = "RecipeID"
 
 class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetailsView {
 
-
-
-
     private val recipeId: String by lazy{
         arguments?.getString(ARG_RECIPE_ID).orEmpty()
     }
+
+    private lateinit var recipeEdit: RecipeViewModel
 
     @Inject
     lateinit var schedulers: Schedulers
@@ -62,17 +62,7 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         ui.authorName.text = "Автор: " + recipe.user.username
 
         ui.authorEmail.text = "E-mail: " + recipe.user.email
-
-//        ui.fabUpdate.setOnClickListener {
-//            val navController = findNavController()
-//            val bundle = Bundle()
-//            bundle.putSerializable("RECIPE", recipe)
-//            navController.navigate(R.id.addRecipeFragment, bundle)
-//        }
-//
-//        ui.fabDelete.setOnClickListener{
-//            loadDialog()
-//        }
+        recipeEdit = recipe
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,9 +76,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             presenter.showMainScreen()
         }
 
-        override fun onDialogCancel() {
-
-        }
+        override fun onDialogCancel()
+        {}
         }
 
 
@@ -106,5 +95,16 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         menu.findItem(R.id.action_search).isVisible = false
     }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_delete -> loadDialog()
+            R.id.action_edit -> {
+                val navController = findNavController()
+                val bundle = Bundle()
+                bundle.putSerializable("RECIPE", recipeEdit)
+                navController.navigate(R.id.addRecipeFragment, bundle)
+            }
+        }
+        return true
+    }
 }

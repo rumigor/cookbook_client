@@ -4,11 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-data class Category(
+data class Ingredient(
     @PrimaryKey
     @SerializedName("id")
     val id: Int,
-    @ColumnInfo(name = "title")
-    @SerializedName("title")
-    val title: String
+    @ColumnInfo(name = "unit")
+    @SerializedName("unit")
+    val unit: Unit,
+    @ColumnInfo(name = "amount")
+    @SerializedName("amount")
+    val amount: Int,
+
 )

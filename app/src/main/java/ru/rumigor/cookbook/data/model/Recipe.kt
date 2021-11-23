@@ -19,6 +19,8 @@ data class Recipe(
     @SerializedName("recipe")
     val recipe: String,
     val user: User,
+    val ingredients: Ingredients,
+    val steps: Steps,
     @ColumnInfo(name = "imagePath")
     @SerializedName("imagePath")
     val imagePath: String

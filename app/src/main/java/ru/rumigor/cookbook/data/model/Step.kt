@@ -4,11 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-data class Category(
+data class Step(
     @PrimaryKey
-    @SerializedName("id")
-    val id: Int,
-    @ColumnInfo(name = "title")
-    @SerializedName("title")
+    @SerializedName("description")
+    val description: String,
+    @ColumnInfo(name = "imagePath")
+    @SerializedName("imagePath")
     val title: String
 )
