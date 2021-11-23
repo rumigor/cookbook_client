@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">cookbook</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">CookBook</string>
+    <string name="nav_header_subtitle">rumigor@gmail.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="edit_recipe">Редактировать рецепт</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="add_new_recipe">Добавить рецепт</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="delete">Удалить</string>
+    <string name="recipes_list">Список рецептов</string>
+    <string name="cusine">Выбрать кухню</string>
+    <string name="category">Выбрать категорию</string>
+    <string name="top10">Топ-10</string>
+    <string name="quickest">10 быстрых рецептов</string>
+    <string name="favorites">Закладки</string>
+</resources>

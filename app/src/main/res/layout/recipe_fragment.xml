@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/recipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFDE7"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/dishPic"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="8pt" />
+
+        <TextView
+            android:id="@+id/recipeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/recipe_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/authorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16pt"
+            android:textAllCaps="true"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/authorEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/fab_delete"
+        android:layout_width="53dp"
+        android:layout_height="58dp"
+        android:layout_gravity="end"
+        android:background="#FFCDD2"
+        android:backgroundTintMode="add"
+        android:contentDescription="@string/edit_recipe"
+        android:focusable="true"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_baseline_delete_24" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_update"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="@dimen/fab_magin"
+        android:layout_marginBottom="@dimen/fab_magin"
+        android:backgroundTint="#81D4FA"
+        android:backgroundTintMode="add"
+        android:contentDescription="@string/edit_recipe"
+        android:focusable="true"
+        app:backgroundTint="@color/silver"
+        app:fabSize="normal"
+        app:layout_behavior=".ui.FABBehavior"
+        app:srcCompat="@drawable/ic_baseline_edit_24" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

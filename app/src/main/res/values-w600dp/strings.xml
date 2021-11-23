@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="delete">Удалить</string>
+    <string name="recipes_list">Список рецептов</string>
+    <string name="cusine">Выбрать кухню</string>
+    <string name="category">Выбрать категорию</string>
+    <string name="top10">Топ-10</string>
+    <string name="quickest">10 быстрых рецептов</string>
+    <string name="favorites">Закладки</string>
+</resources>

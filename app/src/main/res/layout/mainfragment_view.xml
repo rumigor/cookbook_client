@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainfragmentlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/menuList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFDE7"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16pt"
+            app:srcCompat="@drawable/cookbook" />
+
+        <Button
+            android:id="@+id/allRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFCC80"
+            android:text="Открыть все рецепты"
+            app:cornerRadius="16pt" />
+
+        <Button
+            android:id="@+id/cusineButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFCC80"
+            android:text="Выбрать кухню"
+            app:cornerRadius="16pt" />
+
+        <Button
+            android:id="@+id/categoryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFCC80"
+            android:text="Выбрать категорию"
+            app:cornerRadius="16pt" />
+
+        <Button
+            android:id="@+id/topButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFCC80"
+            android:text="Топ-10"
+            app:cornerRadius="16pt" />
+
+        <Button
+            android:id="@+id/quickRecepiesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFCC80"
+            android:text="10 быстрых рецептов"
+            app:cornerRadius="16pt" />
+
+        <Button
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFCC80"
+            android:text="Поиск рецептов"
+            app:cornerRadius="16pt" />
+
+        <Button
+            android:id="@+id/favorites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFCC80"
+            android:text="Избранное"
+            app:cornerRadius="16pt" />
+
+    </LinearLayout>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

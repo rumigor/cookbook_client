@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="@string/recipes_list" />
+        <item
+            android:id="@+id/nav_cusine"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/cusine" />
+        <item
+            android:id="@+id/nav_category"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/category" />
+        <item
+            android:id="@+id/nav_top"
+            android:icon="@android:drawable/btn_star_big_on"
+            android:title="@string/top10" />
+        <item
+            android:id="@+id/nav_quickest"
+            android:icon="@android:drawable/ic_lock_idle_alarm"
+            android:title="@string/quickest" />
+        <item
+            android:id="@+id/nav_favorites"
+            android:icon="@android:drawable/ic_menu_save"
+            android:title="@string/favorites" />
+    </group>
+</menu>
