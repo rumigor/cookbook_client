@@ -9,7 +9,7 @@ class RecipeViewModel(
     val category: Category,
     val title: String,
     val description: String,
-    val ingredients: Ingredients,
+    val ingredients: List<Ingredient>,
     val steps: Steps,
     val recipe: String,
     val user: User,

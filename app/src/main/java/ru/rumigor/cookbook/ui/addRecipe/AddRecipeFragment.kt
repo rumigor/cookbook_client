@@ -7,6 +7,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
@@ -15,8 +17,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.github.terrakok.cicerone.Router
 import moxy.ktx.moxyPresenter
+import org.w3c.dom.Text
 import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.arguments
+import ru.rumigor.cookbook.data.model.Step
+import ru.rumigor.cookbook.data.model.Steps
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.AddrecipeViewBinding
 import ru.rumigor.cookbook.scheduler.Schedulers
@@ -71,14 +76,29 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        var i = 0
         val recipe = (arguments?.getSerializable(ARG_RECIPE) as RecipeViewModel?)
-        recipe?.let{
+        recipe?.let {
             ui.newTitle.setText(recipe.title)
             ui.newDescription.setText(recipe.description)
             ui.recipeDetails.setText(recipe.recipe)
             ui.url.setText(recipe.imagePath)
-            ui.chooseCategory.setSelection(categoryId-1)
+            ui.chooseCategory.setSelection(categoryId - 1)
             ui.addRecipeButton.text = "Изменить рецепт"
+            for (step in recipe.steps) {
+                i++
+                val stepText = EditText(context)
+                stepText.id = i
+                val stepNumber = EditText(context)
+                val stepImage = EditText(context)
+                stepImage.id = 100 + i
+                stepNumber.setText("Этап №$i")
+                stepText.setText(step.description)
+                stepImage.setText(step.imagePath)
+                ui.steps.addView(stepNumber)
+                ui.steps.addView(stepText)
+                ui.steps.addView(stepImage)
+            }
         }
         ui.loadImage.setOnClickListener {
             if (ui.url.text.toString() != "") {
@@ -89,15 +109,37 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 }
             }
         }
+
+        ui.addStep.setOnClickListener {
+            i++
+            val stepText = EditText(context)
+            stepText.id = i
+            stepText.hint = "Введите описание этапа"
+            val stepNumber = EditText(context)
+            val stepImage = EditText(context)
+            stepImage.hint = "Вставьте ссылку на фото"
+            stepImage.id = 100 + i
+            stepNumber.setText("Этап №$i")
+            ui.steps.addView(stepNumber)
+            ui.steps.addView(stepText)
+            ui.steps.addView(stepImage)
+        }
         ui.addRecipeButton.setOnClickListener {
             if ((ui.newTitle.text.toString() != "") && (ui.newDescription.text.toString() != "")
-                    && (ui.recipeDetails.text.toString() != "")){
+                && (ui.recipeDetails.text.toString() != "")
+            ) {
                 val title = ui.newTitle.text.toString()
                 val description = ui.newDescription.text.toString()
                 val recipe = ui.recipeDetails.text.toString()
                 val imagePath = ui.url.text.toString()
                 categoryId = ui.chooseCategory.selectedItemPosition + 1
-                presenter.saveRecipe(title, description, recipe, imagePath, categoryId)
+                val steps = Steps(mutableListOf())
+                for (k in 1..i) {
+                    val stepsDescription = view.findViewById<TextView>(k).text.toString()
+                    val stepImagePath = view.findViewById<TextView>(k+100).text.toString()
+                    steps.steps.add(Step(stepsDescription, stepImagePath))
+                }
+                presenter.saveRecipe(title, description, recipe, imagePath, categoryId, steps)
             }
         }
     }

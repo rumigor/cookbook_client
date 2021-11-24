@@ -20,7 +20,7 @@ class RecipesListPresenter (
         disposables +=
             recipeRepository
                 .getRecipes()
-                .map { recipes-> recipes.map(RecipeViewModel.Mapper::map) }
+                .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe(

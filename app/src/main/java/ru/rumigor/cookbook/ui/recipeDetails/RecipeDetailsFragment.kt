@@ -1,10 +1,14 @@
 package ru.rumigor.cookbook.ui.recipeDetails
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -24,7 +28,7 @@ private const val ARG_RECIPE_ID = "RecipeID"
 
 class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetailsView {
 
-    private val recipeId: String by lazy{
+    private val recipeId: String by lazy {
         arguments?.getString(ARG_RECIPE_ID).orEmpty()
     }
 
@@ -56,8 +60,28 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         }
 
         ui.recipeTitle.text = recipe.title
+        var i = 0
+        if (recipe.steps.steps == null) {
+            recipe.steps.steps = mutableListOf()
+        }
+        for (step in recipe.steps.steps) {
+            i++
+            val stepTitle = TextView(context)
+            val stepDescription = TextView(context)
+            stepTitle.text = "Этап № $i"
+            stepTitle.setTypeface(null, Typeface.BOLD)
+            stepDescription.text = step.description
+            ui.stages.addView(stepTitle)
+            ui.stages.addView(stepDescription)
+            val stepImage = ImageView(context)
+            ui.stages.addView(stepImage)
+            context?.let {
+                Glide.with(it)
+                    .load(step.imagePath)
+            }
+            ui.stages.setPadding(0, 0, 0, 6)
 
-        ui.recipeDetails.text = recipe.recipe
+        }
 
         ui.authorName.text = "Автор: " + recipe.user.username
 
@@ -76,9 +100,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             presenter.showMainScreen()
         }
 
-        override fun onDialogCancel()
-        {}
-        }
+        override fun onDialogCancel() {}
+    }
 
 
     private fun loadDialog() {
@@ -96,7 +119,7 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_delete -> loadDialog()
             R.id.action_edit -> {
                 val navController = findNavController()

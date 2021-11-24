@@ -7,8 +7,8 @@ import com.google.gson.annotations.SerializedName
 data class Step(
     @PrimaryKey
     @SerializedName("description")
-    val description: String,
+    var description: String,
     @ColumnInfo(name = "imagePath")
     @SerializedName("imagePath")
-    val title: String
+    var imagePath: String
 )
