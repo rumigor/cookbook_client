@@ -2,9 +2,14 @@ package ru.rumigor.cookbook.data.model
 
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-data class Ingredients (
+data class Ingredients(
     @PrimaryKey
-    @SerializedName("ingredients")
-    val ingredients: List<Ingredient>
-        )
+    @SerializedName("ingredient")
+    val ingredient: Ingredient,
+    @SerializedName("unit")
+    val unit: Unit,
+    @SerializedName("amount")
+    val amount: Int
+): Serializable

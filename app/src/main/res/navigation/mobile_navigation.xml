@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/addRecipeFragment"
         android:name="ru.rumigor.cookbook.ui.addRecipe.AddRecipeFragment"
-        android:label="Добваить/изменить рецепт">
+        android:label="Добавить/изменить рецепт">
         <action
             android:id="@+id/action_addRecipeFragment_to_dialog"
             app:destination="@id/dialog" />

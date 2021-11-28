@@ -15,12 +15,10 @@ data class Recipe(
     @ColumnInfo(name = "description")
     @SerializedName("description")
     val description: String,
-    @ColumnInfo(name = "recipe")
-    @SerializedName("recipe")
-    val recipe: String,
     val user: User,
-    val ingredients: List<Ingredient>,
-    val steps: Steps,
+    val ingredients: List<Ingredients>,
+    @SerializedName("steps")
+    val steps: List<Steps>,
     @ColumnInfo(name = "imagePath")
     @SerializedName("imagePath")
     val imagePath: String

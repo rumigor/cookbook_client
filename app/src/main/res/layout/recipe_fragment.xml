@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/dishPic"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingBottom="8pt" />
 
@@ -40,6 +40,7 @@
                 android:text="Ингредиенты:" />
 
             <TableLayout
+                android:id="@+id/ingredientsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

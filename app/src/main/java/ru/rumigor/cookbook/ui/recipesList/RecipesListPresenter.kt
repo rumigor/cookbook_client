@@ -33,9 +33,6 @@ class RecipesListPresenter (
         disposables.dispose()
     }
 
-    fun displayRecipe(recipeId: String){
-
-    }
 
 
 

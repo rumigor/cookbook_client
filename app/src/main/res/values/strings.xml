@@ -20,4 +20,8 @@
     <string name="quickest">10 быстрых рецептов</string>
     <string name="favorites">Закладки</string>
     <string name="search">Найти рецепт</string>
+    <string name="author">Автор: %s</string>
+    <string name="email">E-mail: %s</string>
+    <string name="stage">Этап № %d</string>
+    <string name="ingredient">: %d %s</string>
 </resources>
