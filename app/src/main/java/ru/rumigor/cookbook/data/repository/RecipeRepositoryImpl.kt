@@ -1,14 +1,20 @@
 package ru.rumigor.cookbook.data.repository
 
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import okhttp3.ResponseBody
 import ru.rumigor.cookbook.data.api.CookbookApi
+import ru.rumigor.cookbook.data.di.modules.InMemory
+import ru.rumigor.cookbook.data.di.modules.Persisted
 import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.model.Unit
+import ru.rumigor.cookbook.data.storage.CookbookDatabase
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
-    private val cookbookApi: CookbookApi
+    private val cookbookApi: CookbookApi,
+    @Persisted private val cookbookDatabase: CookbookDatabase
 ) : RecipeRepository
 {
 
@@ -72,5 +78,31 @@ class RecipeRepositoryImpl @Inject constructor(
             .addIngredient(ingredient = ingredient)
             .toObservable()
 
+    override fun loadFavorites(): Observable<List<FavoriteRecipe>> =
+        cookbookDatabase
+            .cookbookDao()
+            .loadFavoritesRecipes()
+
+    override fun loadFavoriteRecipe(recipeId: String): Observable<FavoriteRecipe> =
+        cookbookDatabase
+            .cookbookDao()
+            .loadFavoriteRecipe(recipeId)
+            .toObservable()
+
+    override fun addToFavorites(recipe: FavoriteRecipe): Single<FavoriteRecipe> =
+        cookbookDatabase
+            .cookbookDao()
+            .insert(recipe)
+            .andThen(Single.just(recipe))
+
+    override fun favoriteSearch(name: String): Observable<List<FavoriteRecipe>> =
+        cookbookDatabase
+            .cookbookDao()
+            .favoriteSearch(name)
+
+    override fun deleteFromFavorites(recipeId: String): Completable =
+        cookbookDatabase
+            .cookbookDao()
+            .deleteFromFavorites(recipeId)
 
 }

@@ -1,5 +1,6 @@
-package ru.rumigor.cookbook.ui.recipesList
+package ru.rumigor.cookbook.ui.favorites
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -7,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -16,14 +18,15 @@ import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.RecipesFragmentBinding
 import ru.rumigor.cookbook.scheduler.Schedulers
-import ru.rumigor.cookbook.ui.RecipeViewModel
+import ru.rumigor.cookbook.ui.FavoritesViewModel
 import ru.rumigor.cookbook.ui.abs.AbsFragment
-import ru.rumigor.cookbook.ui.recipesList.RecipesListPresenter
-import ru.rumigor.cookbook.ui.recipesList.RecipesListView
-import ru.rumigor.cookbook.ui.recipesList.adapter.RecipeAdapter
+import ru.rumigor.cookbook.ui.favorites.adapter.FavoritesAdapter
 import javax.inject.Inject
 
-class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListView, RecipeAdapter.Delegate {
+
+
+
+class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, FavoritesAdapter.Delegate {
 
     private lateinit var navController: NavController
 
@@ -34,15 +37,15 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
     lateinit var recipeRepository: RecipeRepository
 
     @Suppress("unused")
-    private val presenter: RecipesListPresenter by moxyPresenter {
-        RecipesListPresenter(
+    private val presenter: FavoritesPresenter by moxyPresenter {
+        FavoritesPresenter(
             schedulers = schedulers,
             recipeRepository = recipeRepository
         )
     }
 
     private val ui: RecipesFragmentBinding by viewBinding()
-    private val recipeAdapter = RecipeAdapter(delegate = this)
+    private val recipeAdapter = FavoritesAdapter(delegate = this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +60,19 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
         ui.fab.setOnClickListener {
             navController.navigate(R.id.addRecipeFragment)
         }
+        requireActivity().findViewById<androidx.appcompat.widget.SearchView>(R.id.action_search).setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { presenter.filterFavorites(query) }
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        }
+                )
     }
 
-    override fun showRecipes(recipes: List<RecipeViewModel>) {
+    override fun showRecipes(recipes: List<FavoritesViewModel>) {
         recipeAdapter.submitList(recipes)
     }
 
@@ -72,7 +85,7 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
         Log.d("ERROR", error.message.toString())
     }
 
-    override fun onRecipePicked(recipe: RecipeViewModel) {
+    override fun onRecipePicked(recipe: FavoritesViewModel) {
         val bundle = Bundle()
         bundle.putString("RecipeID", recipe.recipeId)
         navController.navigate(R.id.recipeDetailsFragment, bundle)
@@ -82,6 +95,24 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
         menu.findItem(R.id.action_delete).isVisible = false
         menu.findItem(R.id.action_edit).isVisible = false
         menu.findItem(R.id.action_favorites).isVisible = false
+        val search = menu.findItem(R.id.action_search)
+        val searchText = search.actionView as SearchView
+        searchText.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { presenter.filterFavorites(query) }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+
+        })
+        searchText.setOnCloseListener {
+            presenter.filterFavorites("")
+            false
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -89,6 +120,7 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
             android.R.id.home -> { requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout)
                 .open()
             }
+
         }
         return super.onOptionsItemSelected(item)
     }

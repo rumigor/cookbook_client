@@ -22,6 +22,12 @@
         <action
             android:id="@+id/action_recipeDetailsFragment_to_addRecipeFragment"
             app:destination="@id/addRecipeFragment" />
+        <action
+            android:id="@+id/action_recipeDetailsFragment_to_recipesListFragment"
+            app:destination="@id/recipesListFragment" />
+        <action
+            android:id="@+id/action_recipeDetailsFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRecipeFragment"
@@ -33,9 +39,20 @@
         <action
             android:id="@+id/action_addRecipeFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment" />
+        <action
+            android:id="@+id/action_addRecipeFragment_to_recipesListFragment"
+            app:destination="@id/recipesListFragment" />
     </fragment>
     <fragment
         android:id="@+id/dialog"
         android:name="ru.rumigor.cookbook.ui.recipeDetails.Dialog"
         android:label="Dialog" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="ru.rumigor.cookbook.ui.favorites.FavoritesFragment"
+        android:label="FavoritesFragment" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_recipeDetailsFragment"
+            app:destination="@id/recipeDetailsFragment" />
+    </fragment>
 </navigation>

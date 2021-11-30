@@ -119,8 +119,8 @@ class AddRecipePresenter(
         disposables +=
             recipeRepository
                 .addIngredient(ingredient)
-                .map(ServerResponseViewModel.Mapper::map)
                 .observeOn(schedulers.main())
+                .map(ServerResponseViewModel.Mapper::map)
                 .subscribeOn(schedulers.background())
                 .subscribe(
                     viewState::addIngredientToServer,
