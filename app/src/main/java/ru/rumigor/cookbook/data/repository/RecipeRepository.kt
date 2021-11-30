@@ -26,4 +26,6 @@ interface RecipeRepository {
 
     fun deleteFromFavorites(recipeId: String): Completable
 
+    fun getRecipesByCategory(categoryId: String): Observable<List<Recipe>>
+
 }

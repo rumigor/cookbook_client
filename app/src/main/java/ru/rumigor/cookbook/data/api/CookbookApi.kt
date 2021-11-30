@@ -26,6 +26,8 @@ interface CookbookApi {
     fun getUnits(): Single<List<Unit>>
     @POST("/cookbook/rest/ingredient")
     fun addIngredient(@Body ingredient: Ingredient): Single<ServerResponse>
+    @GET("/cookbook/rest/recipe")
+    fun getRecipesByCategory(@Query("categoryId")categoryId: String): Single<List<Recipe>>
 
 
 }

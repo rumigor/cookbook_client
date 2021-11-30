@@ -105,4 +105,8 @@ class RecipeRepositoryImpl @Inject constructor(
             .cookbookDao()
             .deleteFromFavorites(recipeId)
 
+    override fun getRecipesByCategory(categoryId: String): Observable<List<Recipe>> =
+        cookbookApi
+            .getRecipesByCategory(categoryId)
+            .toObservable()
 }

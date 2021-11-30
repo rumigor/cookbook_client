@@ -51,6 +51,11 @@ class Main2Activity : AppCompatActivity() {
                     drawerLayout.close()
                     true
                 }
+                R.id.nav_category-> {
+                    navController.navigate(R.id.categoryFragment)
+                    drawerLayout.close()
+                    true
+                }
                 else -> true
             }
         }

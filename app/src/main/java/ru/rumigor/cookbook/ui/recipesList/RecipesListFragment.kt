@@ -18,12 +18,21 @@ import ru.rumigor.cookbook.databinding.RecipesFragmentBinding
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.abs.AbsFragment
-import ru.rumigor.cookbook.ui.recipesList.RecipesListPresenter
-import ru.rumigor.cookbook.ui.recipesList.RecipesListView
 import ru.rumigor.cookbook.ui.recipesList.adapter.RecipeAdapter
 import javax.inject.Inject
 
+private const val ARG_RECIPE_QUERY = "Query"
+private const val ARG_CATEGORY_ID = "CategoryId"
+
 class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListView, RecipeAdapter.Delegate {
+
+    private val query: String? by lazy {
+        arguments?.getString(ARG_RECIPE_QUERY).orEmpty()
+    }
+
+    private val categoryId: String? by lazy {
+        arguments?.getString(ARG_CATEGORY_ID).orEmpty()
+    }
 
     private lateinit var navController: NavController
 
@@ -37,7 +46,9 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
     private val presenter: RecipesListPresenter by moxyPresenter {
         RecipesListPresenter(
             schedulers = schedulers,
-            recipeRepository = recipeRepository
+            recipeRepository = recipeRepository,
+            query = query,
+            categoryId = categoryId
         )
     }
 

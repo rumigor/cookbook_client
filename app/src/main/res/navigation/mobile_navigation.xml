@@ -50,9 +50,17 @@
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="ru.rumigor.cookbook.ui.favorites.FavoritesFragment"
-        android:label="FavoritesFragment" >
+        android:label="Закладки">
         <action
             android:id="@+id/action_favoritesFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="ru.rumigor.cookbook.ui.category.CategoryFragment"
+        android:label="CategoryFragment" >
+        <action
+            android:id="@+id/action_categoryFragment_to_recipesListFragment"
+            app:destination="@id/recipesListFragment" />
     </fragment>
 </navigation>
