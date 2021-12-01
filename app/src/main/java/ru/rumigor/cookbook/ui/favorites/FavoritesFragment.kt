@@ -60,16 +60,6 @@ class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, 
         ui.fab.setOnClickListener {
             navController.navigate(R.id.addRecipeFragment)
         }
-        requireActivity().findViewById<androidx.appcompat.widget.SearchView>(R.id.action_search).setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { presenter.filterFavorites(query) }
-                return false
-            }
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-        }
-                )
     }
 
     override fun showRecipes(recipes: List<FavoritesViewModel>) {
