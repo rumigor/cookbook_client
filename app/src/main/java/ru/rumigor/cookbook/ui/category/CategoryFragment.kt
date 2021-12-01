@@ -2,6 +2,8 @@ package ru.rumigor.cookbook.ui.category
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
 import androidx.navigation.NavController
@@ -65,5 +67,9 @@ class CategoryFragment: AbsFragment(R.layout.category_fragment_view), CategoryVi
         val bundle = Bundle()
         bundle.putString("CategoryId", category.id.toString())
         navController.navigate(R.id.recipesListFragment, bundle)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
     }
 }
