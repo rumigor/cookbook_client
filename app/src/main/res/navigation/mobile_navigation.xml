@@ -58,7 +58,7 @@
     <fragment
         android:id="@+id/categoryFragment"
         android:name="ru.rumigor.cookbook.ui.category.CategoryFragment"
-        android:label="CategoryFragment" >
+        android:label="Категории">
         <action
             android:id="@+id/action_categoryFragment_to_recipesListFragment"
             app:destination="@id/recipesListFragment" />
