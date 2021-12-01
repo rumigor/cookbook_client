@@ -109,4 +109,14 @@ class RecipeRepositoryImpl @Inject constructor(
         cookbookApi
             .getRecipesByCategory(categoryId)
             .toObservable()
+
+    override fun findRecipeByName(title: String): Observable<List<Recipe>> =
+        cookbookApi
+            .findRecipeByName(title)
+            .toObservable()
+
+    override fun findRecipeByName(categoryId: String, title: String): Observable<List<Recipe>> =
+        cookbookApi
+            .findRecipeByNameInCategory(categoryId, title)
+            .toObservable()
 }

@@ -28,6 +28,11 @@ interface CookbookApi {
     fun addIngredient(@Body ingredient: Ingredient): Single<ServerResponse>
     @GET("/cookbook/rest/recipe")
     fun getRecipesByCategory(@Query("categoryId")categoryId: String): Single<List<Recipe>>
-
+    @GET("/cookbook/rest/recipe")
+    fun findRecipeByName(@Query("name")title: String): Single<List<Recipe>>
+    @GET("/cookbook/rest/recipe")
+    fun findRecipeByNameInCategory(
+        @Query("categoryId") categoryId: String,
+        @Query("name")title: String): Single<List<Recipe>>
 
 }

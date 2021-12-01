@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -93,6 +94,32 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
         menu.findItem(R.id.action_delete).isVisible = false
         menu.findItem(R.id.action_edit).isVisible = false
         menu.findItem(R.id.action_favorites).isVisible = false
+        try {
+            val search = menu.findItem(R.id.action_search)
+            val searchText = search.actionView as SearchView
+            searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let { presenter.search(query) }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return true
+                }
+
+            })
+            searchText.setOnCloseListener {
+                presenter.search("")
+                false
+            }
+        } catch (e: Throwable){
+            Toast.makeText(
+                requireContext(),
+                "Sorry, something go with search toolbar",
+                Toast.LENGTH_LONG
+            ).show()
+            Log.d("ERROR", e.message.toString())
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

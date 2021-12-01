@@ -9,57 +9,94 @@ import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.recipesList.RecipesListView
 
 
-class RecipesListPresenter (
+class RecipesListPresenter(
     private val recipeRepository: RecipeRepository,
     private val schedulers: Schedulers,
     private val query: String?,
     private val categoryId: String?
-        ): MvpPresenter<RecipesListView>() {
+) : MvpPresenter<RecipesListView>() {
 
     private val disposables = CompositeDisposable()
 
     override fun onFirstViewAttach() {
-        categoryId?.let{
-            if (categoryId != ""){
-            disposables +=
-                recipeRepository
-                    .getRecipesByCategory(categoryId)
-                    .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
-                    .observeOn(schedulers.main())
-                    .subscribeOn(schedulers.background())
-                    .subscribe(
-                        viewState::showRecipes,
-                        viewState::showError
-                    )} else {
+        categoryId?.let {
+            if (categoryId != "") {
                 disposables +=
                     recipeRepository
-                        .getRecipes()
-                        .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
+                        .getRecipesByCategory(categoryId)
+                        .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
                         .observeOn(schedulers.main())
                         .subscribeOn(schedulers.background())
                         .subscribe(
                             viewState::showRecipes,
                             viewState::showError
                         )
-                    }
-        }?: run{disposables +=
-            recipeRepository
-                .getRecipes()
-                .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::showRecipes,
-                    viewState::showError
-                )}
+            } else {
+                disposables +=
+                    recipeRepository
+                        .getRecipes()
+                        .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                        .observeOn(schedulers.main())
+                        .subscribeOn(schedulers.background())
+                        .subscribe(
+                            viewState::showRecipes,
+                            viewState::showError
+                        )
+            }
+        } ?: run {
+            disposables +=
+                recipeRepository
+                    .getRecipes()
+                    .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                    .observeOn(schedulers.main())
+                    .subscribeOn(schedulers.background())
+                    .subscribe(
+                        viewState::showRecipes,
+                        viewState::showError
+                    )
+        }
     }
 
     override fun onDestroy() {
         disposables.dispose()
     }
 
+    fun search(query: String?) {
+        query?.let {
+            categoryId?.let{
+                if (categoryId != "") {
+                    disposables +=
+                        recipeRepository
+                            .findRecipeByName(categoryId, query)
+                            .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                            .observeOn(schedulers.main())
+                            .subscribeOn(schedulers.background())
+                            .subscribe(
+                                viewState::showRecipes,
+                                viewState::showError
+                            )
+                } else findRecipe(query)
+            } ?: run{
+                findRecipe(query)
+            }
+        }
+    }
 
-
-
+    private fun findRecipe(query: String) {
+        disposables +=
+            recipeRepository
+                .findRecipeByName(query)
+                .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showRecipes,
+                    viewState::showError
+                )
+    }
 
 }
+
+
+
+

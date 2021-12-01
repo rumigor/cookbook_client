@@ -28,4 +28,8 @@ interface RecipeRepository {
 
     fun getRecipesByCategory(categoryId: String): Observable<List<Recipe>>
 
+    fun findRecipeByName(title: String): Observable<List<Recipe>>
+
+    fun findRecipeByName(categoryId: String, title: String): Observable<List<Recipe>>
+
 }

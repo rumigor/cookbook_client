@@ -95,22 +95,31 @@ class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, 
         menu.findItem(R.id.action_delete).isVisible = false
         menu.findItem(R.id.action_edit).isVisible = false
         menu.findItem(R.id.action_favorites).isVisible = false
-        val search = menu.findItem(R.id.action_search)
-        val searchText = search.actionView as SearchView
-        searchText.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { presenter.filterFavorites(query) }
-                return true
-            }
+        try {
+            val search = menu.findItem(R.id.action_search)
+            val searchText = search.actionView as SearchView
+            searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let { presenter.filterFavorites(query) }
+                    return true
+                }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return true
+                }
 
-        })
-        searchText.setOnCloseListener {
-            presenter.filterFavorites("")
-            false
+            })
+            searchText.setOnCloseListener {
+                presenter.filterFavorites("")
+                false
+            }
+        } catch (e: Throwable){
+            Toast.makeText(
+                requireContext(),
+                "Sorry, something go wrong with search toolbar",
+                Toast.LENGTH_LONG
+            ).show()
+            Log.d("ERROR", e.message.toString())
         }
 
     }
