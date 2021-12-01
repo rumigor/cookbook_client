@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -24,7 +25,7 @@ fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
 
 
 @Suppress("IMPLICIT_CAST_TO_ANY")
-fun TextView.setStartDrawableCircleImageFromUri(uri: String, placeholder: Int = 0) {
+fun TextView.setStartDrawableCircleImageFromUri(uri: String, placeholder: Int = R.drawable.ic_baseline_block_24) {
     val glideUrl = if (uri.isEmpty()) placeholder else GlideUrl(uri)
 
     Glide.with(context)
@@ -50,6 +51,7 @@ fun TextView.setStartDrawableCircleImageFromUri(uri: String, placeholder: Int = 
             }
 
         })
+
 }
 
 fun TextView.setCompoundDrawable(

@@ -4,35 +4,65 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import moxy.MvpPresenter
-import ru.rumigor.cookbook.data.model.Category
-import ru.rumigor.cookbook.data.model.Recipe
-import ru.rumigor.cookbook.data.model.User
+import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.CategoryViewModel
+import ru.rumigor.cookbook.ui.IngredientsViewModel
 import ru.rumigor.cookbook.ui.ServerResponseViewModel
+import ru.rumigor.cookbook.ui.UnitViewModel
 
-class AddRecipePresenter(private val recipeRepository: RecipeRepository,
-                         private val schedulers: Schedulers,
-                         private val recipeId: String
-): MvpPresenter<AddRecipeView>() {
+class AddRecipePresenter(
+    private val recipeRepository: RecipeRepository,
+    private val schedulers: Schedulers,
+) : MvpPresenter<AddRecipeView>() {
 
     private val disposables = CompositeDisposable()
 
     override fun onFirstViewAttach() {
-        disposables+=
-           recipeRepository
-               .getCategories()
-               .map{categories -> categories.map(CategoryViewModel.Mapper::map)}
-               .observeOn(schedulers.main())
-               .subscribeOn(schedulers.background())
-               .subscribe(
-                   viewState::showCategories,
-                   viewState::showError
-               )
+        disposables +=
+            recipeRepository
+                .getIngredients()
+                .map { ingredients -> ingredients.map(IngredientsViewModel.Mapper::map) }
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showIngredients,
+                    viewState::showError
+                )
+
+        disposables +=
+            recipeRepository
+                .getCategories()
+                .map { categories -> categories.map(CategoryViewModel.Mapper::map) }
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showCategories,
+                    viewState::showError
+                )
+
+        disposables +=
+            recipeRepository
+                .getUnits()
+                .map { units -> units.map(UnitViewModel.Mapper::map) }
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showUnits,
+                    viewState::showError
+                )
     }
 
-    fun saveRecipe(title: String, description: String, recipe: String, imagePath: String, categoryId : Int) {
+    fun saveRecipe(
+        recipeId: String,
+        title: String,
+        description: String,
+        imagePath: String,
+        categoryId: Int,
+        ingredients: List<Ingredients>,
+        steps: List<Steps>
+    ) {
         if (recipeId == "0") {
             disposables +=
                 recipeRepository
@@ -41,10 +71,11 @@ class AddRecipePresenter(private val recipeRepository: RecipeRepository,
                             "0",
                             Category(categoryId, ""),
                             description = description,
-                            recipe = recipe,
                             imagePath = imagePath,
                             title = title,
-                            user = User("4", "", "")
+                            user = User("4", "", ""),
+                            ingredients = ingredients,
+                            steps = steps
                         )
                     )
                     .map(ServerResponseViewModel.Mapper::map)
@@ -62,10 +93,11 @@ class AddRecipePresenter(private val recipeRepository: RecipeRepository,
                             recipeId,
                             Category(categoryId, ""),
                             description = description,
-                            recipe = recipe,
                             imagePath = imagePath,
                             title = title,
-                            user = User("4", "", "")
+                            user = User("4", "", ""),
+                            ingredients = ingredients,
+                            steps = steps
                         )
                     )
                     .map(ServerResponseViewModel.Mapper::map)
@@ -79,8 +111,20 @@ class AddRecipePresenter(private val recipeRepository: RecipeRepository,
     }
 
 
-
     override fun onDestroy() {
         disposables.dispose()
+    }
+
+    fun addIngredient(ingredient: Ingredient) {
+        disposables +=
+            recipeRepository
+                .addIngredient(ingredient)
+                .observeOn(schedulers.main())
+                .map(ServerResponseViewModel.Mapper::map)
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::addIngredientToServer,
+                    viewState::showError
+                )
     }
 }

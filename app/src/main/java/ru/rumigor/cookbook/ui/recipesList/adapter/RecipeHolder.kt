@@ -7,6 +7,7 @@ import ru.rumigor.cookbook.ui.RecipeViewModel
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.rumigor.cookbook.click
 import ru.rumigor.cookbook.setStartDrawableCircleImageFromUri
+import ru.rumigor.cookbook.ui.recipesList.adapter.RecipeAdapter
 
 class RecipeHolder(view: View) : RecyclerView.ViewHolder(view) {
 

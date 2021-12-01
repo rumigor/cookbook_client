@@ -1,13 +1,17 @@
 package ru.rumigor.cookbook.ui.addRecipe
 
 import moxy.viewstate.strategy.alias.SingleState
-import ru.rumigor.cookbook.ui.CategoryViewModel
-import ru.rumigor.cookbook.ui.ScreenView
-import ru.rumigor.cookbook.ui.ServerResponseViewModel
+import ru.rumigor.cookbook.ui.*
 
 interface AddRecipeView: ScreenView {
     @SingleState
     fun showCategories(categories: List<CategoryViewModel>)
     @SingleState
     fun showAnswer(serverResponse: ServerResponseViewModel)
+    @SingleState
+    fun showIngredients(ingredients: List<IngredientsViewModel>)
+    @SingleState
+    fun showUnits(units: List<UnitViewModel>)
+    @SingleState
+    fun addIngredientToServer(serverResponseViewModel: ServerResponseViewModel)
 }

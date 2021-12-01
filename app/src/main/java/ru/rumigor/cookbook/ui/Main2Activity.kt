@@ -2,8 +2,6 @@ package ru.rumigor.cookbook.ui
 
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,7 +10,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.databinding.ActivityMain2Binding
 
@@ -46,6 +43,16 @@ class Main2Activity : AppCompatActivity() {
             when(it.itemId){
                 R.id.nav_home -> {
                     navController.navigate(R.id.recipesListFragment)
+                    drawerLayout.close()
+                    true
+                }
+                R.id.nav_favorites -> {
+                    navController.navigate(R.id.favoritesFragment)
+                    drawerLayout.close()
+                    true
+                }
+                R.id.nav_category-> {
+                    navController.navigate(R.id.categoryFragment)
                     drawerLayout.close()
                     true
                 }

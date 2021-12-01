@@ -40,17 +40,35 @@
                     android:hint="Добавьте описание рецепта" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <TableLayout
+                android:id="@+id/ingredients"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16pt">
+                android:layout_height="match_parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/recipeDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Опишите процесс приготовления" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/addIngredient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:backgroundTint="#90CAF9"
+                android:text="Добавить ингредиент"
+                app:cornerRadius="16dp" />
+
+            <LinearLayout
+                android:id="@+id/steps"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
+
+            <Button
+                android:id="@+id/addStep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:backgroundTint="#90CAF9"
+                android:gravity="center|end"
+                android:text="Добавить этап"
+                app:cornerRadius="16pt" />
 
             <LinearLayout
                 android:layout_width="match_parent"

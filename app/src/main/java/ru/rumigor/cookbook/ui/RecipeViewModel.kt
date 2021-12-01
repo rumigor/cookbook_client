@@ -1,8 +1,6 @@
 package ru.rumigor.cookbook.ui
 
-import ru.rumigor.cookbook.data.model.Category
-import ru.rumigor.cookbook.data.model.Recipe
-import ru.rumigor.cookbook.data.model.User
+import ru.rumigor.cookbook.data.model.*
 import java.io.Serializable
 
 
@@ -11,7 +9,8 @@ class RecipeViewModel(
     val category: Category,
     val title: String,
     val description: String,
-    val recipe: String,
+    val ingredients: List<Ingredients>,
+    val steps: List<Steps>,
     val user: User,
     val imagePath: String
 ): Serializable {
@@ -22,7 +21,8 @@ class RecipeViewModel(
                 recipe.category,
                 recipe.title,
                 recipe.description,
-                recipe.recipe,
+                recipe.ingredients,
+                recipe.steps,
                 recipe.user,
                 recipe.imagePath
             )

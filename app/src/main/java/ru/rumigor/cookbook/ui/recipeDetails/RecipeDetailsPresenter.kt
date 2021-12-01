@@ -4,8 +4,10 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import moxy.MvpPresenter
+import ru.rumigor.cookbook.data.model.FavoriteRecipe
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.scheduler.Schedulers
+import ru.rumigor.cookbook.ui.FavoritesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.ServerResponseViewModel
 
@@ -27,6 +29,16 @@ class RecipeDetailsPresenter (
                     viewState::showRecipe,
                     viewState::showError
                 )
+        disposables +=
+            recipeRepository
+                .loadFavoriteRecipe(recipeId)
+                .map (FavoritesViewModel.Mapper::map)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::markFavorite,
+                    viewState::favoriteError
+                )
 
     }
 
@@ -34,10 +46,7 @@ class RecipeDetailsPresenter (
         disposables.clear()
     }
 
-    fun updateRecipe(recipe: RecipeViewModel){
-//        router.navigateTo(AddRecipeScreen(recipe.recipeId, recipe.title, recipe.category.id.toString(),
-//        recipe.description, recipe.title, recipe.imagePath))
-    }
+
 
     fun deleteRecipe(recipeId: String){
         disposables +=
@@ -50,8 +59,22 @@ class RecipeDetailsPresenter (
     }
 
 
-    fun showMainScreen(){
+    fun removeFromFavorites(recipeId: String){
+        disposables +=
+            recipeRepository
+                .deleteFromFavorites(recipeId)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe()
+    }
 
+    fun addToFavorites(recipe: FavoriteRecipe){
+        disposables +=
+            recipeRepository
+                .addToFavorites(recipe)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe()
     }
 
 }

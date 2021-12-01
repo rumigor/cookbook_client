@@ -4,51 +4,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFDE7"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/recipeLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFDE7"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/dishPic"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="8pt" />
-
-        <TextView
-            android:id="@+id/recipeTitle"
+        <LinearLayout
+            android:id="@+id/recipeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+            android:layout_height="match_parent"
+            android:background="#FFFDE7"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/recipe_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/dishPic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="8pt" />
 
-        <TextView
-            android:id="@+id/authorName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16pt"
-            android:textAllCaps="true"
-            android:textColor="#000000" />
+            <TextView
+                android:id="@+id/recipeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/authorEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ингредиенты:" />
+
+            <TableLayout
+                android:id="@+id/ingredientsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/stages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+            <TextView
+                android:id="@+id/recipe_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/authorName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16pt"
+                android:textAllCaps="true"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/authorEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
-
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
