@@ -173,6 +173,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ui.steps.addView(stepNumber)
             ui.steps.addView(stepText)
             ui.steps.addView(stepImage)
+            ui.steps.addView(stepImageLink)
             ui.steps.addView(deleteStep)
             stepNumber.setText(getString(R.string.stage, (ui.steps.indexOfChild(stepNumber)/4+1)))
             deleteStep.setBackgroundColor(resources.getColor(R.color.pink, requireActivity().theme))
@@ -222,7 +223,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 for (i in 0 until ui.steps.childCount step 5) {
                     val newStep = Steps(
                         (ui.steps.getChildAt(i + 1) as EditText).text.toString(),
-                        (ui.steps.getChildAt(i + 2) as EditText).text.toString()
+                        (ui.steps.getChildAt(i + 3) as TextView).text.toString()
                     )
                     newSteps.add(newStep)
                 }
@@ -379,6 +380,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ui.steps.addView(stepNumber)
             ui.steps.addView(stepText)
             ui.steps.addView(stepImage)
+            ui.steps.addView(stepImageLink)
             ui.steps.addView(deleteStep)
             stepNumber.setText(getString(R.string.stage, (ui.steps.indexOfChild(stepNumber)/4+1)))
             deleteStep.setBackgroundColor(resources.getColor(R.color.pink, requireActivity().theme))
