@@ -11,13 +11,14 @@ import ru.rumigor.cookbook.CookbookApp
 import ru.rumigor.cookbook.data.di.modules.CookBookModule
 import ru.rumigor.cookbook.data.di.modules.CookbookApiModule
 import ru.rumigor.cookbook.data.di.modules.CookbookStorageModule
+import ru.rumigor.cookbook.data.di.modules.UploadImageApiModule
 import ru.rumigor.cookbook.scheduler.Schedulers
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules =[AndroidInjectionModule::class, CookBookModule::class, CookbookApiModule::class,
-    CookbookStorageModule::class]
+    CookbookStorageModule::class, UploadImageApiModule::class]
 )
 interface CookbookApplicationComponent : AndroidInjector<CookbookApp> {
     @Component.Builder

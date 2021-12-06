@@ -6,6 +6,8 @@ import dagger.android.ContributesAndroidInjector
 import ru.rumigor.cookbook.ui.Main2Activity
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.data.repository.RecipeRepositoryImpl
+import ru.rumigor.cookbook.data.repository.UploadImage
+import ru.rumigor.cookbook.data.repository.UploadImageImpl
 import ru.rumigor.cookbook.ui.addRecipe.AddRecipeFragment
 import ru.rumigor.cookbook.ui.category.CategoryFragment
 import ru.rumigor.cookbook.ui.favorites.FavoritesFragment
@@ -37,4 +39,8 @@ interface CookBookModule {
     @Singleton
     @Binds
     fun bindRecipeRepository(repository: RecipeRepositoryImpl): RecipeRepository
+
+    @Singleton
+    @Binds
+    fun bindUploadImage(uploadImage: UploadImageImpl): UploadImage
 }

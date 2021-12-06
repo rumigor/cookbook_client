@@ -6,15 +6,14 @@ import io.reactivex.rxjava3.kotlin.plusAssign
 import moxy.MvpPresenter
 import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.repository.RecipeRepository
+import ru.rumigor.cookbook.data.repository.UploadImage
 import ru.rumigor.cookbook.scheduler.Schedulers
-import ru.rumigor.cookbook.ui.CategoryViewModel
-import ru.rumigor.cookbook.ui.IngredientsViewModel
-import ru.rumigor.cookbook.ui.ServerResponseViewModel
-import ru.rumigor.cookbook.ui.UnitViewModel
+import ru.rumigor.cookbook.ui.*
 
 class AddRecipePresenter(
     private val recipeRepository: RecipeRepository,
     private val schedulers: Schedulers,
+    private val uploadImage: UploadImage
 ) : MvpPresenter<AddRecipeView>() {
 
     private val disposables = CompositeDisposable()
@@ -126,5 +125,20 @@ class AddRecipePresenter(
                     viewState::addIngredientToServer,
                     viewState::showError
                 )
+    }
+
+    fun loadImage(file: String?){
+        file?.let {
+            disposables +=
+                uploadImage
+                    .uploadImage(file)
+                    .observeOn(schedulers.main())
+                    .map(ImageServerResponseViewModel.Mapper::map)
+                    .subscribeOn(schedulers.background())
+                    .subscribe(
+                        viewState::loadImage,
+                        viewState::showError
+                    )
+        }
     }
 }

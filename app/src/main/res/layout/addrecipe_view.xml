@@ -96,10 +96,26 @@
                 android:layout_marginBottom="16pt"
                 android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_baseline_block_24" />
+
+                <Button
+                    android:id="@+id/openImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2">
+                    android:layout_gravity="center"
+                    android:backgroundTint="#81D4FA"
+                    android:text="Открыть на устройстве"
+                    app:cornerRadius="16dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    tools:visibility="gone">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/url"
@@ -110,23 +126,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:id="@+id/loadImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:backgroundTint="#81D4FA"
-                    android:text="Проверить"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="#FFFFFF"
-                    app:iconPadding="8pt" />
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:srcCompat="@tools:sample/avatars" />
 
             <Button
                 android:id="@+id/addRecipeButton"
