@@ -7,6 +7,8 @@ data class ServerResponse(
     @PrimaryKey
     @SerializedName("id")
     val id: Long,
-    @SerializedName("timestamp")
-    val timestamp: Long,
+    @SerializedName("briefname")
+    val briefName: String,
+    @SerializedName("name")
+    val name: String
 )

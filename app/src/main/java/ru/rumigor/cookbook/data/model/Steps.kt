@@ -8,6 +8,6 @@ import java.io.Serializable
 data class Steps(
     @SerializedName("description")
     var stepDescription: String,
-    @SerializedName("imagePath")
-    var stepImagePath: String
+//    @SerializedName("imagePath")
+//    var stepImagePath: String
 ) : Serializable

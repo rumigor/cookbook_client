@@ -8,31 +8,31 @@ import ru.rumigor.cookbook.data.model.Unit
 
 interface CookbookApi {
 
-    @GET("/cookbook/rest/recipe")
-    fun getRecipes(): Single<List<Recipe>>
-    @GET("/cookbook/rest/recipe/{recipe_id}")
+    @GET("/api/v1/recipe")
+    fun getRecipes(): Single<Content>
+    @GET("/api/v1/recipe/{recipe_id}")
     fun getRecipe(@Path("recipe_id") id: String): Single<Recipe>
-    @POST("/cookbook/rest/recipe")
+    @POST("/api/v1/recipe")
     fun addRecipe(@Body recipe: Recipe): Single<ServerResponse>
-    @GET("/cookbook/rest/category")
+    @GET("/api/v1/category")
     fun getCategory(): Single<List<Category>>
-    @PUT("/cookbook/rest/recipe")
-    fun updateRecipe(@Body recipe: Recipe): Single<ServerResponse>
-    @DELETE("/cookbook/rest/recipe/{recipe_id}")
+    @PUT("/api/v1/recipe/{recipe_id}")
+    fun updateRecipe(@Path("recipe_id")id: String, @Body recipe: Recipe): Single<ServerResponse>
+    @DELETE("/api/v1/recipe/{recipe_id}")
     fun deleteRecipe(@Path("recipe_id") id: String): Single<ServerResponse>
-    @GET("/cookbook/rest/ingredient")
+    @GET("/api/v1/ingredient")
     fun getIngredients(): Single<List<Ingredient>>
-    @GET("/cookbook/rest/unit")
+    @GET("/api/v1/unit")
     fun getUnits(): Single<List<Unit>>
-    @POST("/cookbook/rest/ingredient")
+    @POST("/api/v1/ingredient")
     fun addIngredient(@Body ingredient: Ingredient): Single<ServerResponse>
-    @GET("/cookbook/rest/recipe")
-    fun getRecipesByCategory(@Query("categoryId")categoryId: String): Single<List<Recipe>>
-    @GET("/cookbook/rest/recipe")
-    fun findRecipeByName(@Query("name")title: String): Single<List<Recipe>>
-    @GET("/cookbook/rest/recipe")
+    @GET("/api/v1/recipe")
+    fun getRecipesByCategory(@Query("categoryId")categoryId: String): Single<Content>
+    @GET("/api/v1/recipe")
+    fun findRecipeByName(@Query("name")title: String): Single<Content>
+    @GET("/api/v1/recipe")
     fun findRecipeByNameInCategory(
         @Query("categoryId") categoryId: String,
-        @Query("name")title: String): Single<List<Recipe>>
+        @Query("name")title: String): Single<Content>
 
 }

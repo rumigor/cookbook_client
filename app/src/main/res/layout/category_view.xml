@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MyCardViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFF9C4"
@@ -13,4 +14,4 @@
         android:text="TextView"
         android:textColor="#000000"
         android:textSize="20sp" />
-</LinearLayout>
+</androidx.cardview.widget.CardView>

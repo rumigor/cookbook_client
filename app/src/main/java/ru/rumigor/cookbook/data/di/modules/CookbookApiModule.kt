@@ -17,7 +17,7 @@ class CookbookApiModule {
 
     @Named("cookbook_api")
     @Provides
-    fun provideBaseUrlProd(): String = "http://10.0.2.2:8081"
+    fun provideBaseUrlProd(): String = "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/"
 
     @Reusable
     @Provides

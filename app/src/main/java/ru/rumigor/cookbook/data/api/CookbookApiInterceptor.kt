@@ -9,7 +9,7 @@ object CookbookApiInterceptor: Interceptor {
         chain.proceed(
             chain.request()
                 .newBuilder()
-                .addHeader("cookbook", "10.0.2.2/cookbook/rest/")
+                .addHeader("cookbook", "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com")
                 .build()
         )
 }

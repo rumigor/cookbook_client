@@ -121,17 +121,17 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             recipeId = recipe.recipeId
             ui.newTitle.setText(recipe.title)
             ui.newDescription.setText(recipe.description)
-            ui.url.setText(recipe.imagePath)
-            context?.let {
-                Glide.with(it)
-                    .load(recipe.imagePath)
-                    .apply(
-                        RequestOptions
-                            .centerCropTransform()
-                            .override(100.dp(requireContext()))
-                    )
-                    .into(ui.imageView)
-            }
+//            ui.url.setText(recipe.imagePath)
+//            context?.let {
+//                Glide.with(it)
+//                    .load(recipe.imagePath)
+//                    .apply(
+//                        RequestOptions
+//                            .centerCropTransform()
+//                            .override(100.dp(requireContext()))
+//                    )
+//                    .into(ui.imageView)
+//            }
             categoryId = recipe.category.id - 1
             ui.addRecipeButton.text = "Изменить рецепт"
             newIngredients = recipe.ingredients as MutableList<Ingredients>
@@ -211,6 +211,9 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                             )
                         )
                     }
+                    ingredientId = getIndex(
+                        (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
+                                as TextView).text.toString())
                     val unitName = unitsList[(((ui.ingredients.getChildAt(k)) as TableRow)
                         .getChildAt(3) as Spinner).selectedItemId.toInt()]
                     val newIngredient = Ingredients(
@@ -223,11 +226,11 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 for (i in 0 until ui.steps.childCount step 5) {
                     val newStep = Steps(
                         (ui.steps.getChildAt(i + 1) as EditText).text.toString(),
-                        (ui.steps.getChildAt(i + 3) as TextView).text.toString()
+//                        (ui.steps.getChildAt(i + 3) as TextView).text.toString()
                     )
                     newSteps.add(newStep)
                 }
-                presenter.saveRecipe(recipeId, title, description, imagePath, categoryId, newIngredients, newSteps)
+                presenter.saveRecipe(recipeId, title, description, categoryId, newIngredients, newSteps)
             }
         }
     }
@@ -258,6 +261,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         ingredientName.setAdapter(ingredientsAdapter)
         ingredientName.hint = "Наименование"
         ingredientName.threshold = 1
+        ingredientName.width = 200.dp(requireContext())
         ingredientName.setPadding(0, 0, 6, 0)
         tableRow.addView(ingredientName)
         val ingredientAmount = EditText(context)
@@ -323,6 +327,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ingredientName.completionHint = "Наименование ингредиента"
             ingredientName.threshold = 1
             ingredientName.setText(ingredient.ingredient.name)
+            ingredientName.width = 200.dp(requireContext())
             ingredientName.setPadding(0, 0, 6, 0)
             tableRow.addView(ingredientName)
             val ingredientAmount = EditText(context)
@@ -359,19 +364,20 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             val deleteStep = Button(context)
             deleteStep.text = "Удалить этап"
             stepText.setText(step.stepDescription)
-            stepImageLink.text = step.stepImagePath
+//            stepImageLink.text = step.stepImagePath
             stepImage.maxHeight = 100
             stepImage.maxWidth = 100
-            context?.let{
-                Glide.with(it)
-                    .load(step.stepImagePath)
-                    .apply(
-                RequestOptions
-                    .centerCropTransform()
-                    .override(100.dp(requireContext()))
-            )
-                    .into(stepImage)
-            }
+            stepImage.setImageResource(R.drawable.ic_baseline_block_24)
+//            context?.let{
+//                Glide.with(it)
+//                    .load(step.stepImagePath)
+//                    .apply(
+//                RequestOptions
+//                    .centerCropTransform()
+//                    .override(100.dp(requireContext()))
+//            )
+//                    .into(stepImage)
+//            }
             stepImage.setOnClickListener {
                 image = stepImage
                 link = stepImageLink
@@ -422,14 +428,16 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     override fun showUnits(units: List<UnitViewModel>) {
         for (unit in units) {
-            unitsList.add(unit.name)
+            unitsList.add(unit.briefName)
             unitsIds.add(unit.id)
         }
         loadIngredients(newIngredients)
     }
 
     override fun addIngredientToServer(serverResponseViewModel: ServerResponseViewModel) {
-        ingredientId = serverResponseViewModel.id.toInt()
+        ingredientsIds.add(serverResponseViewModel.id.toInt())
+        ingredientsList.add(serverResponseViewModel.name)
+
     }
 
     override fun loadImage(response: ImageServerResponseViewModel) {

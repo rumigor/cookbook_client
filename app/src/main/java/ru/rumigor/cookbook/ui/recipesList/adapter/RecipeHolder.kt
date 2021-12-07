@@ -15,7 +15,7 @@ class RecipeHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(recipe: RecipeViewModel, delegate: RecipeAdapter.Delegate?){
         with(viewBinding){
-            viewBinding.recipeName.setStartDrawableCircleImageFromUri(recipe.imagePath)
+            viewBinding.recipeName.setStartDrawableCircleImageFromUri("https://st2.depositphotos.com/5575750/8869/v/600/depositphotos_88692298-stock-illustration-recipe-book-cover-concept.jpg")
             viewBinding.recipeName.text = recipe.title
             viewBinding.description.text = recipe.description
             viewBinding.category.text = recipe.category.title

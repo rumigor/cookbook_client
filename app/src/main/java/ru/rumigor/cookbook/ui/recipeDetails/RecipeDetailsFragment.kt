@@ -64,10 +64,10 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     private val ui: RecipeFragmentBinding by viewBinding()
 
     override fun showRecipe(recipe: RecipeViewModel) {
-        favoriteRecipe = FavoriteRecipe(recipe.recipeId, recipe.title, recipe.category.title, recipe.description, recipe.imagePath)
+        favoriteRecipe = FavoriteRecipe(recipe.recipeId, recipe.title, recipe.category.title, recipe.description, "https://st2.depositphotos.com/5575750/8869/v/600/depositphotos_88692298-stock-illustration-recipe-book-cover-concept.jpg")
         context?.let {
             Glide.with(it)
-                .load(recipe.imagePath)
+                .load("https://st2.depositphotos.com/5575750/8869/v/600/depositphotos_88692298-stock-illustration-recipe-book-cover-concept.jpg")
                 .into(ui.dishPic)
         }
         ui.recipeTitle.text = recipe.title
@@ -107,18 +107,19 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             ui.stages.addView(stepDescription)
             val stepImage = ImageView(context)
             ui.stages.addView(stepImage)
-            context?.let {
-                Glide.with(it)
-                    .load(step.stepImagePath)
-                    .placeholder(R.drawable.noimage)
-                    .apply(
-                        RequestOptions
-                            .fitCenterTransform()
-                            .override(250.dp(requireContext()))
-                    )
-                    .into(stepImage)
-            }
+//            context?.let {
+//                Glide.with(it)
+//                    .load(step.stepImagePath)
+//                    .placeholder(R.drawable.noimage)
+//                    .apply(
+//                        RequestOptions
+//                            .fitCenterTransform()
+//                            .override(250.dp(requireContext()))
+//                    )
+//                    .into(stepImage)
+//            }
             stepImage.setPadding(0,0,0,8)
+            stepImage.setImageResource(R.drawable.ic_baseline_block_24)
         }
 
     }

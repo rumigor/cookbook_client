@@ -57,7 +57,7 @@ class AddRecipePresenter(
         recipeId: String,
         title: String,
         description: String,
-        imagePath: String,
+//        imagePath: String,
         categoryId: Int,
         ingredients: List<Ingredients>,
         steps: List<Steps>
@@ -70,7 +70,7 @@ class AddRecipePresenter(
                             "0",
                             Category(categoryId, ""),
                             description = description,
-                            imagePath = imagePath,
+//                            imagePath = imagePath,
                             title = title,
                             user = User("4", "", ""),
                             ingredients = ingredients,
@@ -92,7 +92,7 @@ class AddRecipePresenter(
                             recipeId,
                             Category(categoryId, ""),
                             description = description,
-                            imagePath = imagePath,
+//                            imagePath = imagePath,
                             title = title,
                             user = User("4", "", ""),
                             ingredients = ingredients,
@@ -120,7 +120,7 @@ class AddRecipePresenter(
                 .addIngredient(ingredient)
                 .observeOn(schedulers.main())
                 .map(ServerResponseViewModel.Mapper::map)
-                .subscribeOn(schedulers.background())
+                .subscribeOn(schedulers.main())
                 .subscribe(
                     viewState::addIngredientToServer,
                     viewState::showError
