@@ -3,6 +3,9 @@ package ru.rumigor.cookbook.data.repository
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
 import ru.rumigor.cookbook.data.api.CookbookApi
 import ru.rumigor.cookbook.data.di.modules.InMemory
@@ -10,6 +13,7 @@ import ru.rumigor.cookbook.data.di.modules.Persisted
 import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.model.Unit
 import ru.rumigor.cookbook.data.storage.CookbookDatabase
+import java.io.File
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
@@ -35,20 +39,18 @@ class RecipeRepositoryImpl @Inject constructor(
             .toObservable()
 
 
-    override fun addRecipe(recipe: Recipe): Observable<ServerResponse> =
+    override fun addRecipe(recipe: Recipe): Observable<Recipe> =
         cookbookApi
             .addRecipe(recipe)
             .toObservable()
 
-    override fun updateRecipe(recipe: Recipe): Observable<ServerResponse> =
+    override fun updateRecipe(recipe: Recipe): Completable =
         cookbookApi
             .updateRecipe(recipe.id, recipe)
-            .toObservable()
 
-    override fun deleteRecipe(recipeId: String): Observable<ServerResponse> =
+    override fun deleteRecipe(recipeId: String): Completable =
         cookbookApi
             .deleteRecipe(recipeId)
-            .toObservable()
 
     override fun getIngredients(): Observable<List<Ingredient>> =
         cookbookApi
@@ -109,4 +111,17 @@ class RecipeRepositoryImpl @Inject constructor(
             .findRecipeByNameInCategory(categoryId, title)
             .map{it.recipes}
             .toObservable()
+
+    override fun getTags(): Observable<List<Tag>> =
+        cookbookApi
+            .getTags()
+            .toObservable()
+
+    override fun uploadImage(filePath: String): Completable {
+        val file = File(filePath)
+        val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+        return cookbookApi
+            .uploadImage("1", body)
+    }
 }

@@ -13,4 +13,6 @@ interface RecipeDetailsView: ScreenView {
     fun favoriteError(error: Throwable)
     @SingleState
     fun markFavorite(favoriteRecipe: FavoritesViewModel)
+    @SingleState
+    fun onDelete()
 }

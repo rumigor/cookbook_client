@@ -7,7 +7,7 @@ interface AddRecipeView: ScreenView {
     @SingleState
     fun showCategories(categories: List<CategoryViewModel>)
     @SingleState
-    fun showAnswer(serverResponse: ServerResponseViewModel)
+    fun showAnswer(recipeViewModel: RecipeViewModel)
     @SingleState
     fun showIngredients(ingredients: List<IngredientsViewModel>)
     @SingleState
@@ -16,4 +16,10 @@ interface AddRecipeView: ScreenView {
     fun addIngredientToServer(serverResponseViewModel: ServerResponseViewModel)
     @SingleState
     fun loadImage(response: ImageServerResponseViewModel)
+    @SingleState
+    fun showUpdatedRecipe()
+    @SingleState
+    fun loadTagsList(tags: List<TagViewModel>)
+    @SingleState()
+    fun fileUploaded()
 }

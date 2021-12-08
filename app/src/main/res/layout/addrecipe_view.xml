@@ -40,10 +40,28 @@
                     android:hint="Добавьте описание рецепта" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/tagLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
+
+            <Button
+                android:id="@+id/addTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:backgroundTint="#90CAF9"
+                android:text="Добавить тэг"
+                app:cornerRadius="16dp" />
+
             <TableLayout
                 android:id="@+id/ingredients"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+
+
 
             <Button
                 android:id="@+id/addIngredient"

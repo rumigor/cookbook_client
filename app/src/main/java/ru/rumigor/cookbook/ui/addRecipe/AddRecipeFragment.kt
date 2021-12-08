@@ -1,12 +1,8 @@
 package ru.rumigor.cookbook.ui.addRecipe
 
-import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
-import android.content.res.Resources
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -14,31 +10,23 @@ import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.UiThread
-import androidx.core.view.GravityCompat
-import androidx.core.view.marginEnd
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import moxy.ktx.moxyPresenter
-import okhttp3.internal.wait
 import ru.rumigor.cookbook.ImageFilePath
 import ru.rumigor.cookbook.R
-import ru.rumigor.cookbook.data.model.Ingredient
-import ru.rumigor.cookbook.data.model.Ingredients
-import ru.rumigor.cookbook.data.model.Steps
+import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.model.Unit
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.data.repository.UploadImage
 import ru.rumigor.cookbook.databinding.AddrecipeViewBinding
 import ru.rumigor.cookbook.dp
 import ru.rumigor.cookbook.scheduler.Schedulers
-import ru.rumigor.cookbook.setStartDrawableCircleImageFromUri
 import ru.rumigor.cookbook.ui.*
 import ru.rumigor.cookbook.ui.abs.AbsFragment
-import java.io.File
 import javax.inject.Inject
 
 private const val ARG_RECIPE = "RECIPE"
@@ -55,6 +43,9 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     private lateinit var startForResult: ActivityResultLauncher<Intent>
 
     private var selectedImagePath = ""
+
+    private val tagsList = mutableListOf<TagViewModel>()
+    private val tagsNameList = mutableListOf<String>()
 
     private var newSteps = mutableListOf<Steps>()
 
@@ -118,9 +109,9 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recipe = (arguments?.getSerializable(ARG_RECIPE) as RecipeViewModel?)
         recipe?.let {
-            recipeId = recipe.recipeId
-            ui.newTitle.setText(recipe.title)
-            ui.newDescription.setText(recipe.description)
+            recipeId = it.recipeId
+            ui.newTitle.setText(it.title)
+            ui.newDescription.setText(it.description)
 //            ui.url.setText(recipe.imagePath)
 //            context?.let {
 //                Glide.with(it)
@@ -132,10 +123,11 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 //                    )
 //                    .into(ui.imageView)
 //            }
-            categoryId = recipe.category.id - 1
+            categoryId = it.category.id - 1
             ui.addRecipeButton.text = "Изменить рецепт"
-            newIngredients = recipe.ingredients as MutableList<Ingredients>
-            loadSteps(recipe.steps)
+            newIngredients = it.ingredients as MutableList<Ingredients>
+            loadSteps(it.steps)
+            loadTags(it.tags)
         }
 
 //        ui.loadImage.setOnClickListener {
@@ -230,9 +222,57 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                     )
                     newSteps.add(newStep)
                 }
-                presenter.saveRecipe(recipeId, title, description, categoryId, newIngredients, newSteps)
+                val newTags = mutableListOf<Tag>()
+                for (i in 0 until ui.tagLayout.childCount){
+                    val newTag = Tag(getTagIndex((((ui.tagLayout.getChildAt(i)) as LinearLayout).getChildAt(0) as TextView).text.toString()), "", "")
+                    newTags.add(newTag)
+                }
+                presenter.saveRecipe(recipeId, title, description, categoryId, newIngredients, newSteps, newTags)
             }
         }
+    }
+
+    private fun getTagIndex(tagName: String): String {
+        var id = "0"
+        for (tag in tagsList){
+            if (tagName == tag.briefName) {
+                id = tag.id
+                break
+            }
+        }
+        return id
+    }
+
+    private fun loadTags(tags: List<Tag>) {
+        val tagsAdapter =
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                tagsNameList
+            )
+        for(tag in tags){
+            val newTagline = LinearLayout(context)
+            newTagline.orientation = LinearLayout.HORIZONTAL
+            val tagName = AutoCompleteTextView(context)
+            tagName.setAdapter(tagsAdapter)
+            tagName.setText(tag.name)
+            val removeButton = Button(context)
+            removeButton.text = "Удалить тэг"
+            removeButton.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
+            removeButton.background = ResourcesCompat.getDrawable(resources, R.drawable.button_shape, requireActivity().theme)
+            removeButton.setOnClickListener {
+                removeTag(newTagline)
+            }
+            newTagline.addView(tagName)
+            newTagline.addView(removeButton)
+            ui.tagLayout.addView(newTagline)
+            removeButton.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+            removeButton.layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+        }
+    }
+
+    private fun removeTag(newTagline: LinearLayout) {
+        ui.tagLayout.removeView(newTagline)
     }
 
     private fun pickImage() {
@@ -409,13 +449,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
     }
 
-    override fun showAnswer(serverResponse: ServerResponseViewModel) {
-        Toast.makeText(requireContext(), "new id: ${serverResponse.id}", Toast.LENGTH_LONG).show()
+    override fun showAnswer(recipeViewModel: RecipeViewModel) {
+        Toast.makeText(requireContext(), "new id: ${recipeViewModel.recipeId}", Toast.LENGTH_LONG).show()
         val navController = findNavController()
         val bundle = Bundle()
         val navBuilder = NavOptions.Builder()
         val navOptions: NavOptions = navBuilder.setPopUpTo(R.id.recipesListFragment, true).build()
-        bundle.putString("RecipeID", serverResponse.id.toString())
+        bundle.putString("RecipeID", recipeViewModel.recipeId)
         navController.navigate(R.id.recipeDetailsFragment, bundle, navOptions)
     }
 
@@ -448,6 +488,56 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 .into(image)
         }
     }
+
+    override fun showUpdatedRecipe() {
+        val navController = findNavController()
+        val bundle = Bundle()
+        val navBuilder = NavOptions.Builder()
+        val navOptions: NavOptions = navBuilder.setPopUpTo(R.id.recipesListFragment, true).build()
+        bundle.putString("RecipeID", recipeId)
+        navController.navigate(R.id.recipeDetailsFragment, bundle, navOptions)
+    }
+
+    override fun loadTagsList(tags: List<TagViewModel>) {
+        tagsList.addAll(tags)
+        for (tag in tags){
+            tagsNameList.add(tag.briefName)
+        }
+        ui.addTag.setOnClickListener {
+            addTag()
+        }
+    }
+
+    override fun fileUploaded() {
+        Toast.makeText(requireContext(),"Файл успешно загружен", Toast.LENGTH_LONG).show()
+        Log.d("ERROR", "Файл успешно загружен")
+    }
+
+    private fun addTag() {
+        val tagsAdapter =
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                tagsNameList
+            )
+        val newTagline = LinearLayout(context)
+        newTagline.orientation = LinearLayout.HORIZONTAL
+        val tagName = AutoCompleteTextView(context)
+        tagName.setAdapter(tagsAdapter)
+        val removeButton = Button(context)
+        removeButton.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
+        removeButton.text = "Удалить тэг"
+        removeButton.background = ResourcesCompat.getDrawable(resources, R.drawable.button_shape, requireActivity().theme)
+        removeButton.setOnClickListener {
+            removeTag(newTagline)
+        }
+        newTagline.addView(tagName)
+        newTagline.addView(removeButton)
+        ui.tagLayout.addView(newTagline)
+        removeButton.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+        removeButton.layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+    }
+
 
     override fun showError(error: Throwable) {
         Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()

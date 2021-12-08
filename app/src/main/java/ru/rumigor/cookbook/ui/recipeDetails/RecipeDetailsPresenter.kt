@@ -52,10 +52,12 @@ class RecipeDetailsPresenter (
         disposables +=
             recipeRepository
                 .deleteRecipe(recipeId)
-                .map(ServerResponseViewModel.Mapper::map)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
-                .subscribe()
+                .subscribe(
+                    viewState::onDelete,
+                    viewState::showError
+                )
     }
 
 

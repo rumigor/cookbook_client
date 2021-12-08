@@ -24,4 +24,5 @@
     <string name="email">E-mail: %s</string>
     <string name="stage">Этап № %d</string>
     <string name="ingredient">: %d %s</string>
+    <string name="tags">Тэги: %s</string>
 </resources>

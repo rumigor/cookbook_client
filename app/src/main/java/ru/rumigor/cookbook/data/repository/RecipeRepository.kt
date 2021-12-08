@@ -11,9 +11,9 @@ interface RecipeRepository {
     fun getRecipes(): Observable<List<Recipe>>
     fun getRecipe(recipeID: String): Observable<Recipe>
     fun getCategories(): Observable<List<Category>>
-    fun addRecipe(recipe: Recipe): Observable<ServerResponse>
-    fun updateRecipe(recipe: Recipe): Observable<ServerResponse>
-    fun deleteRecipe(recipeId: String): Observable<ServerResponse>
+    fun addRecipe(recipe: Recipe): Observable<Recipe>
+    fun updateRecipe(recipe: Recipe): Completable
+    fun deleteRecipe(recipeId: String): Completable
     fun getIngredients(): Observable<List<Ingredient>>
     fun getUnits(): Observable<List<Unit>>
     fun addIngredient(ingredient: Ingredient): Observable<ServerResponse>
@@ -32,4 +32,7 @@ interface RecipeRepository {
 
     fun findRecipeByName(categoryId: String, title: String): Observable<List<Recipe>>
 
+    fun getTags(): Observable<List<Tag>>
+
+    fun uploadImage(filePath: String): Completable
 }

@@ -51,6 +51,16 @@ class AddRecipePresenter(
                     viewState::showUnits,
                     viewState::showError
                 )
+        disposables +=
+            recipeRepository
+                .getTags()
+                .map {tags -> tags.map(TagViewModel.Mapper::map)}
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::loadTagsList,
+                    viewState::showError
+                )
     }
 
     fun saveRecipe(
@@ -60,7 +70,8 @@ class AddRecipePresenter(
 //        imagePath: String,
         categoryId: Int,
         ingredients: List<Ingredients>,
-        steps: List<Steps>
+        steps: List<Steps>,
+        tags: List<Tag>
     ) {
         if (recipeId == "0") {
             disposables +=
@@ -74,10 +85,11 @@ class AddRecipePresenter(
                             title = title,
                             user = User("4", "", ""),
                             ingredients = ingredients,
-                            steps = steps
+                            steps = steps,
+                            tags = tags
                         )
                     )
-                    .map(ServerResponseViewModel.Mapper::map)
+                    .map(RecipeViewModel.Mapper::map)
                     .observeOn(schedulers.main())
                     .subscribeOn(schedulers.background())
                     .subscribe(
@@ -96,14 +108,14 @@ class AddRecipePresenter(
                             title = title,
                             user = User("4", "", ""),
                             ingredients = ingredients,
-                            steps = steps
+                            steps = steps,
+                            tags = tags
                         )
                     )
-                    .map(ServerResponseViewModel.Mapper::map)
                     .observeOn(schedulers.main())
                     .subscribeOn(schedulers.background())
                     .subscribe(
-                        viewState::showAnswer,
+                        viewState::showUpdatedRecipe,
                         viewState::showError
                     )
         }
@@ -130,13 +142,12 @@ class AddRecipePresenter(
     fun loadImage(file: String?){
         file?.let {
             disposables +=
-                uploadImage
+                recipeRepository
                     .uploadImage(file)
                     .observeOn(schedulers.main())
-                    .map(ImageServerResponseViewModel.Mapper::map)
                     .subscribeOn(schedulers.background())
                     .subscribe(
-                        viewState::loadImage,
+                        viewState::fileUploaded,
                         viewState::showError
                     )
         }

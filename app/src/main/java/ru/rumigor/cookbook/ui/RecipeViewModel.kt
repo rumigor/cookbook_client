@@ -9,9 +9,10 @@ class RecipeViewModel(
     val category: Category,
     val title: String,
     val description: String,
-    val ingredients: List<Ingredients>,
+    val ingredients: List<Ingredients>?,
     val steps: List<Steps>,
     val user: User,
+    val tags: List<Tag>
 //    val imagePath: String
 ): Serializable {
     object Mapper{
@@ -24,6 +25,7 @@ class RecipeViewModel(
                 recipe.ingredients,
                 recipe.steps,
                 recipe.user,
+                recipe.tags
 //                recipe.imagePath
             )
     }

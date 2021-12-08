@@ -3,26 +3,19 @@ package ru.rumigor.cookbook.ui.recipeDetails
 import android.graphics.Typeface
 import android.graphics.Typeface.ITALIC
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import android.widget.ImageView
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import moxy.ktx.moxyPresenter
-import org.w3c.dom.Text
 import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.data.model.FavoriteRecipe
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.RecipeFragmentBinding
-import ru.rumigor.cookbook.dp
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.FavoritesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
@@ -75,7 +68,13 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         loadSteps(recipe)
 
         ui.stages.setPadding(0, 0, 0, 8)
-
+        if (recipe.tags.isNotEmpty()) {
+            val tags = StringBuffer()
+            for (tag in recipe.tags) {
+                tags.append(tag.name + " ")
+            }
+            ui.tags.text = getString(R.string.tags, tags)
+        } else ui.tags.visibility = View.GONE
 
         ui.authorName.text = getString(R.string.author, recipe.user.username)
 
@@ -90,6 +89,11 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     override fun markFavorite(favoriteRecipe: FavoritesViewModel) {
         favorite = true
         favoriteItem.setIcon(R.drawable.ic_baseline_favorite_24)
+    }
+
+    override fun onDelete() {
+        val navController = findNavController()
+        navController.navigate(R.id.recipesListFragment)
     }
 
     private fun loadSteps(recipe: RecipeViewModel) {
@@ -125,18 +129,21 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     }
 
     private fun loadIngredients(recipe: RecipeViewModel) {
-        for (ingredient in recipe.ingredients){
-            val tableRow = TableRow(context)
-            tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
-            val ingredientName = TextView(context)
-            ingredientName.text = ingredient.ingredient.name
-            ingredientName.textSize = 16f
-            tableRow.addView(ingredientName, 0)
-            val amount = TextView(context)
-            amount.text = getString(R.string.ingredient, ingredient.amount, ingredient.unit.briefName)
-            amount.textSize = 16f
-            tableRow.addView(amount)
-            ui.ingredientsList.addView(tableRow)
+        recipe.ingredients?.let {
+            for (ingredient in it) {
+                val tableRow = TableRow(context)
+                tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
+                val ingredientName = TextView(context)
+                ingredientName.text = ingredient.ingredient.name
+                ingredientName.textSize = 16f
+                tableRow.addView(ingredientName, 0)
+                val amount = TextView(context)
+                amount.text =
+                    getString(R.string.ingredient, ingredient.amount, ingredient.unit.briefName)
+                amount.textSize = 16f
+                tableRow.addView(amount)
+                ui.ingredientsList.addView(tableRow)
+            }
         }
     }
 

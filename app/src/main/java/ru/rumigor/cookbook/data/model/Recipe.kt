@@ -12,9 +12,11 @@ data class Recipe(
     @SerializedName("description")
     val description: String,
     val user: User,
-    val ingredients: List<Ingredients>,
+    val ingredients: List<Ingredients>?,
     @SerializedName("steps")
     val steps: List<Steps>,
+    @SerializedName("tags")
+    val tags: List<Tag>
 //    @SerializedName("imagePath")
 //    val imagePath: String
 )
