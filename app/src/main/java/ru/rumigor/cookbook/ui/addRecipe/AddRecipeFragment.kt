@@ -40,6 +40,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     private var ingredientId = 0
 
+    private var ingredientIndex = 0
+
     private lateinit var startForResult: ActivityResultLauncher<Intent>
 
     private var selectedImagePath = ""
@@ -183,53 +185,65 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         ui.addRecipeButton.setOnClickListener {
             if ((ui.newTitle.text.toString() != "") && (ui.newDescription.text.toString() != "")
             ) {
-                val title = ui.newTitle.text.toString()
-                val description = ui.newDescription.text.toString()
-                val imagePath = ui.url.text.toString()
-                categoryId = ui.chooseCategory.selectedItemPosition + 1
-                val newIngredients = mutableListOf<Ingredients>()
-                for (k in 0 until ui.ingredients.childCount){
-                    ingredientId = getIndex(
-                        (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
-                                as TextView).text.toString())
-                    if (ingredientId == 0) {
-                        presenter.addIngredient(
-                            Ingredient(
-                                0,
-                                (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
-                                        as TextView).text.toString(),
-                                (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
-                                        as TextView).text.toString()
-                            )
-                        )
-                    }
-                    ingredientId = getIndex(
-                        (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
-                                as TextView).text.toString())
-                    val unitName = unitsList[(((ui.ingredients.getChildAt(k)) as TableRow)
-                        .getChildAt(3) as Spinner).selectedItemId.toInt()]
-                    val newIngredient = Ingredients(
-                        Ingredient(ingredientId,"",""), Unit(getUnitIndex(unitName), "", ""),
-                        (((ui.ingredients.getChildAt(k)
-                            as TableRow).getChildAt(2)) as TextView).text.toString().toInt()
-                    )
-                    newIngredients.add(newIngredient)
-                }
-                for (i in 0 until ui.steps.childCount step 5) {
-                    val newStep = Steps(
-                        (ui.steps.getChildAt(i + 1) as EditText).text.toString(),
+                if (ui.ingredients.childCount > 0) {
+                    checkIngredients()
+                } else {
+                    for (i in 0 until ui.steps.childCount step 5) {
+                        val newStep = Steps(
+                            (ui.steps.getChildAt(i + 1) as EditText).text.toString(),
 //                        (ui.steps.getChildAt(i + 3) as TextView).text.toString()
+                        )
+                        newSteps.add(newStep)
+                    }
+                    val newTags = mutableListOf<Tag>()
+                    for (i in 0 until ui.tagLayout.childCount) {
+                        val newTag = Tag(
+                            getTagIndex(
+                                (((ui.tagLayout.getChildAt(i)) as LinearLayout).getChildAt(0) as TextView).text.toString()
+                            ), "", ""
+                        )
+                        newTags.add(newTag)
+                    }
+                    val title = ui.newTitle.text.toString()
+                    val description = ui.newDescription.text.toString()
+                    val imagePath = ui.url.text.toString()
+                    categoryId = ui.chooseCategory.selectedItemPosition + 1
+                    presenter.saveRecipe(
+                        recipeId,
+                        title,
+                        description,
+                        categoryId,
+                        newIngredients,
+                        newSteps,
+                        newTags
                     )
-                    newSteps.add(newStep)
                 }
-                val newTags = mutableListOf<Tag>()
-                for (i in 0 until ui.tagLayout.childCount){
-                    val newTag = Tag(getTagIndex((((ui.tagLayout.getChildAt(i)) as LinearLayout).getChildAt(0) as TextView).text.toString()), "", "")
-                    newTags.add(newTag)
-                }
-                presenter.saveRecipe(recipeId, title, description, categoryId, newIngredients, newSteps, newTags)
             }
         }
+    }
+
+    private fun checkIngredients(): Boolean {
+        var isAdded = true
+        for (k in ingredientIndex until ui.ingredients.childCount) {
+            ingredientId = getIndex(
+                (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
+                        as TextView).text.toString()
+            )
+            if (ingredientId == 0) {
+                presenter.addIngredient(
+                    Ingredient(
+                        0,
+                        (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
+                                as TextView).text.toString(),
+                        (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
+                                as TextView).text.toString()
+                    )
+                )
+                ingredientIndex = k+1
+                isAdded = false
+            }
+        }
+        return isAdded
     }
 
     private fun getTagIndex(tagName: String): String {
@@ -385,7 +399,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             }
             ingredientUnit.setSelection(position)
             tableRow.addView(ingredientUnit)
-            ingredientsIds.add(ingredient.ingredient.id)
+//            ingredientsIds.add(ingredient.ingredient.id)
             unitsIds.add(ingredient.unit.id)
 
             removeIngredient.setOnClickListener { removeIngredient(tableRow) }
@@ -477,6 +491,52 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     override fun addIngredientToServer(serverResponseViewModel: ServerResponseViewModel) {
         ingredientsIds.add(serverResponseViewModel.id.toInt())
         ingredientsList.add(serverResponseViewModel.name)
+        if (checkIngredients()) addRecipe()
+    }
+
+    private fun addRecipe() {
+        for (k in 0 until ui.ingredients.childCount){
+            ingredientId = getIndex(
+                (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
+                        as TextView).text.toString())
+            val unitName = unitsList[(((ui.ingredients.getChildAt(k)) as TableRow)
+                .getChildAt(3) as Spinner).selectedItemId.toInt()]
+            val newIngredient = Ingredients(
+                Ingredient(ingredientId,"",""), Unit(getUnitIndex(unitName), "", ""),
+                (((ui.ingredients.getChildAt(k)
+                        as TableRow).getChildAt(2)) as TextView).text.toString().toInt()
+            )
+            newIngredients.add(newIngredient)
+        }
+        for (i in 0 until ui.steps.childCount step 5) {
+            val newStep = Steps(
+                (ui.steps.getChildAt(i + 1) as EditText).text.toString(),
+//                        (ui.steps.getChildAt(i + 3) as TextView).text.toString()
+            )
+            newSteps.add(newStep)
+        }
+        val newTags = mutableListOf<Tag>()
+        for (i in 0 until ui.tagLayout.childCount) {
+            val newTag = Tag(
+                getTagIndex(
+                    (((ui.tagLayout.getChildAt(i)) as LinearLayout).getChildAt(0) as TextView).text.toString()
+                ), "", ""
+            )
+            newTags.add(newTag)
+        }
+        val title = ui.newTitle.text.toString()
+        val description = ui.newDescription.text.toString()
+        val imagePath = ui.url.text.toString()
+        categoryId = ui.chooseCategory.selectedItemPosition + 1
+        presenter.saveRecipe(
+            recipeId,
+            title,
+            description,
+            categoryId,
+            newIngredients,
+            newSteps,
+            newTags
+        )
 
     }
 
