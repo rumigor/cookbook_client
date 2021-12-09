@@ -9,7 +9,7 @@ object CookbookApiInterceptor: Interceptor {
         chain.proceed(
             chain.request()
                 .newBuilder()
-                .addHeader("cookbook", "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com")
+                .addHeader("Content-Type", "multipart/form-data")
                 .build()
         )
 }

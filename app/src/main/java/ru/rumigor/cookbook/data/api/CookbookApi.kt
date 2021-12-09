@@ -39,8 +39,6 @@ interface CookbookApi {
         @Query("name")title: String): Single<Content>
     @GET("/api/v1/tag")
     fun getTags(): Single<List<Tag>>
-    @Multipart
-    @POST("/file/upload")
-    fun uploadImage(@Query ("userid")userid: String, @Part image: MultipartBody.Part): Completable
+
 
 }

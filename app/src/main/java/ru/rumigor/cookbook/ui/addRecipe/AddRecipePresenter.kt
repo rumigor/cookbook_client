@@ -142,7 +142,7 @@ class AddRecipePresenter(
     fun loadImage(file: String?){
         file?.let {
             disposables +=
-                recipeRepository
+                uploadImage
                     .uploadImage(file)
                     .observeOn(schedulers.main())
                     .subscribeOn(schedulers.background())

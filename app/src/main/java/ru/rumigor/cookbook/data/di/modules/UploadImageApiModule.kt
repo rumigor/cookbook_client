@@ -16,7 +16,7 @@ import javax.inject.Named
 class UploadImageApiModule {
     @Named("upload_image_api")
     @Provides
-    fun provideBaseUrlProd(): String = "https://api.imgbb.com/"
+    fun provideBaseUrlProd(): String = "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/"
 
     @Reusable
     @Provides
@@ -25,6 +25,7 @@ class UploadImageApiModule {
             .baseUrl(baseUrl)
             .client(
                 OkHttpClient.Builder()
+//                    .addInterceptor(UploadImageApiInterceptor)
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                     })

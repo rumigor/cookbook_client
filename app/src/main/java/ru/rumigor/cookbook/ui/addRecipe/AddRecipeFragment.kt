@@ -16,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import moxy.ktx.moxyPresenter
+import okhttp3.ResponseBody
+import retrofit2.Response
 import ru.rumigor.cookbook.ImageFilePath
 import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.data.model.*
@@ -568,9 +570,12 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
     }
 
-    override fun fileUploaded() {
+    override fun fileUploaded(responseBody: Response<String>) {
+        for (header in responseBody.headers()){
+            println(header.toString())
+        }
         Toast.makeText(requireContext(),"Файл успешно загружен", Toast.LENGTH_LONG).show()
-        Log.d("ERROR", "Файл успешно загружен")
+        Log.d("SUCCESS", "Файл успешно загружен")
     }
 
     private fun addTag() {

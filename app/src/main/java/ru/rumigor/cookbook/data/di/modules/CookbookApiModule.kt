@@ -26,7 +26,7 @@ class CookbookApiModule {
             .baseUrl(baseUrl)
             .client(
                 OkHttpClient.Builder()
-                    .addInterceptor(CookbookApiInterceptor)
+//                    .addInterceptor(CookbookApiInterceptor)
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                     })

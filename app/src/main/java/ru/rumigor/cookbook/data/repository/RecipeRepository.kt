@@ -34,5 +34,5 @@ interface RecipeRepository {
 
     fun getTags(): Observable<List<Tag>>
 
-    fun uploadImage(filePath: String): Completable
+
 }

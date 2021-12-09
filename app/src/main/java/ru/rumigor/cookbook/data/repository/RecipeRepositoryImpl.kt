@@ -117,11 +117,5 @@ class RecipeRepositoryImpl @Inject constructor(
             .getTags()
             .toObservable()
 
-    override fun uploadImage(filePath: String): Completable {
-        val file = File(filePath)
-        val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-        return cookbookApi
-            .uploadImage("1", body)
-    }
+
 }

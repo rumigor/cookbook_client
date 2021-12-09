@@ -8,7 +8,7 @@ object UploadImageApiInterceptor: Interceptor {
         chain.proceed(
             chain.request()
                 .newBuilder()
-                .addHeader("key", "569AHPRW898b721fa9229e1836487e2a5b7d86ec")
+                .addHeader("Content-Type", "image/jpeg")
                 .build()
         )
 }

@@ -1,6 +1,8 @@
 package ru.rumigor.cookbook.ui.addRecipe
 
 import moxy.viewstate.strategy.alias.SingleState
+import okhttp3.ResponseBody
+import retrofit2.Response
 import ru.rumigor.cookbook.ui.*
 
 interface AddRecipeView: ScreenView {
@@ -21,5 +23,5 @@ interface AddRecipeView: ScreenView {
     @SingleState
     fun loadTagsList(tags: List<TagViewModel>)
     @SingleState()
-    fun fileUploaded()
+    fun fileUploaded(responseBody: Response<String>)
 }
