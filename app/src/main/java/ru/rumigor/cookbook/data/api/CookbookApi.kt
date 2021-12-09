@@ -39,6 +39,8 @@ interface CookbookApi {
         @Query("name")title: String): Single<Content>
     @GET("/api/v1/tag")
     fun getTags(): Single<List<Tag>>
+    @GET("/api/v1/recipe/{recipe_id}/image")
+    fun getImage(@Path("recipe_id")recipeId: String): Single<Image>
 
 
 }

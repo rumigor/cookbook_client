@@ -34,5 +34,7 @@ interface RecipeRepository {
 
     fun getTags(): Observable<List<Tag>>
 
+    fun getImages(recipeId: String): Observable<List<RecipeImages>>
+
 
 }

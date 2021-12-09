@@ -3,6 +3,7 @@ package ru.rumigor.cookbook.ui.recipeDetails
 import moxy.viewstate.strategy.alias.SingleState
 import ru.rumigor.cookbook.data.model.FavoriteRecipe
 import ru.rumigor.cookbook.ui.FavoritesViewModel
+import ru.rumigor.cookbook.ui.RecipeImagesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.ScreenView
 
@@ -15,4 +16,6 @@ interface RecipeDetailsView: ScreenView {
     fun markFavorite(favoriteRecipe: FavoritesViewModel)
     @SingleState
     fun onDelete()
+    @SingleState
+    fun showImage(images: List<RecipeImagesViewModel>)
 }

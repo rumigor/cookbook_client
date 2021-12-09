@@ -8,6 +8,7 @@ import ru.rumigor.cookbook.data.model.FavoriteRecipe
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.FavoritesViewModel
+import ru.rumigor.cookbook.ui.RecipeImagesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.ServerResponseViewModel
 
@@ -38,6 +39,16 @@ class RecipeDetailsPresenter (
                 .subscribe(
                     viewState::markFavorite,
                     viewState::favoriteError
+                )
+        disposables +=
+            recipeRepository
+                .getImages(recipeId)
+                .map {images -> images.map(RecipeImagesViewModel.Mapper::map)}
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showImage,
+                    viewState::showError
                 )
 
     }

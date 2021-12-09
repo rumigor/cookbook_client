@@ -18,13 +18,15 @@ import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.RecipeFragmentBinding
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.FavoritesViewModel
+import ru.rumigor.cookbook.ui.RecipeImagesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.abs.AbsFragment
+import ru.rumigor.cookbook.ui.recipeDetails.adapter.ImagesAdapter
 import javax.inject.Inject
 
 private const val ARG_RECIPE_ID = "RecipeID"
 
-class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetailsView {
+class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetailsView, ImagesAdapter.Delegate {
 
     private val recipeId: String by lazy {
         arguments?.getString(ARG_RECIPE_ID).orEmpty()
@@ -33,6 +35,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     private lateinit var recipeEdit: RecipeViewModel
 
     private var favorite = false
+
+    private val imagesAdapter = ImagesAdapter(this)
 
     private lateinit var favoriteItem: MenuItem
 
@@ -56,13 +60,13 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     private val ui: RecipeFragmentBinding by viewBinding()
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        ui.imagesRecycleView.adapter = imagesAdapter
+    }
+
     override fun showRecipe(recipe: RecipeViewModel) {
-        favoriteRecipe = FavoriteRecipe(recipe.recipeId, recipe.title, recipe.category.title, recipe.description, "https://st2.depositphotos.com/5575750/8869/v/600/depositphotos_88692298-stock-illustration-recipe-book-cover-concept.jpg")
-        context?.let {
-            Glide.with(it)
-                .load("https://st2.depositphotos.com/5575750/8869/v/600/depositphotos_88692298-stock-illustration-recipe-book-cover-concept.jpg")
-                .into(ui.dishPic)
-        }
+        favoriteRecipe = FavoriteRecipe(recipe.recipeId, recipe.title, recipe.category.title, recipe.description, "")
         ui.recipeTitle.text = recipe.title
         loadIngredients(recipe)
         loadSteps(recipe)
@@ -94,6 +98,12 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     override fun onDelete() {
         val navController = findNavController()
         navController.navigate(R.id.recipesListFragment)
+    }
+
+    override fun showImage(images: List<RecipeImagesViewModel>) {
+        if (images.isNotEmpty()){
+            imagesAdapter.submitList(images)
+        }
     }
 
     private fun loadSteps(recipe: RecipeViewModel) {
@@ -213,5 +223,9 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     override fun onResume() {
         super.onResume()
+    }
+
+    override fun onImagePicked(image: RecipeImagesViewModel) {
+
     }
 }

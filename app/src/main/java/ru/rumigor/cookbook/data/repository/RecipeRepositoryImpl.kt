@@ -19,8 +19,7 @@ import javax.inject.Inject
 class RecipeRepositoryImpl @Inject constructor(
     private val cookbookApi: CookbookApi,
     @Persisted private val cookbookDatabase: CookbookDatabase
-) : RecipeRepository
-{
+) : RecipeRepository {
 
     override fun getRecipes(): Observable<List<Recipe>> =
         cookbookApi
@@ -97,19 +96,19 @@ class RecipeRepositoryImpl @Inject constructor(
     override fun getRecipesByCategory(categoryId: String): Observable<List<Recipe>> =
         cookbookApi
             .getRecipesByCategory(categoryId)
-            .map{it.recipes}
+            .map { it.recipes }
             .toObservable()
 
     override fun findRecipeByName(title: String): Observable<List<Recipe>> =
         cookbookApi
             .findRecipeByName(title)
-            .map{it.recipes}
+            .map { it.recipes }
             .toObservable()
 
     override fun findRecipeByName(categoryId: String, title: String): Observable<List<Recipe>> =
         cookbookApi
             .findRecipeByNameInCategory(categoryId, title)
-            .map{it.recipes}
+            .map { it.recipes }
             .toObservable()
 
     override fun getTags(): Observable<List<Tag>> =
@@ -117,5 +116,9 @@ class RecipeRepositoryImpl @Inject constructor(
             .getTags()
             .toObservable()
 
-
+    override fun getImages(recipeId: String): Observable<List<RecipeImages>> =
+        cookbookApi
+            .getImage(recipeId)
+            .map { it.files }
+            .toObservable()
 }
