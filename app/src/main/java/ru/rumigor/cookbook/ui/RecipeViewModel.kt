@@ -13,7 +13,7 @@ class RecipeViewModel(
     val steps: List<Steps>,
     val user: User,
     val tags: List<Tag>,
-    val imageUrl: String
+    val imagePath: String?
 ): Serializable {
     object Mapper{
         fun map(recipe: Recipe) =
@@ -26,7 +26,7 @@ class RecipeViewModel(
                 recipe.steps,
                 recipe.user,
                 recipe.tags,
-                ""
+                recipe.imagePath
             )
     }
 }

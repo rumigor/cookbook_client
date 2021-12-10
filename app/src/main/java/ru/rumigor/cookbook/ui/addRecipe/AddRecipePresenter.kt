@@ -67,7 +67,7 @@ class AddRecipePresenter(
         recipeId: String,
         title: String,
         description: String,
-//        imagePath: String,
+        imagePath: String,
         categoryId: Int,
         ingredients: List<Ingredients>,
         steps: List<Steps>,
@@ -81,12 +81,13 @@ class AddRecipePresenter(
                             "0",
                             Category(categoryId, ""),
                             description = description,
-//                            imagePath = imagePath,
+                            imagePath = imagePath,
                             title = title,
                             user = User("4", "", ""),
                             ingredients = ingredients,
                             steps = steps,
                             tags = tags
+
                         )
                     )
                     .map(RecipeViewModel.Mapper::map)
@@ -104,7 +105,7 @@ class AddRecipePresenter(
                             recipeId,
                             Category(categoryId, ""),
                             description = description,
-//                            imagePath = imagePath,
+                            imagePath = imagePath,
                             title = title,
                             user = User("4", "", ""),
                             ingredients = ingredients,

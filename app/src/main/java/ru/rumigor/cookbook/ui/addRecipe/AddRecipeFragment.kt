@@ -41,6 +41,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     private var recipeId = "0"
 
+    private var imagePath = ""
+
     private var lastImages = mutableListOf<RecipeImagesViewModel>()
 
     private var imagesToRemove = mutableListOf<String>()
@@ -131,6 +133,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             categoryId = it.category.id - 1
             ui.addRecipeButton.text = "Изменить рецепт"
             newIngredients = it.ingredients as MutableList<Ingredients>
+            it.imagePath?.let{url-> imagePath = url}
             loadSteps(it.steps)
             loadTags(it.tags)
         }
@@ -491,6 +494,9 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     }
 
     private fun addRecipeToList(){
+        if (fileKeys.isEmpty()){
+            imagePath = "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/file/+${fileKeys[0]}"
+        }
         for (i in 0 until ui.steps.childCount step 5) {
             val newStep = Steps(
                 (ui.steps.getChildAt(i + 1) as EditText).text.toString(),
@@ -515,6 +521,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             recipeId,
             title,
             description,
+            imagePath,
             categoryId,
             newIngredients,
             newSteps,
@@ -551,7 +558,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     override fun showUpdatedRecipe() {
         for (image in imagesToRemove){
-            
+
         }
         for (image in fileKeys) {
             presenter.addPhoto(recipeId, image)

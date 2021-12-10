@@ -16,7 +16,7 @@ data class Recipe(
     @SerializedName("steps")
     val steps: List<Steps>,
     @SerializedName("tags")
-    val tags: List<Tag>
-//    @SerializedName("imagePath")
-//    val imagePath: String
+    val tags: List<Tag>,
+    @SerializedName("imagePath")
+    val imagePath: String?
 )
