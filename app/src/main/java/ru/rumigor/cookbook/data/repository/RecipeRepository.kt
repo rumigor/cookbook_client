@@ -6,6 +6,7 @@ import io.reactivex.rxjava3.core.Single
 import okhttp3.ResponseBody
 import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.model.Unit
+import ru.rumigor.cookbook.data.model.UploadImage
 
 interface RecipeRepository {
     fun getRecipes(): Observable<List<Recipe>>
@@ -35,6 +36,10 @@ interface RecipeRepository {
     fun getTags(): Observable<List<Tag>>
 
     fun getImages(recipeId: String): Observable<List<RecipeImages>>
+
+    fun addImage(recipeId: String, image: UploadImage): Completable
+
+    fun deleteImage(recipeId: String, fileKey: String): Completable
 
 
 }

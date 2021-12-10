@@ -4,12 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/drawable-v24/side_nav_bar.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/drawable/button.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/drawable/button_shape.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/drawable/side_nav_bar.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/drawable/side_nav_cookboob.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/activity_main2.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/addrecipe_view.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/addrecipe_view.xml" value="0.25" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/app_bar_main2.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/category_view.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/content_main2.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/dishimageview.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/fragment_gallery.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/fragment_slideshow.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/nav_header_main2.xml" value="0.20520833333333333" />
@@ -24,12 +28,8 @@
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/addrecipe_view.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/category_fragment_view.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/category_view.xml" value="0.13020833333333334" />
-        <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/content_main2.xml" value="0.13020833333333334" />
-        <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/dishimageview.xml" value="0.13020833333333334" />
-        <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/image_view.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipe_fragment.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipe_view.xml" value="0.13020833333333334" />
-        <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipeimage_view.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipes_fragment.xml" value="0.13020833333333334" />
       </map>
     </option>

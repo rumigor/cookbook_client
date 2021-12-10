@@ -108,43 +108,25 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
-            <LinearLayout
+            <Button
+                android:id="@+id/openImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16pt"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="#81D4FA"
+                android:text="Добавить фото"
+                app:cornerRadius="16dp" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:srcCompat="@drawable/ic_baseline_block_24" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/openImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:backgroundTint="#81D4FA"
-                    android:text="Открыть на устройстве"
-                    app:cornerRadius="16dp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/imagesList"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    tools:visibility="gone">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/url"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:hint="Введите адрес фото блюда" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
 
             <Button
                 android:id="@+id/addRecipeButton"

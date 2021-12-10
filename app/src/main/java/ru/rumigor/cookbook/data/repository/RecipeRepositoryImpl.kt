@@ -12,6 +12,7 @@ import ru.rumigor.cookbook.data.di.modules.InMemory
 import ru.rumigor.cookbook.data.di.modules.Persisted
 import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.model.Unit
+import ru.rumigor.cookbook.data.model.UploadImage
 import ru.rumigor.cookbook.data.storage.CookbookDatabase
 import java.io.File
 import javax.inject.Inject
@@ -121,4 +122,15 @@ class RecipeRepositoryImpl @Inject constructor(
             .getImage(recipeId)
             .map { it.files }
             .toObservable()
+
+    override fun addImage(
+        recipeId: String,
+        image: UploadImage
+    ): Completable =
+        cookbookApi
+            .addImage(recipeId, image)
+
+    override fun deleteImage(recipeId: String, fileKey: String): Completable =
+        cookbookApi
+            .removeImage(recipeId, fileKey)
 }

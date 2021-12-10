@@ -1,12 +1,13 @@
 package ru.rumigor.cookbook.ui
 
 import ru.rumigor.cookbook.data.model.Tag
+import java.io.Serializable
 
 class TagViewModel (
     val id: String,
     val briefName: String,
     val description: String
-) {
+): Serializable {
     object Mapper{
         fun map(tag: Tag) =
             TagViewModel(

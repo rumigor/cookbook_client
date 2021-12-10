@@ -152,4 +152,30 @@ class AddRecipePresenter(
                     )
         }
     }
+
+    fun getPhoto(recipeId: String){
+        disposables +=
+            recipeRepository
+                .getImages(recipeId)
+                .map {images -> images.map(RecipeImagesViewModel.Mapper::map)}
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showImage,
+                    viewState::showError
+                )
+    }
+
+    fun addPhoto(recipeId: String, fileKey: String){
+        val image = UploadImage(fileKey, "")
+        disposables +=
+            recipeRepository
+                .addImage(recipeId, image)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::addPhoto,
+                    viewState::showError
+                )
+    }
 }

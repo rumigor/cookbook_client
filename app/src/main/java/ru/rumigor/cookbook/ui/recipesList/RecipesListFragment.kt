@@ -17,6 +17,7 @@ import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.RecipesFragmentBinding
 import ru.rumigor.cookbook.scheduler.Schedulers
+import ru.rumigor.cookbook.ui.RecipeImagesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.abs.AbsFragment
 import ru.rumigor.cookbook.ui.recipesList.adapter.RecipeAdapter
@@ -25,7 +26,8 @@ import javax.inject.Inject
 private const val ARG_RECIPE_QUERY = "Query"
 private const val ARG_CATEGORY_ID = "CategoryId"
 
-class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListView, RecipeAdapter.Delegate {
+class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListView,
+    RecipeAdapter.Delegate {
 
     private val query: String? by lazy {
         arguments?.getString(ARG_RECIPE_QUERY).orEmpty()
@@ -36,6 +38,10 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
     }
 
     private lateinit var navController: NavController
+
+    private var imagesCounter = 0
+
+    private var newRecipes = mutableListOf<RecipeViewModel>()
 
     @Inject
     lateinit var schedulers: Schedulers
@@ -75,6 +81,10 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
         recipeAdapter.submitList(recipes)
     }
 
+    override fun showImage(images: List<RecipeImagesViewModel>) {
+
+    }
+
     override fun showError(error: Throwable) {
         Toast.makeText(
             requireContext(),
@@ -112,7 +122,7 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
                 presenter.search("")
                 false
             }
-        } catch (e: Throwable){
+        } catch (e: Throwable) {
             Toast.makeText(
                 requireContext(),
                 "Sorry, something go with search toolbar",
@@ -123,9 +133,10 @@ class RecipesListFragment: AbsFragment(R.layout.recipes_fragment), RecipesListVi
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            android.R.id.home -> { requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout)
-                .open()
+        when (item.itemId) {
+            android.R.id.home -> {
+                requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout)
+                    .open()
             }
         }
         return super.onOptionsItemSelected(item)

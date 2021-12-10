@@ -3,6 +3,7 @@ package ru.rumigor.cookbook.data.api
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.http.*
 import ru.rumigor.cookbook.data.model.*
@@ -41,6 +42,10 @@ interface CookbookApi {
     fun getTags(): Single<List<Tag>>
     @GET("/api/v1/recipe/{recipe_id}/image")
     fun getImage(@Path("recipe_id")recipeId: String): Single<Image>
+    @POST("/api/v1/recipe/{recipe_id}/image")
+    fun addImage(@Path("recipe_id")recipeId: String, @Body image: UploadImage): Completable
+    @DELETE("/api/v1/recipe/{recipe_id}/image/{filekey}")
+    fun removeImage(@Path("recipe_id")recipeId: String, @Path("filekey") fileKey: String): Completable
 
 
 }

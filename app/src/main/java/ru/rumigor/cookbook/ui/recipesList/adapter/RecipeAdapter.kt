@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.ui.RecipeViewModel
-import ru.rumigor.cookbook.ui.recipesList.adapter.RecipeDiff
-import ru.rumigor.cookbook.ui.recipesList.adapter.RecipeHolder
+
 
 class RecipeAdapter(private val delegate: Delegate): ListAdapter<RecipeViewModel, RecipeHolder>(
     RecipeDiff
 ) {
+
 
     interface Delegate{
         fun onRecipePicked(recipe: RecipeViewModel)
