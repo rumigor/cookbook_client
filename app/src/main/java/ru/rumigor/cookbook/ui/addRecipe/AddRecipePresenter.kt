@@ -1,6 +1,5 @@
 package ru.rumigor.cookbook.ui.addRecipe
 
-import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import moxy.MvpPresenter
@@ -178,5 +177,33 @@ class AddRecipePresenter(
                     viewState::addPhoto,
                     viewState::showError
                 )
+    }
+
+    fun removePhoto(recipeId: String, fileKey: String){
+        disposables +=
+            recipeRepository
+                .deleteImage(recipeId, fileKey)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe()
+    }
+
+    fun addStepPhoto(recipeId: String, stepNumber: Int, fileKey: String){
+        val image = UploadImage(fileKey, "фото этапа № $stepNumber")
+        disposables +=
+            recipeRepository
+                .addStepImage(recipeId, stepNumber.toString(), image)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe()
+    }
+
+    fun removeStepPhoto(recipeId: String, stepNumber: Int, fileKey: String){
+        disposables +=
+            recipeRepository
+                .removeStepImage(recipeId, stepNumber.toString(), fileKey)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe()
     }
 }

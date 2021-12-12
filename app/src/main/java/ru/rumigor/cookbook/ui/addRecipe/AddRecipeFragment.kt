@@ -28,7 +28,6 @@ import ru.rumigor.cookbook.data.repository.UploadImage
 import ru.rumigor.cookbook.databinding.AddrecipeViewBinding
 import ru.rumigor.cookbook.dp
 import ru.rumigor.cookbook.scheduler.Schedulers
-import ru.rumigor.cookbook.setStartDrawableCircleImageFromUri
 import ru.rumigor.cookbook.ui.*
 import ru.rumigor.cookbook.ui.abs.AbsFragment
 import javax.inject.Inject
@@ -45,7 +44,20 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     private var lastImages = mutableListOf<RecipeImagesViewModel>()
 
+    private var stepFileKeys = mutableListOf<StepImages>()
+
+    data class StepImages (
+        var fileKeys : MutableList<String> = mutableListOf(),
+        var imagesCounter: Int = 0
+            )
+
+    private var stepImagesToRemove = mutableListOf<MutableList<String>>()
+
     private var imagesToRemove = mutableListOf<String>()
+
+    private var imagesCount = 0
+
+    private var stepIndex = -1
 
     private lateinit var link: TextView
     private lateinit var image: ImageView
@@ -55,7 +67,9 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     private var ingredientIndex = 0
 
-    private lateinit var startForResult: ActivityResultLauncher<Intent>
+    private lateinit var uploadRecipeImage: ActivityResultLauncher<Intent>
+
+    private lateinit var uploadStepImage: ActivityResultLauncher<Intent>
 
     private var selectedImagePath = ""
 
@@ -110,14 +124,14 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        startForResult =
+        uploadRecipeImage =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     result.data?.data.let {
                         Toast.makeText(requireContext(), "Изображение выбрано", Toast.LENGTH_SHORT)
                             .show()
-                        selectedImagePath = ImageFilePath.getPath(requireContext(), it)
-                        presenter.loadImage(selectedImagePath)
+                        val imagePath = ImageFilePath.getPath(requireContext(), it)
+                        presenter.loadImage(imagePath)
                     }
                 }
             }
@@ -133,7 +147,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             categoryId = it.category.id - 1
             ui.addRecipeButton.text = "Изменить рецепт"
             newIngredients = it.ingredients as MutableList<Ingredients>
-            it.imagePath?.let{url-> imagePath = url}
+            it.imagePath?.let { url -> imagePath = url }
             loadSteps(it.steps)
             loadTags(it.tags)
         }
@@ -146,23 +160,25 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             val stepText = EditText(context)
             stepText.hint = "Введите описание этапа"
             val stepNumber = EditText(context)
-            val stepImage = ImageView(context)
-            val stepImageLink = TextView(context)
-            stepImageLink.visibility = View.GONE
-            stepImage.maxHeight = 100
-            stepImage.maxWidth = 100
-            stepImage.setImageResource(R.drawable.ic_baseline_block_24)
-            stepImage.setOnClickListener {
-                image = stepImage
-                link = stepImageLink
-                pickImage()
-            }
+            val addPhoto = Button(context, null, R.style.buttonAdd)
+            addPhoto.text = "Добавить фото"
+            val imageFrame = HorizontalScrollView(requireContext())
             val deleteStep = Button(context)
             deleteStep.text = "Удалить этап"
             ui.steps.addView(stepNumber)
             ui.steps.addView(stepText)
-            ui.steps.addView(stepImage)
-            ui.steps.addView(stepImageLink)
+            ui.steps.addView(addPhoto)
+            ui.steps.addView(imageFrame)
+            ui.steps.addView(deleteStep)
+            addPhoto.background = ResourcesCompat.getDrawable(resources, R.drawable.button_add, requireActivity().theme)
+            addPhoto.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
+            stepFileKeys.add(StepImages(mutableListOf(), 0))
+            stepImagesToRemove.add(mutableListOf())
+            addPhoto.setOnClickListener {
+                stepIndex = ui.steps.indexOfChild(it) / 5
+                pickImage()
+            }
+            ui.steps.addView(imageFrame)
             val rightGravityParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
             )
@@ -171,7 +187,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             stepNumber.setText(
                 getString(
                     R.string.stage,
-                    (ui.steps.indexOfChild(stepNumber) / 4 + 1)
+                    (ui.steps.indexOfChild(stepNumber) / 5 + 1)
                 )
             )
             deleteStep.background = ResourcesCompat.getDrawable(
@@ -186,7 +202,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
 
         ui.openImage.setOnClickListener {
-            pickImage()
+            pickStepImage()
         }
 
         ui.addRecipeButton.setOnClickListener {
@@ -199,6 +215,12 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 } else addRecipeToList()
             }
         }
+    }
+
+    private fun pickStepImage() {
+        val getIntent = Intent(ACTION_GET_CONTENT)
+        getIntent.type = "image/*"
+        uploadStepImage.launch(getIntent)
     }
 
     private fun checkIngredients(): Boolean {
@@ -275,7 +297,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     private fun pickImage() {
         val getIntent = Intent(ACTION_GET_CONTENT)
         getIntent.type = "image/*"
-        startForResult.launch(getIntent)
+        uploadRecipeImage.launch(getIntent)
     }
 
     private fun addIngredient() {
@@ -382,7 +404,6 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             }
             ingredientUnit.setSelection(position)
             tableRow.addView(ingredientUnit)
-//            ingredientsIds.add(ingredient.ingredient.id)
             unitsIds.add(ingredient.unit.id)
 
             removeIngredient.setOnClickListener { removeIngredient(tableRow) }
@@ -395,16 +416,15 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         for (step in steps) {
             val stepText = EditText(context)
             val stepNumber = EditText(context)
-            val stepImage = ImageView(context)
-            val stepImageLink = TextView(context)
-            stepImageLink.visibility = View.GONE
             val deleteStep = Button(context)
+            val addPhoto = Button(context)
+            addPhoto.background = ResourcesCompat.getDrawable(resources, R.drawable.button_add, requireActivity().theme)
+            addPhoto.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
+            addPhoto.text = "Добавить фото"
+            val imageFrame = HorizontalScrollView(requireContext())
             deleteStep.text = "Удалить этап"
             stepText.setText(step.stepDescription)
 //            stepImageLink.text = step.stepImagePath
-            stepImage.maxHeight = 100
-            stepImage.maxWidth = 100
-            stepImage.setImageResource(R.drawable.ic_baseline_block_24)
 //            context?.let{
 //                Glide.with(it)
 //                    .load(step.stepImagePath)
@@ -415,15 +435,16 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 //            )
 //                    .into(stepImage)
 //            }
-            stepImage.setOnClickListener {
-                image = stepImage
-                link = stepImageLink
-                pickImage()
-            }
             ui.steps.addView(stepNumber)
             ui.steps.addView(stepText)
-            ui.steps.addView(stepImage)
-            ui.steps.addView(stepImageLink)
+            ui.steps.addView(addPhoto)
+            ui.steps.addView(imageFrame)
+            stepFileKeys.add(StepImages(mutableListOf(), 0))
+            stepImagesToRemove.add(mutableListOf())
+            addPhoto.setOnClickListener {
+                stepIndex = ui.steps.indexOfChild(it) / 5
+                pickImage()
+            }
             val rightGravityParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
             )
@@ -432,7 +453,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             stepNumber.setText(
                 getString(
                     R.string.stage,
-                    (ui.steps.indexOfChild(stepNumber) / 4 + 1)
+                    (ui.steps.indexOfChild(stepNumber) / 5 + 1)
                 )
             )
             deleteStep.background = ResourcesCompat.getDrawable(
@@ -450,8 +471,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     private fun deleteStep(view: View?) {
         val index = ui.steps.indexOfChild(view)
-        for (k in index until ui.steps.childCount step 4) {
-            ((ui.steps.getChildAt(k)) as TextView).text = getString(R.string.stage, k / 4)
+        for (k in index until ui.steps.childCount step 5) {
+            ((ui.steps.getChildAt(k)) as TextView).text = getString(R.string.stage, k / 5)
         }
         for (k in 0..4) {
             ui.steps.removeViewAt(index)
@@ -463,6 +484,15 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             .show()
         for (image in fileKeys) {
             presenter.addPhoto(recipeViewModel.recipeId, image)
+        }
+        if (stepFileKeys.isNotEmpty()){
+            for ((index, step) in stepFileKeys.withIndex()){
+                if (step.fileKeys.isNotEmpty()){
+                    for (i in step.imagesCounter until step.fileKeys.size){
+                        presenter.addStepPhoto(recipeViewModel.recipeId, index, step.fileKeys[i])
+                    }
+                }
+            }
         }
         val navController = findNavController()
         val bundle = Bundle()
@@ -493,9 +523,10 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         if (checkIngredients()) addRecipe()
     }
 
-    private fun addRecipeToList(){
-        if (fileKeys.isEmpty()){
-            imagePath = "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/file/+${fileKeys[0]}"
+    private fun addRecipeToList() {
+        if (fileKeys.isNotEmpty()) {
+            imagePath =
+                "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/file/+${fileKeys[0]}"
         }
         for (i in 0 until ui.steps.childCount step 5) {
             val newStep = Steps(
@@ -544,7 +575,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             )
             newIngredients.add(newIngredient)
         }
-       addRecipeToList()
+        addRecipeToList()
     }
 
     override fun loadImage(response: ImageServerResponseViewModel) {
@@ -557,11 +588,27 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     }
 
     override fun showUpdatedRecipe() {
-        for (image in imagesToRemove){
-
+        for (image in imagesToRemove) {
+            presenter.removePhoto(recipeId, image)
         }
-        for (image in fileKeys) {
-            presenter.addPhoto(recipeId, image)
+        if (fileKeys.isNotEmpty()) {
+            for (i in imagesCount until fileKeys.size) {
+                presenter.addPhoto(recipeId, fileKeys[i])
+            }
+        }
+        for ((index, step) in stepImagesToRemove.withIndex()){
+            for (image in step){
+                presenter.removeStepPhoto(recipeId,index+1, image)
+            }
+        }
+        if (stepFileKeys.isNotEmpty()){
+            for ((index, step) in stepFileKeys.withIndex()){
+                if (step.fileKeys.isNotEmpty()){
+                    for (i in step.imagesCounter until step.fileKeys.size){
+                        presenter.addStepPhoto(recipeId, index, step.fileKeys[i])
+                    }
+                }
+            }
         }
         val navController = findNavController()
         val bundle = Bundle()
@@ -584,25 +631,49 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     override fun fileUploaded(response: Response<ResponseBody>) {
         val imageUrl = response.headers()["Location"]
         imageUrl?.let { it ->
-            val urlParts = it.split("/").toTypedArray()
-            recipeImages.add(urlParts[urlParts.size - 1])
-            val newImage = ImageView(context)
-            ui.imagesList.addView(newImage)
-            context?.let { context ->
-                Glide.with(context)
-                    .load(it)
-                    .apply(
-                        RequestOptions
-                            .centerCropTransform()
-                            .override(80.dp(context))
-                    )
-                    .into(newImage)
-            }
-            fileKeys.add(urlParts[urlParts.size - 1])
-            newImage.setOnLongClickListener {
-                fileKeys.removeAt(ui.imagesList.indexOfChild(it))
-                ui.imagesList.removeView(it)
-                return@setOnLongClickListener true
+                val urlParts = it.split("/").toTypedArray()
+            if (stepIndex == -1) {
+                if (checkFileKey(urlParts[urlParts.size - 1])) {
+                    val newImage = ImageView(context)
+                    ui.imagesList.addView(newImage)
+                    context?.let { context ->
+                        Glide.with(context)
+                            .load(it)
+                            .apply(
+                                RequestOptions
+                                    .centerCropTransform()
+                                    .override(80.dp(context))
+                            )
+                            .into(newImage)
+                    }
+                    fileKeys.add(urlParts[urlParts.size - 1])
+                    newImage.setOnLongClickListener {
+                        fileKeys.removeAt(ui.imagesList.indexOfChild(it))
+                        ui.imagesList.removeView(it)
+                        return@setOnLongClickListener true
+                    }
+                } else Toast.makeText(requireContext(), "Фото уже добавлено", Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                val newImage = ImageView(context)
+                (ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).addView(newImage)
+                context?.let { context ->
+                    Glide.with(context)
+                        .load(it)
+                        .apply(
+                            RequestOptions
+                                .centerCropTransform()
+                                .override(80.dp(context))
+                        )
+                        .into(newImage)
+                }
+                stepFileKeys[stepIndex].fileKeys.add(urlParts[urlParts.size - 1])
+                newImage.setOnLongClickListener {
+                    val index = ((ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView)).indexOfChild(it)
+                    stepFileKeys[stepIndex].fileKeys.removeAt(index)
+                    (ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).removeView(it)
+                    return@setOnLongClickListener true
+                }
             }
         }
     }
@@ -623,8 +694,11 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             }
             val urlParts = image.url.split("/").toTypedArray()
             fileKeys.add(urlParts[urlParts.size - 1])
+            imagesCount++
             photo.setOnLongClickListener {
+                imagesToRemove.add(fileKeys[ui.imagesList.indexOfChild(it)])
                 fileKeys.removeAt(ui.imagesList.indexOfChild(it))
+                imagesCount--
                 ui.imagesList.removeView(it)
                 return@setOnLongClickListener true
             }
@@ -633,6 +707,33 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     override fun addPhoto() {
         Toast.makeText(requireContext(), "Фото добавлено", Toast.LENGTH_LONG).show()
+    }
+
+    override fun showStepImage(images: List<RecipeImagesViewModel>) {
+        for (image in images) {
+            val photo = ImageView(context)
+            (ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).addView(photo)
+            context?.let {
+                Glide.with(it)
+                    .load(image.url)
+                    .apply(
+                        RequestOptions
+                            .centerCropTransform()
+                            .override(80.dp(it))
+                    )
+                    .into(photo)
+            }
+            val urlParts = image.url.split("/").toTypedArray()
+            stepFileKeys[stepIndex].fileKeys.add(urlParts[urlParts.size - 1])
+            stepFileKeys[stepIndex].imagesCounter++
+            photo.setOnLongClickListener {
+                val index = ((ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView)).indexOfChild(it)
+                stepFileKeys[stepIndex].fileKeys.removeAt(index)
+                (ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).removeView(it)
+                stepFileKeys[stepIndex].imagesCounter--
+                return@setOnLongClickListener true
+            }
+        }
     }
 
     private fun addTag() {
@@ -683,6 +784,16 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
         return super.onOptionsItemSelected(item)
 
+    }
+
+    private fun checkFileKey(imageName: String): Boolean {
+        var isUnique = true
+        for (file in fileKeys) {
+            if (imageName == file) {
+                isUnique = false
+            }
+        }
+        return isUnique
     }
 
 }

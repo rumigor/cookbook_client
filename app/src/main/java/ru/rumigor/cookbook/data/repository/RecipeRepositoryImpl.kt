@@ -1,5 +1,6 @@
 package ru.rumigor.cookbook.data.repository
 
+import androidx.room.PrimaryKey
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
@@ -130,7 +131,24 @@ class RecipeRepositoryImpl @Inject constructor(
         cookbookApi
             .addImage(recipeId, image)
 
+    override fun addStepImage(
+        recipeId: String,
+        stepNumber: String,
+        image: UploadImage
+    ): Completable =
+        cookbookApi
+            .addStepImage(recipeId, stepNumber, image)
+
+
     override fun deleteImage(recipeId: String, fileKey: String): Completable =
         cookbookApi
             .removeImage(recipeId, fileKey)
+
+    override fun removeStepImage(
+        recipeId: String,
+        stepNumber: String,
+        fileKey: String
+    ): Completable =
+        cookbookApi
+            .removeStepImage(recipeId, stepNumber, fileKey)
 }

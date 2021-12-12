@@ -89,5 +89,4 @@ class RecipeDetailsPresenter (
                 .subscribeOn(schedulers.background())
                 .subscribe()
     }
-
 }

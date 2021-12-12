@@ -39,7 +39,11 @@ interface RecipeRepository {
 
     fun addImage(recipeId: String, image: UploadImage): Completable
 
+    fun addStepImage(recipeId: String, stepNumber: String, image: UploadImage): Completable
+
     fun deleteImage(recipeId: String, fileKey: String): Completable
+
+    fun removeStepImage(recipeId: String, stepNumber: String, fileKey: String): Completable
 
 
 }

@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -119,8 +120,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             stepDescription.textSize = 18f
             stepDescription.setTypeface(null, ITALIC)
             ui.stages.addView(stepDescription)
-            val stepImage = ImageView(context)
-            ui.stages.addView(stepImage)
+            val stepImages = CardView(requireContext(),null, R.style.ImageCardViewStyle)
+            ui.stages.addView(stepImages)
 //            context?.let {
 //                Glide.with(it)
 //                    .load(step.stepImagePath)
@@ -132,8 +133,7 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 //                    )
 //                    .into(stepImage)
 //            }
-            stepImage.setPadding(0,0,0,8)
-            stepImage.setImageResource(R.drawable.ic_baseline_block_24)
+            stepImages.setPadding(0,0,0,8)
         }
 
     }

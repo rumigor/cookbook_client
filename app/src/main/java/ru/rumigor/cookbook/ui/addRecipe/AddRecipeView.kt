@@ -33,4 +33,6 @@ interface AddRecipeView: ScreenView {
     fun showImage(images: List<RecipeImagesViewModel>)
     @SingleState
     fun addPhoto()
+    @Skip
+    fun showStepImage(images: List<RecipeImagesViewModel>)
 }

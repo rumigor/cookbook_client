@@ -44,8 +44,12 @@ interface CookbookApi {
     fun getImage(@Path("recipe_id")recipeId: String): Single<Image>
     @POST("/api/v1/recipe/{recipe_id}/image")
     fun addImage(@Path("recipe_id")recipeId: String, @Body image: UploadImage): Completable
+    @POST("/api/v1/recipe/{recipe_id}/image")
+    fun addStepImage(@Path("recipe_id")recipeId: String, @Header("Resource-Part") step: String, @Body image: UploadImage): Completable
     @DELETE("/api/v1/recipe/{recipe_id}/image/{filekey}")
     fun removeImage(@Path("recipe_id")recipeId: String, @Path("filekey") fileKey: String): Completable
+    @DELETE("/api/v1/recipe/{recipe_id}/image/{filekey}")
+    fun removeStepImage(@Header("Resource-Part") step: String, @Path("recipe_id")recipeId: String, @Path("filekey") fileKey: String): Completable
 
 
 }
