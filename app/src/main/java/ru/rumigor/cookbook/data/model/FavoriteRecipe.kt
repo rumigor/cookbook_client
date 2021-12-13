@@ -16,5 +16,5 @@ data class FavoriteRecipe
     @ColumnInfo(name = "description")
     val description: String,
     @ColumnInfo(name = "imagePath")
-    val imagePath: String
+    var imagePath: String
 )

@@ -20,7 +20,7 @@
         <item name="contentPaddingTop">2dp</item>
         <item name="contentPaddingLeft">2dp</item>
         <item name="contentPaddingRight">2dp</item>
-        <item name="cardBackgroundColor">@color/light_green</item>
+        <item name="cardBackgroundColor">#FFFDE7</item>
         <item name="android:layout_margin">4dp</item>
     </style>
 

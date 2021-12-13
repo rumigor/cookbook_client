@@ -166,6 +166,18 @@ class AddRecipePresenter(
                 )
     }
 
+    fun getStepPhoto(recipeId: String){
+        disposables +=
+            recipeRepository
+                .getStepImages(recipeId)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::loadStepImages,
+                    viewState::showError
+                )
+    }
+
     fun addPhoto(recipeId: String, fileKey: String){
         val image = UploadImage(fileKey, "")
         disposables +=

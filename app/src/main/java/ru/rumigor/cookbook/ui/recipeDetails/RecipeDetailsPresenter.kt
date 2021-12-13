@@ -89,4 +89,16 @@ class RecipeDetailsPresenter (
                 .subscribeOn(schedulers.background())
                 .subscribe()
     }
+    fun loadStepImages(recipeId: String){
+        disposables +=
+            recipeRepository
+                .getStepImages(recipeId)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::loadStepImages,
+                    viewState::showError
+                )
+
+    }
 }

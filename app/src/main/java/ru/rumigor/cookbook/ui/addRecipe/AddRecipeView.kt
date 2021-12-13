@@ -8,6 +8,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 
 import ru.rumigor.cookbook.data.model.FileResponse
+import ru.rumigor.cookbook.data.model.RecipeImages
 import ru.rumigor.cookbook.ui.*
 
 interface AddRecipeView: ScreenView {
@@ -35,4 +36,6 @@ interface AddRecipeView: ScreenView {
     fun addPhoto()
     @Skip
     fun showStepImage(images: List<RecipeImagesViewModel>)
+    @Skip
+    fun loadStepImages(stepImages: Map<String, List<RecipeImages>>)
 }

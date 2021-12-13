@@ -9,15 +9,21 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import moxy.ktx.moxyPresenter
 import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.data.model.FavoriteRecipe
+import ru.rumigor.cookbook.data.model.RecipeImages
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.RecipeFragmentBinding
+import ru.rumigor.cookbook.dp
 import ru.rumigor.cookbook.scheduler.Schedulers
+import ru.rumigor.cookbook.setStartDrawableCircleImageFromUri
 import ru.rumigor.cookbook.ui.FavoritesViewModel
 import ru.rumigor.cookbook.ui.RecipeImagesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
@@ -105,6 +111,29 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         if (images.isNotEmpty()){
             imagesAdapter.submitList(images)
         }
+        favoriteRecipe.imagePath = images[0].url
+    }
+
+    override fun loadStepImages(stepImages: Map<String, List<RecipeImages>>) {
+        val adapterLists = mutableListOf<MutableList<RecipeImagesViewModel>>()
+        val imageAdapters = mutableListOf<ImagesAdapter>()
+        for (i in 0 until stepImages.size){
+            adapterLists.add(mutableListOf())
+            val stepUrls = stepImages[i.toString()]
+            stepUrls?.let{
+                for (image in it){
+                    val stepImage = RecipeImagesViewModel(image.url, image.description)
+                    adapterLists[i].add(stepImage)
+                }
+            }
+            val stepImagesRecycleView = RecyclerView(requireContext())
+            val stepImagesAdapter = ImagesAdapter(this)
+            imageAdapters.add(stepImagesAdapter)
+            stepImagesRecycleView.adapter = imageAdapters[i]
+            (ui.stages.getChildAt((i*3)+2) as CardView).addView(stepImagesRecycleView)
+            stepImagesRecycleView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            imageAdapters[i].submitList(adapterLists[i])
+        }
     }
 
     private fun loadSteps(recipe: RecipeViewModel) {
@@ -120,21 +149,15 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             stepDescription.textSize = 18f
             stepDescription.setTypeface(null, ITALIC)
             ui.stages.addView(stepDescription)
-            val stepImages = CardView(requireContext(),null, R.style.ImageCardViewStyle)
+            val stepImages = CardView(requireContext())
+            stepImages.cardElevation = 6f
+            stepImages.maxCardElevation = 10f
+            stepImages.setPadding(2,2,2,2)
+            stepImages.background = ResourcesCompat.getDrawable(resources, R.drawable.card_background, requireActivity().theme)
             ui.stages.addView(stepImages)
-//            context?.let {
-//                Glide.with(it)
-//                    .load(step.stepImagePath)
-//                    .placeholder(R.drawable.noimage)
-//                    .apply(
-//                        RequestOptions
-//                            .fitCenterTransform()
-//                            .override(250.dp(requireContext()))
-//                    )
-//                    .into(stepImage)
-//            }
             stepImages.setPadding(0,0,0,8)
         }
+        presenter.loadStepImages(recipeId)
 
     }
 

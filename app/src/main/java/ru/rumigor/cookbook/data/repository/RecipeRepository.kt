@@ -45,5 +45,7 @@ interface RecipeRepository {
 
     fun removeStepImage(recipeId: String, stepNumber: String, fileKey: String): Completable
 
+    fun getStepImages(recipeId: String): Observable<Map<String, List<RecipeImages>>>
+
 
 }

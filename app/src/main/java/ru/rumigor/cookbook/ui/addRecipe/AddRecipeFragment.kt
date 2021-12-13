@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -157,19 +158,27 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
 
         ui.addStep.setOnClickListener {
+            val rightGravityParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            rightGravityParams.gravity = Gravity.END
+            rightGravityParams.marginStart = 2
+            rightGravityParams.marginEnd = 2
             val stepText = EditText(context)
             stepText.hint = "Введите описание этапа"
             val stepNumber = EditText(context)
-            val addPhoto = Button(context, null, R.style.buttonAdd)
+            val addPhoto = Button(context)
             addPhoto.text = "Добавить фото"
             val imageFrame = HorizontalScrollView(requireContext())
             val deleteStep = Button(context)
             deleteStep.text = "Удалить этап"
             ui.steps.addView(stepNumber)
             ui.steps.addView(stepText)
-            ui.steps.addView(addPhoto)
-            ui.steps.addView(imageFrame)
-            ui.steps.addView(deleteStep)
+            ui.steps.addView(addPhoto, rightGravityParams)
+            val linearLayout = LinearLayout(requireContext())
+            linearLayout.orientation = LinearLayout.VERTICAL
+            imageFrame.addView(linearLayout)
+            addPhoto.setPadding(0,2,0,4)
             addPhoto.background = ResourcesCompat.getDrawable(resources, R.drawable.button_add, requireActivity().theme)
             addPhoto.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
             stepFileKeys.add(StepImages(mutableListOf(), 0))
@@ -178,11 +187,10 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 stepIndex = ui.steps.indexOfChild(it) / 5
                 pickImage()
             }
+
+            addPhoto.setPadding(2,2,2,2)
             ui.steps.addView(imageFrame)
-            val rightGravityParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            rightGravityParams.gravity = Gravity.END
+
             ui.steps.addView(deleteStep, rightGravityParams)
             stepNumber.setText(
                 getString(
@@ -195,6 +203,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 R.drawable.button_shape,
                 requireActivity().theme
             )
+            deleteStep.setPadding(2,2,2,2)
             deleteStep.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
             deleteStep.setOnClickListener {
                 deleteStep(stepNumber)
@@ -202,6 +211,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
 
         ui.openImage.setOnClickListener {
+            stepIndex = - 1
             pickStepImage()
         }
 
@@ -220,7 +230,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     private fun pickStepImage() {
         val getIntent = Intent(ACTION_GET_CONTENT)
         getIntent.type = "image/*"
-        uploadStepImage.launch(getIntent)
+        uploadRecipeImage.launch(getIntent)
     }
 
     private fun checkIngredients(): Boolean {
@@ -311,8 +321,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, unitsList)
         unitsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         val tableRow = TableRow(context)
-        tableRow.setPadding(0, 4, 0, 4)
-        tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
+        tableRow.setPadding(0, 0, 0, 0)
+        tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
         val removeIngredient = ImageView(context)
         removeIngredient.setImageResource(R.drawable.ic_baseline_cancel_24)
         tableRow.addView(removeIngredient)
@@ -321,11 +331,12 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         ingredientName.hint = "Наименование"
         ingredientName.threshold = 1
         ingredientName.width = 200.dp(requireContext())
-        ingredientName.setPadding(0, 0, 6, 0)
+        ingredientName.setPadding(0, 0, 0, 0)
         tableRow.addView(ingredientName)
         val ingredientAmount = EditText(context)
+        ingredientAmount.inputType = InputType.TYPE_CLASS_NUMBER
         ingredientAmount.hint = "количество"
-        ingredientAmount.setPadding(0, 0, 6, 0)
+        ingredientAmount.setPadding(0, 0, 0, 0)
         tableRow.addView(ingredientAmount)
         val ingredientUnit = Spinner(context)
         ingredientUnit.adapter = unitsAdapter
@@ -377,7 +388,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         for (ingredient in ingredients) {
             val tableRow = TableRow(context)
             tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
-            tableRow.setPadding(0, 4, 0, 4)
+            tableRow.setPadding(0, 0, 0, 0)
             val removeIngredient = ImageView(context)
             removeIngredient.setImageResource(R.drawable.ic_baseline_cancel_24)
             tableRow.addView(removeIngredient)
@@ -387,11 +398,12 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ingredientName.threshold = 1
             ingredientName.setText(ingredient.ingredient.name)
             ingredientName.width = 200.dp(requireContext())
-            ingredientName.setPadding(0, 0, 6, 0)
+            ingredientName.setPadding(0, 0, 0, 0)
             tableRow.addView(ingredientName)
             val ingredientAmount = EditText(context)
+            ingredientAmount.inputType = InputType.TYPE_CLASS_NUMBER
             ingredientAmount.setText(ingredient.amount.toString())
-            ingredientName.setPadding(0, 0, 6, 0)
+            ingredientName.setPadding(0, 0, 0, 0)
             tableRow.addView(ingredientAmount)
             val ingredientUnit = Spinner(context)
             ingredientUnit.adapter = unitsAdapter
@@ -418,37 +430,32 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             val stepNumber = EditText(context)
             val deleteStep = Button(context)
             val addPhoto = Button(context)
+            val rightGravityParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            rightGravityParams.gravity = Gravity.END
+            rightGravityParams.marginStart = 2
+            rightGravityParams.marginEnd = 2
             addPhoto.background = ResourcesCompat.getDrawable(resources, R.drawable.button_add, requireActivity().theme)
             addPhoto.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
             addPhoto.text = "Добавить фото"
             val imageFrame = HorizontalScrollView(requireContext())
             deleteStep.text = "Удалить этап"
             stepText.setText(step.stepDescription)
-//            stepImageLink.text = step.stepImagePath
-//            context?.let{
-//                Glide.with(it)
-//                    .load(step.stepImagePath)
-//                    .apply(
-//                RequestOptions
-//                    .centerCropTransform()
-//                    .override(100.dp(requireContext()))
-//            )
-//                    .into(stepImage)
-//            }
             ui.steps.addView(stepNumber)
             ui.steps.addView(stepText)
-            ui.steps.addView(addPhoto)
+            ui.steps.addView(addPhoto, rightGravityParams)
+            addPhoto.setPadding(2,2,2,2)
             ui.steps.addView(imageFrame)
+            val linearLayout = LinearLayout(requireContext())
+            linearLayout.orientation = LinearLayout.VERTICAL
+            imageFrame.addView(linearLayout)
             stepFileKeys.add(StepImages(mutableListOf(), 0))
             stepImagesToRemove.add(mutableListOf())
             addPhoto.setOnClickListener {
                 stepIndex = ui.steps.indexOfChild(it) / 5
                 pickImage()
             }
-            val rightGravityParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            rightGravityParams.gravity = Gravity.END
             ui.steps.addView(deleteStep, rightGravityParams)
             stepNumber.setText(
                 getString(
@@ -461,11 +468,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 R.drawable.button_shape,
                 requireActivity().theme
             )
+            deleteStep.setPadding(2,2,2,2)
             deleteStep.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
             deleteStep.setOnClickListener {
                 deleteStep(stepNumber)
             }
         }
+        presenter.getStepPhoto(recipeId)
 
     }
 
@@ -598,7 +607,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
         for ((index, step) in stepImagesToRemove.withIndex()){
             for (image in step){
-                presenter.removeStepPhoto(recipeId,index+1, image)
+                presenter.removeStepPhoto(recipeId,index, image)
             }
         }
         if (stepFileKeys.isNotEmpty()){
@@ -656,7 +665,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                     .show()
             } else {
                 val newImage = ImageView(context)
-                (ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).addView(newImage)
+                ((ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).getChildAt(0) as LinearLayout).addView(newImage)
                 context?.let { context ->
                     Glide.with(context)
                         .load(it)
@@ -712,7 +721,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     override fun showStepImage(images: List<RecipeImagesViewModel>) {
         for (image in images) {
             val photo = ImageView(context)
-            (ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).addView(photo)
+            ((ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).getChildAt(0) as LinearLayout).addView(photo)
             context?.let {
                 Glide.with(it)
                     .load(image.url)
@@ -727,11 +736,43 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             stepFileKeys[stepIndex].fileKeys.add(urlParts[urlParts.size - 1])
             stepFileKeys[stepIndex].imagesCounter++
             photo.setOnLongClickListener {
-                val index = ((ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView)).indexOfChild(it)
+                val index = ((ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).getChildAt(0) as LinearLayout).indexOfChild(it)
                 stepFileKeys[stepIndex].fileKeys.removeAt(index)
                 (ui.steps.getChildAt(stepIndex*5+3) as HorizontalScrollView).removeView(it)
                 stepFileKeys[stepIndex].imagesCounter--
                 return@setOnLongClickListener true
+            }
+        }
+    }
+
+    override fun loadStepImages(stepImages: Map<String, List<RecipeImages>>) {
+        for (i in 0 until stepImages.size){
+            val stepUrls = stepImages[i.toString()]
+            stepUrls?.let{
+                for (image in it){
+                    val urlParts = image.url.split("/").toTypedArray()
+                    stepFileKeys[i].fileKeys.add(urlParts[urlParts.size-1])
+                    stepFileKeys[i].imagesCounter++
+                    val exPhoto = ImageView(context)
+                    (((ui.steps.getChildAt(i*5+3) as HorizontalScrollView).getChildAt(0)) as LinearLayout).addView(exPhoto)
+                    context?.let { context ->
+                        Glide.with(context)
+                            .load(image.url)
+                            .apply(
+                                RequestOptions
+                                    .centerCropTransform()
+                                    .override(80.dp(context))
+                            )
+                            .into(exPhoto)
+                    }
+                    exPhoto.setOnLongClickListener { photo ->
+                        stepFileKeys[i].fileKeys.removeAt(((ui.steps.getChildAt(i*5+3) as HorizontalScrollView).getChildAt(0) as LinearLayout).indexOfChild(photo))
+                        ((ui.steps.getChildAt(i*5+3) as HorizontalScrollView).getChildAt(0) as LinearLayout).removeView(photo)
+                        stepImagesToRemove[i].add(urlParts[urlParts.size-1])
+                        stepFileKeys[i].imagesCounter--
+                        return@setOnLongClickListener true
+                    }
+                }
             }
         }
     }
@@ -746,6 +787,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         val newTagline = LinearLayout(context)
         newTagline.orientation = LinearLayout.HORIZONTAL
         val tagName = AutoCompleteTextView(context)
+        tagName.threshold = 1
+        tagName.hint = "Начните ввод тэга"
         tagName.setAdapter(tagsAdapter)
         val removeButton = Button(context)
         removeButton.setTextColor(resources.getColor(R.color.white, requireActivity().theme))

@@ -150,5 +150,11 @@ class RecipeRepositoryImpl @Inject constructor(
         fileKey: String
     ): Completable =
         cookbookApi
-            .removeStepImage(recipeId, stepNumber, fileKey)
+            .removeStepImage(stepNumber, recipeId, fileKey)
+
+    override fun getStepImages(recipeId: String): Observable<Map<String, List<RecipeImages>>> =
+        cookbookApi
+            .getImage(recipeId)
+            .map { it.stepImages }
+            .toObservable()
 }

@@ -7,6 +7,7 @@ import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.RecipeImagesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
+import ru.rumigor.cookbook.ui.StepImageViewModel
 import ru.rumigor.cookbook.ui.recipesList.RecipesListView
 
 
@@ -107,6 +108,8 @@ class RecipesListPresenter(
                     viewState::showError
                 )
     }
+
+
 
 }
 
