@@ -540,7 +540,6 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         for (i in 0 until ui.steps.childCount step 5) {
             val newStep = Steps(
                 (ui.steps.getChildAt(i + 1) as EditText).text.toString(),
-//                        (ui.steps.getChildAt(i + 3) as TextView).text.toString()
             )
             newSteps.add(newStep)
         }
@@ -551,7 +550,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                     (((ui.tagLayout.getChildAt(i)) as LinearLayout).getChildAt(0) as TextView).text.toString()
                 ), "", ""
             )
-            newTags.add(newTag)
+            if (newTag.id != "0") newTags.add(newTag)
         }
         val title = ui.newTitle.text.toString()
         val description = ui.newDescription.text.toString()
