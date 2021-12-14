@@ -5,10 +5,7 @@ import moxy.viewstate.strategy.alias.SingleState
 import moxy.viewstate.strategy.alias.Skip
 import ru.rumigor.cookbook.data.model.FavoriteRecipe
 import ru.rumigor.cookbook.data.model.RecipeImages
-import ru.rumigor.cookbook.ui.FavoritesViewModel
-import ru.rumigor.cookbook.ui.RecipeImagesViewModel
-import ru.rumigor.cookbook.ui.RecipeViewModel
-import ru.rumigor.cookbook.ui.ScreenView
+import ru.rumigor.cookbook.ui.*
 
 interface RecipeDetailsView: ScreenView {
     @AddToEndSingle
@@ -23,4 +20,6 @@ interface RecipeDetailsView: ScreenView {
     fun showImage(images: List<RecipeImagesViewModel>)
     @Skip
     fun loadStepImages(stepImages: Map<String, List<RecipeImages>>)
+    @AddToEndSingle
+    fun showTags(tags: List<TagViewModel>)
 }

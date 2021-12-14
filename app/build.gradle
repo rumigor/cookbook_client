@@ -71,6 +71,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:2.40.1"
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.annotation:annotation:1.2.0'
 
     kapt "com.github.moxy-community:moxy-compiler:2.2.2"
     kapt "com.github.bumptech.glide:compiler:4.12.0"

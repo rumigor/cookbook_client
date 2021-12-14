@@ -53,7 +53,7 @@ class AddRecipePresenter(
         disposables +=
             recipeRepository
                 .getTags()
-                .map {tags -> tags.map(TagViewModel.Mapper::map)}
+                .map { tags -> tags.map(TagViewModel.Mapper::map) }
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe(
@@ -70,7 +70,6 @@ class AddRecipePresenter(
         categoryId: Int,
         ingredients: List<Ingredients>,
         steps: List<Steps>,
-        tags: List<Tag>
     ) {
         if (recipeId == "0") {
             disposables +=
@@ -85,7 +84,6 @@ class AddRecipePresenter(
                             user = User("4", "", ""),
                             ingredients = ingredients,
                             steps = steps,
-                            tags = tags
 
                         )
                     )
@@ -109,7 +107,6 @@ class AddRecipePresenter(
                             user = User("4", "", ""),
                             ingredients = ingredients,
                             steps = steps,
-                            tags = tags
                         )
                     )
                     .observeOn(schedulers.main())
@@ -139,7 +136,7 @@ class AddRecipePresenter(
                 )
     }
 
-    fun loadImage(file: String?){
+    fun loadImage(file: String?) {
         file?.let {
             disposables +=
                 uploadImage
@@ -153,11 +150,11 @@ class AddRecipePresenter(
         }
     }
 
-    fun getPhoto(recipeId: String){
+    fun getPhoto(recipeId: String) {
         disposables +=
             recipeRepository
                 .getImages(recipeId)
-                .map {images -> images.map(RecipeImagesViewModel.Mapper::map)}
+                .map { images -> images.map(RecipeImagesViewModel.Mapper::map) }
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe(
@@ -166,7 +163,7 @@ class AddRecipePresenter(
                 )
     }
 
-    fun getStepPhoto(recipeId: String){
+    fun getStepPhoto(recipeId: String) {
         disposables +=
             recipeRepository
                 .getStepImages(recipeId)
@@ -178,7 +175,7 @@ class AddRecipePresenter(
                 )
     }
 
-    fun addPhoto(recipeId: String, fileKey: String){
+    fun addPhoto(recipeId: String, fileKey: String) {
         val image = UploadImage(fileKey, "")
         disposables +=
             recipeRepository
@@ -191,31 +188,40 @@ class AddRecipePresenter(
                 )
     }
 
-    fun removePhoto(recipeId: String, fileKey: String){
+    fun removePhoto(recipeId: String, fileKey: String) {
         disposables +=
             recipeRepository
                 .deleteImage(recipeId, fileKey)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
-                .subscribe()
+                .subscribe(
+                    viewState::addPhoto,
+                    viewState::showError
+                )
     }
 
-    fun addStepPhoto(recipeId: String, stepNumber: Int, fileKey: String){
+    fun addStepPhoto(recipeId: String, stepNumber: Int, fileKey: String) {
         val image = UploadImage(fileKey, "фото этапа № $stepNumber")
         disposables +=
             recipeRepository
                 .addStepImage(recipeId, stepNumber.toString(), image)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
-                .subscribe()
+                .subscribe(
+                    viewState::addPhoto,
+                    viewState::showError
+                )
     }
 
-    fun removeStepPhoto(recipeId: String, stepNumber: Int, fileKey: String){
+    fun removeStepPhoto(recipeId: String, stepNumber: Int, fileKey: String) {
         disposables +=
             recipeRepository
                 .removeStepImage(recipeId, stepNumber.toString(), fileKey)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
-                .subscribe()
+                .subscribe(
+                    viewState::addPhoto,
+                    viewState::showError
+                )
     }
 }

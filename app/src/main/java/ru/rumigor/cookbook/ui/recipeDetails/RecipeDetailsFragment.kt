@@ -27,13 +27,15 @@ import ru.rumigor.cookbook.setStartDrawableCircleImageFromUri
 import ru.rumigor.cookbook.ui.FavoritesViewModel
 import ru.rumigor.cookbook.ui.RecipeImagesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
+import ru.rumigor.cookbook.ui.TagViewModel
 import ru.rumigor.cookbook.ui.abs.AbsFragment
 import ru.rumigor.cookbook.ui.recipeDetails.adapter.ImagesAdapter
 import javax.inject.Inject
 
 private const val ARG_RECIPE_ID = "RecipeID"
 
-class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetailsView, ImagesAdapter.Delegate {
+class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetailsView,
+    ImagesAdapter.Delegate {
 
     private val recipeId: String by lazy {
         arguments?.getString(ARG_RECIPE_ID).orEmpty()
@@ -73,19 +75,18 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     }
 
     override fun showRecipe(recipe: RecipeViewModel) {
-        favoriteRecipe = FavoriteRecipe(recipe.recipeId, recipe.title, recipe.category.title, recipe.description, "")
+        favoriteRecipe = FavoriteRecipe(
+            recipe.recipeId,
+            recipe.title,
+            recipe.category.title,
+            recipe.description,
+            ""
+        )
         ui.recipeTitle.text = recipe.title
         loadIngredients(recipe)
         loadSteps(recipe)
 
         ui.stages.setPadding(0, 0, 0, 8)
-        if (recipe.tags.isNotEmpty()) {
-            val tags = StringBuffer()
-            for (tag in recipe.tags) {
-                tags.append(tag.name + " ")
-            }
-            ui.tags.text = getString(R.string.tags, tags)
-        } else ui.tags.visibility = View.GONE
 
         ui.authorName.text = getString(R.string.author, recipe.user.username)
 
@@ -108,7 +109,7 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     }
 
     override fun showImage(images: List<RecipeImagesViewModel>) {
-        if (images.isNotEmpty()){
+        if (images.isNotEmpty()) {
             imagesAdapter.submitList(images)
         }
         favoriteRecipe.imagePath = images[0].url
@@ -117,11 +118,11 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     override fun loadStepImages(stepImages: Map<String, List<RecipeImages>>) {
         val adapterLists = mutableListOf<MutableList<RecipeImagesViewModel>>()
         val imageAdapters = mutableListOf<ImagesAdapter>()
-        for (i in 0 until stepImages.size){
+        for (i in 0 until stepImages.size) {
             adapterLists.add(mutableListOf())
             val stepUrls = stepImages[i.toString()]
-            stepUrls?.let{
-                for (image in it){
+            stepUrls?.let {
+                for (image in it) {
                     val stepImage = RecipeImagesViewModel(image.url, image.description)
                     adapterLists[i].add(stepImage)
                 }
@@ -130,16 +131,27 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             val stepImagesAdapter = ImagesAdapter(this)
             imageAdapters.add(stepImagesAdapter)
             stepImagesRecycleView.adapter = imageAdapters[i]
-            (ui.stages.getChildAt((i*3)+2) as CardView).addView(stepImagesRecycleView)
-            stepImagesRecycleView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            (ui.stages.getChildAt((i * 3) + 2) as CardView).addView(stepImagesRecycleView)
+            stepImagesRecycleView.layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             imageAdapters[i].submitList(adapterLists[i])
         }
     }
 
+    override fun showTags(tags: List<TagViewModel>) {
+        if (tags.isNotEmpty()) {
+            val tagsList = StringBuffer()
+            for (tag in tags) {
+                tagsList.append(tag.briefName + " ")
+            }
+            ui.tags.text = getString(R.string.tags, tagsList)
+        } else ui.tags.visibility = View.GONE
+    }
+
     private fun loadSteps(recipe: RecipeViewModel) {
-        for ((i,step) in recipe.steps.withIndex()){
+        for ((i, step) in recipe.steps.withIndex()) {
             val stepTitle = TextView(context)
-            stepTitle.text = getString(R.string.stage, i+1)
+            stepTitle.text = getString(R.string.stage, i + 1)
             stepTitle.gravity = Gravity.CENTER
             stepTitle.typeface = Typeface.DEFAULT_BOLD
             stepTitle.textSize = 20f
@@ -152,10 +164,14 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             val stepImages = CardView(requireContext())
             stepImages.cardElevation = 6f
             stepImages.maxCardElevation = 10f
-            stepImages.setPadding(2,2,2,2)
-            stepImages.background = ResourcesCompat.getDrawable(resources, R.drawable.card_background, requireActivity().theme)
+            stepImages.setPadding(2, 2, 2, 2)
+            stepImages.background = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.card_background,
+                requireActivity().theme
+            )
             ui.stages.addView(stepImages)
-            stepImages.setPadding(0,0,0,8)
+            stepImages.setPadding(0, 0, 0, 8)
         }
         presenter.loadStepImages(recipeId)
 
@@ -208,7 +224,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.findItem(R.id.action_search).isVisible = false
-        if (favorite) menu.findItem(R.id.action_favorites).setIcon(R.drawable.ic_baseline_favorite_24)
+        if (favorite) menu.findItem(R.id.action_favorites)
+            .setIcon(R.drawable.ic_baseline_favorite_24)
         favoriteItem = menu.findItem(R.id.action_favorites)
     }
 

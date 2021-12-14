@@ -8,6 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.rumigor.cookbook.data.api.AuthorizationInterceptor
 import ru.rumigor.cookbook.data.api.UploadImageApi
 import ru.rumigor.cookbook.data.api.UploadImageApiInterceptor
 import javax.inject.Named
@@ -25,7 +26,7 @@ class UploadImageApiModule {
             .baseUrl(baseUrl)
             .client(
                 OkHttpClient.Builder()
-//                    .addInterceptor(UploadImageApiInterceptor)
+                    .addInterceptor(AuthorizationInterceptor("igor", "igor"))
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                     })

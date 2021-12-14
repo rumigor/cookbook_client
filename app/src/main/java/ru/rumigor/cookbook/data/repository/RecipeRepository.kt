@@ -47,5 +47,9 @@ interface RecipeRepository {
 
     fun getStepImages(recipeId: String): Observable<Map<String, List<RecipeImages>>>
 
+    fun getRecipeTags(recipeId: String): Observable<List<Tag>>
+
+    fun getUsers(): Observable<List<User>>
+
 
 }

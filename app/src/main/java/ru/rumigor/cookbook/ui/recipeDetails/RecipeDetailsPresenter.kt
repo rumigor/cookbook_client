@@ -7,10 +7,7 @@ import moxy.MvpPresenter
 import ru.rumigor.cookbook.data.model.FavoriteRecipe
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.scheduler.Schedulers
-import ru.rumigor.cookbook.ui.FavoritesViewModel
-import ru.rumigor.cookbook.ui.RecipeImagesViewModel
-import ru.rumigor.cookbook.ui.RecipeViewModel
-import ru.rumigor.cookbook.ui.ServerResponseViewModel
+import ru.rumigor.cookbook.ui.*
 
 class RecipeDetailsPresenter (
     private val recipeId: String,
@@ -48,6 +45,16 @@ class RecipeDetailsPresenter (
                 .subscribeOn(schedulers.background())
                 .subscribe(
                     viewState::showImage,
+                    viewState::showError
+                )
+        disposables +=
+            recipeRepository
+                .getRecipeTags(recipeId)
+                .map { tags -> tags.map(TagViewModel.Mapper::map) }
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showTags,
                     viewState::showError
                 )
 
@@ -101,4 +108,5 @@ class RecipeDetailsPresenter (
                 )
 
     }
+
 }

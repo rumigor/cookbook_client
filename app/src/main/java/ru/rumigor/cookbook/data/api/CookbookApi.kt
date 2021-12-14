@@ -41,6 +41,8 @@ interface CookbookApi {
     @GET("/api/v1/tag")
     fun getTags(): Single<List<Tag>>
     @GET("/api/v1/recipe/{recipe_id}/image")
+    fun getRecipeTags(@Path("recipe_id")recipeId: String): Single<Tags>
+    @GET("/api/v1/recipe/{recipe_id}/image")
     fun getImage(@Path("recipe_id")recipeId: String): Single<Image>
     @POST("/api/v1/recipe/{recipe_id}/image")
     fun addImage(@Path("recipe_id")recipeId: String, @Body image: UploadImage): Completable
@@ -50,6 +52,9 @@ interface CookbookApi {
     fun removeImage(@Path("recipe_id")recipeId: String, @Path("filekey") fileKey: String): Completable
     @DELETE("/api/v1/recipe/{recipe_id}/image/{filekey}")
     fun removeStepImage(@Header("Resource-Part") step: String, @Path("recipe_id")recipeId: String, @Path("filekey") fileKey: String): Completable
+    @GET("/api/v1/user/")
+    fun getUsers(): Single<List<User>>
+
 
 
 

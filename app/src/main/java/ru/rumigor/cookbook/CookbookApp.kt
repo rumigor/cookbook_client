@@ -18,6 +18,7 @@ class CookbookApp: DaggerApplication() {
             .withContext(applicationContext)
             .apply{
                 withSchedulers(DefaultSchedulers())
+                withAppPreferences(AppPreferences)
             }
             .build()
     }

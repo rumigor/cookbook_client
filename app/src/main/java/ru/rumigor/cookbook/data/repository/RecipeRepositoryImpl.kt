@@ -157,4 +157,15 @@ class RecipeRepositoryImpl @Inject constructor(
             .getImage(recipeId)
             .map { it.stepImages }
             .toObservable()
+
+    override fun getRecipeTags(recipeId: String): Observable<List<Tag>> =
+        cookbookApi
+            .getRecipeTags(recipeId)
+            .map{it.tags}
+            .toObservable()
+
+    override fun getUsers(): Observable<List<User>> =
+        cookbookApi
+            .getUsers()
+            .toObservable()
 }
