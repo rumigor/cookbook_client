@@ -34,8 +34,6 @@ interface CookbookApplicationComponent : AndroidInjector<CookbookApp> {
         @BindsInstance
         fun withSchedulers(schedulers: Schedulers): Builder
 
-        @BindsInstance
-        fun withAppPreferences(preferences: AppPreferences): Builder
         fun build(): CookbookApplicationComponent
     }
 }

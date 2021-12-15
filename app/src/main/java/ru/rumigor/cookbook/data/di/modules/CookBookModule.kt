@@ -19,6 +19,7 @@ import ru.rumigor.cookbook.ui.recipesList.RecipesListFragment
 import javax.inject.Singleton
 import android.app.Application
 import android.content.SharedPreferences
+import ru.rumigor.cookbook.ui.StartActivity
 
 
 @Module
@@ -30,6 +31,9 @@ interface CookBookModule {
 
     @ContributesAndroidInjector
     fun bindLoginActivity(): LoginActivity
+
+    @ContributesAndroidInjector
+    fun bindStartActivity(): StartActivity
 
     @ContributesAndroidInjector
     fun bindRecipesListFragment(): RecipesListFragment

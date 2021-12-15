@@ -163,7 +163,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             stepText.hint = "Введите описание этапа"
             val stepNumber = EditText(context)
             val addPhoto = Button(context)
-            addPhoto.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.light_blue, requireActivity().theme))
+            addPhoto.backgroundTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.light_blue,
+                    requireActivity().theme
+                )
+            )
             addPhoto.text = "Добавить фото"
             val imageFrame = HorizontalScrollView(requireContext())
             val deleteStep = Button(context)
@@ -192,7 +198,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                     (ui.steps.indexOfChild(stepNumber) / 5 + 1)
                 )
             )
-            deleteStep.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.pink, requireActivity().theme))
+            deleteStep.backgroundTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.pink,
+                    requireActivity().theme
+                )
+            )
             deleteStep.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
             deleteStep.setOnClickListener {
                 deleteStep(stepNumber)
@@ -273,7 +285,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             val removeButton = Button(context)
             removeButton.text = "Удалить тэг"
             removeButton.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
-            removeButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.pink, requireActivity().theme))
+            removeButton.backgroundTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.pink,
+                    requireActivity().theme
+                )
+            )
             removeButton.setOnClickListener {
                 removeTag(newTagline)
             }
@@ -373,7 +391,10 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         unitsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         for (ingredient in ingredients) {
             val tableRow = TableRow(context)
-            tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
+            tableRow.layoutParams = TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+            )
             val removeIngredient = ImageView(context)
             removeIngredient.setImageResource(R.drawable.ic_baseline_cancel_24)
             tableRow.addView(removeIngredient)
@@ -414,7 +435,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             val stepNumber = EditText(context)
             val deleteStep = Button(context)
             val addPhoto = Button(context)
-            addPhoto.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.light_blue, requireActivity().theme))
+            addPhoto.backgroundTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.light_blue,
+                    requireActivity().theme
+                )
+            )
             addPhoto.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
             addPhoto.text = "Добавить фото"
             val imageFrame = HorizontalScrollView(requireContext())
@@ -440,7 +467,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                     (ui.steps.indexOfChild(stepNumber) / 5 + 1)
                 )
             )
-            deleteStep.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.pink, requireActivity().theme))
+            deleteStep.backgroundTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.pink,
+                    requireActivity().theme
+                )
+            )
             deleteStep.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
             deleteStep.setOnClickListener {
                 deleteStep(stepNumber)
@@ -782,7 +815,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         val removeButton = Button(context)
         removeButton.setTextColor(resources.getColor(R.color.white, requireActivity().theme))
         removeButton.text = "Удалить тэг"
-        removeButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.pink, requireActivity().theme))
+        removeButton.backgroundTintList = ColorStateList.valueOf(
+            ResourcesCompat.getColor(
+                resources,
+                R.color.pink,
+                requireActivity().theme
+            )
+        )
         removeButton.setOnClickListener {
             removeTag(newTagline)
         }
@@ -807,10 +846,11 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         when (item.itemId) {
             android.R.id.home -> {
                 val navController = findNavController()
-                navController.popBackStack(
-                    R.id.action_addRecipeFragment_to_recipeDetailsFragment,
-                    true
-                )
+                if (recipeId != "0") {
+                    val bundle = Bundle()
+                    bundle.putString("RecipeID", recipeId)
+                    navController.navigate(R.id.action_addRecipeFragment_to_recipeDetailsFragment, bundle)
+                } else navController.popBackStack()
             }
         }
         return super.onOptionsItemSelected(item)

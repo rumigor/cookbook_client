@@ -11,7 +11,6 @@ import ru.rumigor.cookbook.ui.UserViewModel
 class LoginPresenter(
     private val recipeRepository: RecipeRepository,
     private val schedulers: Schedulers,
-    private val preferences: AppPreferences
 ) : MvpPresenter<LoginView>() {
     private val disposables = CompositeDisposable()
 
