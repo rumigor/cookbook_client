@@ -21,12 +21,16 @@ object AppPreferences {
         set(value) = Key.PASSWORD.setString(value)
 
     var authorized: Boolean?
-    get() = Key.AUTHORIZED.getBoolean()
-    set(value) = Key.AUTHORIZED.setBoolean(value)
+        get() = Key.AUTHORIZED.getBoolean()
+        set(value) = Key.AUTHORIZED.setBoolean(value)
+
+    var userId: String?
+        get() = Key.USER_ID.getString()
+        set(value) = Key.USER_ID.setString(value)
 
 
     private enum class Key {
-        USER, PASSWORD, AUTHORIZED;
+        USER, PASSWORD, AUTHORIZED, USER_ID;
 
         fun getString(): String? =
             if (sharedPreferences!!.contains(name)) sharedPreferences!!.getString(
@@ -39,8 +43,14 @@ object AppPreferences {
                 sharedPreferences!!.edit { putString(name, value) }
             } ?: remove()
 
-        fun getBoolean(): Boolean? = if (sharedPreferences!!.contains(name)) sharedPreferences!!.getBoolean(name, false) else null
-        fun setBoolean(value: Boolean?) = value?.let { sharedPreferences!!.edit { putBoolean(name, value) } } ?: remove()
+        fun getBoolean(): Boolean? =
+            if (sharedPreferences!!.contains(name)) sharedPreferences!!.getBoolean(
+                name,
+                false
+            ) else null
+
+        fun setBoolean(value: Boolean?) =
+            value?.let { sharedPreferences!!.edit { putBoolean(name, value) } } ?: remove()
 
         fun remove() = sharedPreferences!!.edit { remove(name) }
     }

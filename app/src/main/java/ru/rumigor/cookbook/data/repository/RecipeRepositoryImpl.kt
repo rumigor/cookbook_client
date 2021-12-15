@@ -68,10 +68,10 @@ class RecipeRepositoryImpl @Inject constructor(
             .addIngredient(ingredient = ingredient)
             .toObservable()
 
-    override fun loadFavorites(): Observable<List<FavoriteRecipe>> =
-        cookbookDatabase
-            .cookbookDao()
-            .loadFavoritesRecipes()
+    override fun loadFavorites(userId: String): Observable<List<Recipe>> =
+        cookbookApi
+            .getFavorites(userId)
+            .toObservable()
 
     override fun loadFavoriteRecipe(recipeId: String): Observable<FavoriteRecipe> =
         cookbookDatabase
@@ -79,21 +79,18 @@ class RecipeRepositoryImpl @Inject constructor(
             .loadFavoriteRecipe(recipeId)
             .toObservable()
 
-    override fun addToFavorites(recipe: FavoriteRecipe): Single<FavoriteRecipe> =
-        cookbookDatabase
-            .cookbookDao()
-            .insert(recipe)
-            .andThen(Single.just(recipe))
+    override fun addToFavorites(userId: String, recipeId: String): Completable =
+        cookbookApi
+            .addToFavorites(userId, recipeId)
 
-    override fun favoriteSearch(name: String): Observable<List<FavoriteRecipe>> =
-        cookbookDatabase
-            .cookbookDao()
-            .favoriteSearch(name)
+    override fun favoriteSearch(userId: String, name: String): Observable<List<Recipe>> =
+        cookbookApi
+            .findInFavorites(userId, name)
+            .toObservable()
 
-    override fun deleteFromFavorites(recipeId: String): Completable =
-        cookbookDatabase
-            .cookbookDao()
-            .deleteFromFavorites(recipeId)
+    override fun deleteFromFavorites(userId: String, recipeId: String): Completable =
+        cookbookApi
+            .deleteFromFavorites(userId, recipeId)
 
     override fun getRecipesByCategory(categoryId: String): Observable<List<Recipe>> =
         cookbookApi
@@ -167,5 +164,10 @@ class RecipeRepositoryImpl @Inject constructor(
     override fun getUsers(): Observable<List<User>> =
         cookbookApi
             .getUsers()
+            .toObservable()
+
+    override fun getUser(userId: String): Observable<User> =
+        cookbookApi
+            .getUser(userId)
             .toObservable()
 }

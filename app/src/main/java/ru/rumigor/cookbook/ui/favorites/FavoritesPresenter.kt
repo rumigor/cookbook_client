@@ -3,6 +3,7 @@ package ru.rumigor.cookbook.ui.favorites
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import moxy.MvpPresenter
+import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.FavoritesViewModel
@@ -13,12 +14,14 @@ class FavoritesPresenter(
     private val schedulers: Schedulers
 ): MvpPresenter<FavoritesView>() {
     private val disposables = CompositeDisposable()
+    private val userId = AppPreferences.userId!!
 
     override fun onFirstViewAttach() {
+
         disposables +=
             recipeRepository
-                .loadFavorites()
-                .map { recipes-> recipes.map(FavoritesViewModel.Mapper::map)}
+                .loadFavorites(userId)
+                .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe(
@@ -34,8 +37,8 @@ class FavoritesPresenter(
     fun filterFavorites(query: String){
         disposables +=
             recipeRepository
-                .favoriteSearch(query)
-                .map { recipes-> recipes.map(FavoritesViewModel.Mapper::map)}
+                .favoriteSearch(userId, query)
+                .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe(

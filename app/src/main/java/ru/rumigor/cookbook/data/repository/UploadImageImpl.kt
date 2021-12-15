@@ -23,7 +23,7 @@ class UploadImageImpl @Inject constructor(
             file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         )
         return uploadImageApi
-            .uploadImage(1, body)
+            .uploadImage(body)
             .toObservable()
     }
 }

@@ -18,7 +18,7 @@ import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.RecipesFragmentBinding
 import ru.rumigor.cookbook.scheduler.Schedulers
-import ru.rumigor.cookbook.ui.FavoritesViewModel
+import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.abs.AbsFragment
 import ru.rumigor.cookbook.ui.favorites.adapter.FavoritesAdapter
 import javax.inject.Inject
@@ -62,7 +62,7 @@ class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, 
         }
     }
 
-    override fun showRecipes(recipes: List<FavoritesViewModel>) {
+    override fun showRecipes(recipes: List<RecipeViewModel>) {
         recipeAdapter.submitList(recipes)
     }
 
@@ -75,7 +75,7 @@ class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, 
         Log.d("ERROR", error.message.toString())
     }
 
-    override fun onRecipePicked(recipe: FavoritesViewModel) {
+    override fun onRecipePicked(recipe: RecipeViewModel) {
         val bundle = Bundle()
         bundle.putString("RecipeID", recipe.recipeId)
         navController.navigate(R.id.recipeDetailsFragment, bundle)

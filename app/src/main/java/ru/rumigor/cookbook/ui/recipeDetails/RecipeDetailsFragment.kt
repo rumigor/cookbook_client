@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -72,6 +73,7 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.imagesRecycleView.adapter = imagesAdapter
+
     }
 
     override fun showRecipe(recipe: RecipeViewModel) {
@@ -98,9 +100,15 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         favorite = false
     }
 
-    override fun markFavorite(favoriteRecipe: FavoritesViewModel) {
-        favorite = true
-        favoriteItem.setIcon(R.drawable.ic_baseline_favorite_24)
+    override fun markFavorite(favorites: List<RecipeViewModel>) {
+        for (favoriteRecipe in favorites){
+            if (favoriteRecipe.recipeId == recipeId) {
+                favorite = true
+                favoriteItem.setIcon(R.drawable.ic_baseline_favorite_24)
+                break
+            }
+        }
+
     }
 
     override fun onDelete() {
@@ -243,7 +251,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             }
             android.R.id.home -> {
                 val navController = findNavController()
-                navController.popBackStack()
+                val navBuilder = NavOptions.Builder()
+                navController.popBackStack(R.id.recipesListFragment, false)
             }
         }
         return true
@@ -252,11 +261,11 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     private fun changeStatus(item: MenuItem) {
         if (favorite) {
             favorite = false
-            presenter.removeFromFavorites(recipeId)
+            presenter.removeFromFavorites()
             item.setIcon(R.drawable.ic_baseline_favorite_border_24)
         } else {
             favorite = true
-            presenter.addToFavorites(favoriteRecipe)
+            presenter.addToFavorites()
             item.setIcon(R.drawable.ic_baseline_favorite_24)
         }
     }

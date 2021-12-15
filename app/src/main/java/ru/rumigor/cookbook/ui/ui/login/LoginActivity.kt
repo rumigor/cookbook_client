@@ -43,7 +43,6 @@ class LoginActivity : AbsActivity(R.layout.login),  LoginView{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
-        AppPreferences.setup(applicationContext)
         AppPreferences.authorized?.let { authorized ->
             if (authorized){
                 startActivity(Main2Activity.getStartIntent(this))
@@ -61,7 +60,13 @@ class LoginActivity : AbsActivity(R.layout.login),  LoginView{
     }
 
     override fun login(users: List<UserViewModel>) {
+        for (user in users){
+            if (AppPreferences.username == user.username) {
+                AppPreferences.userId = user.id
+            }
+        }
         startActivity(Main2Activity.getStartIntent(this))
+        finish()
     }
 
     override fun showError(error: Throwable) {

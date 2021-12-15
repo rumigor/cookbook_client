@@ -11,9 +11,6 @@
         <action
             android:id="@+id/action_recipesListFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment" />
-        <action
-            android:id="@+id/action_recipesListFragment_to_addRecipeFragment"
-            app:destination="@id/addRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/recipeDetailsFragment"
@@ -23,25 +20,28 @@
             android:id="@+id/action_recipeDetailsFragment_to_addRecipeFragment"
             app:destination="@id/addRecipeFragment" />
         <action
-            android:id="@+id/action_recipeDetailsFragment_to_recipesListFragment"
-            app:destination="@id/recipesListFragment" />
+            android:id="@+id/action_recipeDetailsFragment_to_dialog"
+            app:destination="@id/dialog" />
         <action
-            android:id="@+id/action_recipeDetailsFragment_to_favoritesFragment"
-            app:destination="@id/favoritesFragment" />
+            android:id="@+id/action_recipeDetailsFragment_to_recipesListFragment"
+            app:destination="@id/recipesListFragment"
+            app:popUpTo="@id/recipesListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/addRecipeFragment"
         android:name="ru.rumigor.cookbook.ui.addRecipe.AddRecipeFragment"
         android:label="Добавить/изменить рецепт">
         <action
-            android:id="@+id/action_addRecipeFragment_to_dialog"
-            app:destination="@id/dialog" />
+            android:id="@+id/action_addRecipeFragment_to_recipeDetailsFragment2"
+            app:destination="@id/recipeDetailsFragment"
+            app:popUpTo="@id/recipeDetailsFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_addRecipeFragment_to_recipesListFragment"
-            app:destination="@id/recipesListFragment" />
-        <action
-            android:id="@+id/action_addRecipeFragment_to_recipeDetailsFragment"
-            app:destination="@id/recipeDetailsFragment" />
+            app:destination="@id/recipesListFragment"
+            app:popUpTo="@id/recipesListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/dialog"
@@ -52,8 +52,8 @@
         android:name="ru.rumigor.cookbook.ui.favorites.FavoritesFragment"
         android:label="Закладки">
         <action
-            android:id="@+id/action_favoritesFragment_to_recipeDetailsFragment"
-            app:destination="@id/recipeDetailsFragment" />
+            android:id="@+id/action_favoritesFragment_to_recipesListFragment"
+            app:destination="@id/recipesListFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"

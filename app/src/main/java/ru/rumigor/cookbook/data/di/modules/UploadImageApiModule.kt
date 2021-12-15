@@ -8,6 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.data.api.AuthorizationInterceptor
 import ru.rumigor.cookbook.data.api.UploadImageApi
 import ru.rumigor.cookbook.data.api.UploadImageApiInterceptor
@@ -21,12 +22,22 @@ class UploadImageApiModule {
 
     @Reusable
     @Provides
-    fun provideGitHubApi(@Named("upload_image_api") baseUrl: String): UploadImageApi =
-        Retrofit.Builder()
+    fun provideGitHubApi(@Named("upload_image_api") baseUrl: String): UploadImageApi {
+        var user = ""
+        var password = ""
+        AppPreferences?.let {
+            AppPreferences.username?.let {
+                user = it
+            }
+            AppPreferences.password?.let {
+                password = it
+            }
+        }
+        return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(
                 OkHttpClient.Builder()
-                    .addInterceptor(AuthorizationInterceptor("igor", "igor"))
+                    .addInterceptor(AuthorizationInterceptor(user, password))
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                     })
@@ -36,4 +47,5 @@ class UploadImageApiModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(UploadImageApi::class.java)
+    }
 }

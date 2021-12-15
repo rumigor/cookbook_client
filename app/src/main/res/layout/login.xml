@@ -8,6 +8,20 @@
     android:orientation="vertical"
     tools:context=".ui.ui.login.LoginActivity">
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"
+        android:text="CookBook"
+        android:textAlignment="center"
+        android:textColor="#E57373"
+        android:textSize="34sp"
+        android:textStyle="bold|italic"
+        android:typeface="serif" />
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="250dp"
@@ -18,7 +32,9 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="clip_vertical">
+        android:layout_gravity="clip_vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp">
 
         <TableRow
             android:layout_width="match_parent"
@@ -28,9 +44,11 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1"
-                android:text="Login"
-                android:textSize="20sp" />
+                android:text="Имя"
+                android:textSize="20sp"
+                android:typeface="serif" />
 
             <EditText
                 android:id="@+id/userName"
@@ -52,9 +70,11 @@
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1"
-                android:text="Password"
-                android:textSize="20sp" />
+                android:text="Пароль"
+                android:textSize="20sp"
+                android:typeface="serif" />
 
             <EditText
                 android:id="@+id/userPassword"
@@ -74,6 +94,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#90CAF9"
-        android:text="LOG IN"
+        android:text="Войти"
         app:cornerRadius="16dp" />
 </LinearLayout>

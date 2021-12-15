@@ -14,12 +14,13 @@ class FavoritesHolder (view: View) : RecyclerView.ViewHolder(view) {
 
     private val viewBinding: RecipeViewBinding by viewBinding()
 
-    fun bind(recipe: FavoritesViewModel, delegate: FavoritesAdapter.Delegate?){
+    fun bind(recipe: RecipeViewModel, delegate: FavoritesAdapter.Delegate?){
         with(viewBinding){
-            viewBinding.recipeName.setStartDrawableCircleImageFromUri(recipe.imagePath)
+            recipe.imagePath?.let{url ->
+                viewBinding.recipeName.setStartDrawableCircleImageFromUri(url)}
             viewBinding.recipeName.text = recipe.title
             viewBinding.description.text = recipe.description
-            viewBinding.category.text = recipe.category
+            viewBinding.category.text = recipe.category.title
 
             root.click { delegate?.onRecipePicked(recipe) }
         }

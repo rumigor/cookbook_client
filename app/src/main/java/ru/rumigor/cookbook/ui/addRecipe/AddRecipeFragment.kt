@@ -34,6 +34,8 @@ import ru.rumigor.cookbook.ui.*
 import ru.rumigor.cookbook.ui.abs.AbsFragment
 import javax.inject.Inject
 import android.widget.LinearLayout
+import com.bumptech.glide.load.model.GlideUrl
+import ru.rumigor.cookbook.getAuth
 
 
 private const val ARG_RECIPE = "RECIPE"
@@ -251,7 +253,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                                 as TextView).text.toString()
                     )
                 )
-                ingredientIndex = k + 1
+                ingredientIndex = k
                 isAdded = false
             }
         }
@@ -595,7 +597,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         link.text = response.data.url
         context?.let {
             Glide.with(it)
-                .load(selectedImagePath)
+                .load(GlideUrl(selectedImagePath, getAuth()))
                 .into(image)
         }
     }
@@ -625,10 +627,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
         val navController = findNavController()
         val bundle = Bundle()
-        val navBuilder = NavOptions.Builder()
-        val navOptions: NavOptions = navBuilder.setPopUpTo(R.id.recipesListFragment, true).build()
         bundle.putString("RecipeID", recipeId)
-        navController.navigate(R.id.recipeDetailsFragment, bundle, navOptions)
+        navController.navigate(R.id.recipeDetailsFragment, bundle)
     }
 
     override fun loadTagsList(tags: List<TagViewModel>) {
@@ -651,7 +651,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                     ui.imagesList.addView(newImage)
                     context?.let { context ->
                         Glide.with(context)
-                            .load(it)
+                            .load(GlideUrl(it, getAuth()))
                             .apply(
                                 RequestOptions
                                     .centerCropTransform()
@@ -674,7 +674,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 )
                 context?.let { context ->
                     Glide.with(context)
-                        .load(it)
+                        .load(GlideUrl(it, getAuth()))
                         .apply(
                             RequestOptions
                                 .centerCropTransform()
@@ -702,7 +702,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ui.imagesList.addView(photo)
             context?.let {
                 Glide.with(it)
-                    .load(image.url)
+                    .load(GlideUrl(image.url, getAuth()))
                     .apply(
                         RequestOptions
                             .centerCropTransform()
@@ -735,7 +735,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             )
             context?.let {
                 Glide.with(it)
-                    .load(image.url)
+                    .load(GlideUrl(image.url, getAuth()))
                     .apply(
                         RequestOptions
                             .centerCropTransform()
@@ -773,7 +773,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                     )
                     context?.let { context ->
                         Glide.with(context)
-                            .load(image.url)
+                            .load(GlideUrl(image.url, getAuth()))
                             .apply(
                                 RequestOptions
                                     .centerCropTransform()
@@ -846,11 +846,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         when (item.itemId) {
             android.R.id.home -> {
                 val navController = findNavController()
-                if (recipeId != "0") {
-                    val bundle = Bundle()
-                    bundle.putString("RecipeID", recipeId)
-                    navController.navigate(R.id.action_addRecipeFragment_to_recipeDetailsFragment, bundle)
-                } else navController.popBackStack()
+                navController.popBackStack()
             }
         }
         return super.onOptionsItemSelected(item)

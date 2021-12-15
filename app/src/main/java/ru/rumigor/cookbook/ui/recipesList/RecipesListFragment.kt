@@ -37,6 +37,8 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
         arguments?.getString(ARG_CATEGORY_ID).orEmpty()
     }
 
+
+
     private lateinit var navController: NavController
 
     private var imagesCounter = 0

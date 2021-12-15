@@ -13,7 +13,7 @@ interface RecipeDetailsView: ScreenView {
     @Skip
     fun favoriteError(error: Throwable)
     @Skip
-    fun markFavorite(favoriteRecipe: FavoritesViewModel)
+    fun markFavorite(favorites: List<RecipeViewModel>)
     @Skip
     fun onDelete()
     @Skip

@@ -19,13 +19,13 @@ interface RecipeRepository {
     fun getUnits(): Observable<List<Unit>>
     fun addIngredient(ingredient: Ingredient): Observable<ServerResponse>
 
-    fun loadFavorites(): Observable<List<FavoriteRecipe>>
+    fun loadFavorites(userId: String): Observable<List<Recipe>>
     fun loadFavoriteRecipe(recipeId: String): Observable<FavoriteRecipe>
-    fun addToFavorites(recipe: FavoriteRecipe): Single<FavoriteRecipe>
+    fun addToFavorites(userId: String, recipeId: String): Completable
 
-    fun favoriteSearch(name: String): Observable<List<FavoriteRecipe>>
+    fun favoriteSearch(userId: String, name: String): Observable<List<Recipe>>
 
-    fun deleteFromFavorites(recipeId: String): Completable
+    fun deleteFromFavorites(userId: String, recipeId: String): Completable
 
     fun getRecipesByCategory(categoryId: String): Observable<List<Recipe>>
 
@@ -50,6 +50,9 @@ interface RecipeRepository {
     fun getRecipeTags(recipeId: String): Observable<List<Tag>>
 
     fun getUsers(): Observable<List<User>>
+
+    fun getUser(userId: String): Observable<User>
+
 
 
 }

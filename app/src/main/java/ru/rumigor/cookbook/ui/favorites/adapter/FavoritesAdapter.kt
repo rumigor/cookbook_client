@@ -8,12 +8,12 @@ import ru.rumigor.cookbook.ui.FavoritesViewModel
 import ru.rumigor.cookbook.ui.RecipeViewModel
 
 
-class FavoritesAdapter (private val delegate: Delegate): ListAdapter<FavoritesViewModel, FavoritesHolder>(
+class FavoritesAdapter (private val delegate: Delegate): ListAdapter<RecipeViewModel, FavoritesHolder>(
     FavoritesDiff
 ) {
 
     interface Delegate{
-        fun onRecipePicked(recipe: FavoritesViewModel)
+        fun onRecipePicked(recipe: RecipeViewModel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesHolder =

@@ -54,6 +54,17 @@ interface CookbookApi {
     fun removeStepImage(@Header("Resource-Part") step: String, @Path("recipe_id")recipeId: String, @Path("filekey") fileKey: String): Completable
     @GET("/api/v1/user/")
     fun getUsers(): Single<List<User>>
+    @GET("/api/v1/user/{user_id}")
+    fun getUser(@Path("user_id")userId: String): Single<User>
+    @GET("/api/v1/user/{user_id}/favorite")
+    fun getFavorites(@Path("user_id")userId: String): Single<List<Recipe>>
+    @GET("/api/v1/user/{user_id}/favorite")
+    fun findInFavorites(@Path("user_id")userId: String, @Query("name")title: String): Single<List<Recipe>>
+    @POST("/api/v1/user/{user_id}/favorite/{recipe_id}")
+    fun addToFavorites(@Path("user_id")userId: String,@Path("recipe_id")recipeId: String): Completable
+    @DELETE("/api/v1/user/{user_id}/favorite/{recipe_id}")
+    fun deleteFromFavorites(@Path("user_id")userId: String,@Path("recipe_id")recipeId: String): Completable
+
 
 
 

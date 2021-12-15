@@ -11,7 +11,7 @@ import retrofit2.http.*
 interface UploadImageApi {
 
     @Multipart
-    @POST("/file/upload")
-    fun uploadImage(@Query ("userId")userId: Int, @Part file: MultipartBody.Part): Single<Response<ResponseBody>>
+    @POST("/api/v1/file/upload")
+    fun uploadImage(@Part file: MultipartBody.Part): Single<Response<ResponseBody>>
 
 }

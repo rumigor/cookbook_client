@@ -4,17 +4,20 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import moxy.MvpPresenter
+import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.data.model.FavoriteRecipe
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.*
 
-class RecipeDetailsPresenter (
+class RecipeDetailsPresenter(
     private val recipeId: String,
     private val recipeRepository: RecipeRepository,
     private val schedulers: Schedulers,
-): MvpPresenter<RecipeDetailsView>() {
+) : MvpPresenter<RecipeDetailsView>() {
     private val disposables = CompositeDisposable()
+
+    private val userId = AppPreferences.userId!!
 
     override fun onFirstViewAttach() {
         disposables +=
@@ -29,18 +32,18 @@ class RecipeDetailsPresenter (
                 )
         disposables +=
             recipeRepository
-                .loadFavoriteRecipe(recipeId)
-                .map (FavoritesViewModel.Mapper::map)
+                .loadFavorites(userId)
+                .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe(
                     viewState::markFavorite,
-                    viewState::favoriteError
+                    viewState::showError
                 )
         disposables +=
             recipeRepository
                 .getImages(recipeId)
-                .map {images -> images.map(RecipeImagesViewModel.Mapper::map)}
+                .map { images -> images.map(RecipeImagesViewModel.Mapper::map) }
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe(
@@ -65,8 +68,7 @@ class RecipeDetailsPresenter (
     }
 
 
-
-    fun deleteRecipe(recipeId: String){
+    fun deleteRecipe(recipeId: String) {
         disposables +=
             recipeRepository
                 .deleteRecipe(recipeId)
@@ -79,24 +81,25 @@ class RecipeDetailsPresenter (
     }
 
 
-    fun removeFromFavorites(recipeId: String){
+    fun removeFromFavorites() {
         disposables +=
             recipeRepository
-                .deleteFromFavorites(recipeId)
+                .deleteFromFavorites(userId, recipeId)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe()
     }
 
-    fun addToFavorites(recipe: FavoriteRecipe){
+    fun addToFavorites() {
         disposables +=
             recipeRepository
-                .addToFavorites(recipe)
+                .addToFavorites(userId, recipeId)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe()
     }
-    fun loadStepImages(recipeId: String){
+
+    fun loadStepImages(recipeId: String) {
         disposables +=
             recipeRepository
                 .getStepImages(recipeId)
