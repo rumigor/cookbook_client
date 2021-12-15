@@ -85,7 +85,7 @@ class AddRecipePresenter(
                             ingredients = ingredients,
                             steps = steps,
 
-                        )
+                            )
                     )
                     .map(RecipeViewModel.Mapper::map)
                     .observeOn(schedulers.main())
@@ -207,10 +207,7 @@ class AddRecipePresenter(
                 .addStepImage(recipeId, stepNumber.toString(), image)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::addPhoto,
-                    viewState::showError
-                )
+                .subscribe()
     }
 
     fun removeStepPhoto(recipeId: String, stepNumber: Int, fileKey: String) {
@@ -219,9 +216,6 @@ class AddRecipePresenter(
                 .removeStepImage(recipeId, stepNumber.toString(), fileKey)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::addPhoto,
-                    viewState::showError
-                )
+                .subscribe()
     }
 }
