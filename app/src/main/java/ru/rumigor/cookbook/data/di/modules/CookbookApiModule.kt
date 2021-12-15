@@ -17,14 +17,13 @@ import javax.inject.Singleton
 import android.content.SharedPreferences
 
 
-
-
 @Module
 class CookbookApiModule {
 
     @Named("cookbook_api")
     @Provides
-    fun provideBaseUrlProd(): String = "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/"
+    fun provideBaseUrlProd(): String =
+        "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/"
 
 
     @Reusable
@@ -32,13 +31,11 @@ class CookbookApiModule {
     fun provideGitHubApi(@Named("cookbook_api") baseUrl: String): CookbookApi {
         var user = ""
         var password = ""
-        AppPreferences?.let {
-            AppPreferences.username?.let {
-                user = it
-            }
-            AppPreferences.password?.let {
-                password = it
-            }
+        AppPreferences.username?.let {
+            user = it
+        }
+        AppPreferences.password?.let {
+            password = it
         }
         return Retrofit.Builder()
             .baseUrl(baseUrl)

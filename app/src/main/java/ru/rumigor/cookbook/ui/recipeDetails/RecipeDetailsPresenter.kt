@@ -50,16 +50,16 @@ class RecipeDetailsPresenter(
                     viewState::showImage,
                     viewState::showError
                 )
-        disposables +=
-            recipeRepository
-                .getRecipeTags(recipeId)
-                .map { tags -> tags.map(TagViewModel.Mapper::map) }
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::showTags,
-                    viewState::showError
-                )
+//        disposables +=
+//            recipeRepository
+//                .getRecipeTags(recipeId)
+//                .map { tags -> tags.map(TagViewModel.Mapper::map) }
+//                .observeOn(schedulers.main())
+//                .subscribeOn(schedulers.background())
+//                .subscribe(
+//                    viewState::showTags,
+//                    viewState::showError
+//                )
 
     }
 

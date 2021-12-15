@@ -53,6 +53,7 @@ class LoginActivity : AbsActivity(R.layout.login),  LoginView{
             if (ui.userName.text.toString() != "" && ui.userPassword.text.toString() != ""){
                 AppPreferences.username = ui.userName.text.toString()
                 AppPreferences.password = ui.userPassword.text.toString()
+                AppPreferences.authorized = false
                 presenter.logon()
             }
         }
@@ -60,17 +61,21 @@ class LoginActivity : AbsActivity(R.layout.login),  LoginView{
     }
 
     override fun login(users: List<UserViewModel>) {
-        for (user in users){
+        for (user in users) {
             if (AppPreferences.username == user.username) {
                 AppPreferences.userId = user.id
+                AppPreferences.authorized = true
             }
         }
-        startActivity(Main2Activity.getStartIntent(this))
-        finish()
+        if (AppPreferences.authorized!!) {
+            startActivity(Main2Activity.getStartIntent(this))
+            finish()
+        } else Toast.makeText(this, "Имя/пароль не найдены!", Toast.LENGTH_LONG).show()
     }
 
     override fun showError(error: Throwable) {
-        Toast.makeText(this, "Имя/пароль не найдены!", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Ошибка подключения", Toast.LENGTH_LONG).show()
+        AppPreferences.authorized = false
     }
 
     override fun onBackPressed() {

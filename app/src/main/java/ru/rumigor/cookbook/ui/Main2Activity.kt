@@ -54,7 +54,6 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppPreferences.authorized = true
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain2.toolbar)
