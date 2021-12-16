@@ -55,7 +55,7 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        AppPreferences.setup(applicationContext)
         setSupportActionBar(binding.appBarMain2.toolbar)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -127,5 +127,7 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
     override fun showError(error: Throwable) {
         Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
     }
+
+
 
 }

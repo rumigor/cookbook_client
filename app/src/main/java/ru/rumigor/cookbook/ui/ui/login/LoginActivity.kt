@@ -42,6 +42,7 @@ class LoginActivity : AbsActivity(R.layout.login),  LoginView{
     private val ui: LoginBinding by viewBinding()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppPreferences.setup(applicationContext)
         setContentView(R.layout.login)
         AppPreferences.authorized?.let { authorized ->
             if (authorized){

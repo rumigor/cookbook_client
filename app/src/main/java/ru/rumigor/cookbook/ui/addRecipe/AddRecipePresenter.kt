@@ -175,47 +175,100 @@ class AddRecipePresenter(
                 )
     }
 
-    fun addPhoto(recipeId: String, fileKey: String) {
-        val image = UploadImage(fileKey, "")
-        disposables +=
-            recipeRepository
-                .addImage(recipeId, image)
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::addPhoto,
-                    viewState::showError
-                )
+    fun addPhoto(recipeId: String, fileKeys: List<String>) {
+        for (element in fileKeys) {
+            val image = UploadImage(element, "Фото рецепта id = $recipeId")
+            disposables +=
+                recipeRepository
+                    .addImage(recipeId, image)
+                    .observeOn(schedulers.main())
+                    .subscribeOn(schedulers.background())
+                    .subscribe(
+                        viewState::photoUploading,
+                        viewState::showError
+                    )
+        }
     }
 
-    fun removePhoto(recipeId: String, fileKey: String) {
-        disposables +=
-            recipeRepository
-                .deleteImage(recipeId, fileKey)
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::addPhoto,
-                    viewState::showError
-                )
+    fun removePhoto(
+        recipeId: String,
+        images: List<String>
+    ) {
+        for (fileKey in images) {
+            disposables +=
+                recipeRepository
+                    .deleteImage(recipeId, fileKey)
+                    .observeOn(schedulers.main())
+                    .subscribeOn(schedulers.background())
+                    .subscribe(
+                        viewState::addPhoto,
+                        viewState::showError
+                    )
+        }
     }
 
-    fun addStepPhoto(recipeId: String, stepNumber: Int, fileKey: String) {
-        val image = UploadImage(fileKey, "фото этапа № $stepNumber")
-        disposables +=
-            recipeRepository
-                .addStepImage(recipeId, stepNumber.toString(), image)
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe()
+
+    fun addStepPhoto(recipeId: String, stepImages: List<List<String>>) {
+        for ((index, step) in stepImages.withIndex()) {
+                for (i in step.indices) {
+                    val stage = index+1
+                    val image = UploadImage(step[i], "фото этапа № $stage")
+                    disposables +=
+                        recipeRepository
+                            .addStepImage(recipeId, index.toString(), image)
+                            .observeOn(schedulers.main())
+                            .subscribeOn(schedulers.background())
+                            .subscribe(
+                                viewState::photoUploading,
+                                viewState::showError
+                            )
+                }
+        }
+
     }
 
-    fun removeStepPhoto(recipeId: String, stepNumber: Int, fileKey: String) {
-        disposables +=
-            recipeRepository
-                .removeStepImage(recipeId, stepNumber.toString(), fileKey)
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe()
+
+    fun removeStepPhoto(recipeId: String, images: List<List<String>>) {
+        for ((index, step) in images.withIndex()) {
+            for (image in step) {
+                disposables +=
+                    recipeRepository
+                        .removeStepImage(recipeId, index.toString(), image)
+                        .observeOn(schedulers.main())
+                        .subscribeOn(schedulers.background())
+                        .subscribe()
+            }
+
+        }
     }
-}
+        fun loadTags(recipeId: String) {
+            disposables +=
+                recipeRepository
+                    .getRecipeTags(recipeId)
+                    .map { tags -> tags.map(TagViewModel.Mapper::map) }
+                    .observeOn(schedulers.main())
+                    .subscribeOn(schedulers.background())
+                    .subscribe(
+                        viewState::loadTags,
+                        viewState::showError
+                    )
+        }
+
+        fun addTagToRecipe(recipeId: String, tagId: String) {
+            disposables +=
+                recipeRepository
+                    .addTagToRecipe(recipeId, tagId)
+                    .observeOn(schedulers.main())
+                    .subscribeOn(schedulers.background())
+                    .subscribe()
+        }
+
+        fun removeTagFromRecipe(recipeId: String, tagId: String) {
+            disposables +=
+                recipeRepository
+                    .removeTagFromRecipe(recipeId, tagId)
+                    .observeOn(schedulers.main())
+                    .subscribeOn(schedulers.background())
+                    .subscribe()
+        }
+    }

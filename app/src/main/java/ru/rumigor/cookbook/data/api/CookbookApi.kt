@@ -41,8 +41,6 @@ interface CookbookApi {
     @GET("/api/v1/tag")
     fun getTags(): Single<List<Tag>>
     @GET("/api/v1/recipe/{recipe_id}/image")
-    fun getRecipeTags(@Path("recipe_id")recipeId: String): Single<Tags>
-    @GET("/api/v1/recipe/{recipe_id}/image")
     fun getImage(@Path("recipe_id")recipeId: String): Single<Image>
     @POST("/api/v1/recipe/{recipe_id}/image")
     fun addImage(@Path("recipe_id")recipeId: String, @Body image: UploadImage): Completable
@@ -64,6 +62,12 @@ interface CookbookApi {
     fun addToFavorites(@Path("user_id")userId: String,@Path("recipe_id")recipeId: String): Completable
     @DELETE("/api/v1/user/{user_id}/favorite/{recipe_id}")
     fun deleteFromFavorites(@Path("user_id")userId: String,@Path("recipe_id")recipeId: String): Completable
+    @GET("/api/v1/recipe/{recipe_id}/tag")
+    fun getRecipeTags(@Path("recipe_id")recipeId: String): Single<List<Tag>>
+    @DELETE("/api/v1/recipe/{recipe_id}/tag/{tag_id}")
+    fun deleteTagFromRecipe(@Path("recipe_id")recipeId: String, @Path("tag_id")tagId: String): Completable
+    @POST("/api/v1/recipe/{recipe_id}/tag/{tag_id}")
+    fun addTagToRecipe(@Path("recipe_id")recipeId: String, @Path("tag_id")tagId: String): Completable
 
 
 

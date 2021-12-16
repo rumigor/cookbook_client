@@ -53,6 +53,10 @@ interface RecipeRepository {
 
     fun getUser(userId: String): Observable<User>
 
+    fun addTagToRecipe(recipeId: String, tagId: String): Completable
+
+    fun removeTagFromRecipe(recipeId: String, tagId: String): Completable
+
 
 
 }

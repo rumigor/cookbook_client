@@ -1,9 +1,6 @@
 package ru.rumigor.cookbook.ui.addRecipe
 
-import moxy.viewstate.strategy.alias.AddToEndSingle
-import moxy.viewstate.strategy.alias.OneExecution
-import moxy.viewstate.strategy.alias.SingleState
-import moxy.viewstate.strategy.alias.Skip
+import moxy.viewstate.strategy.alias.*
 import okhttp3.ResponseBody
 import retrofit2.Response
 
@@ -32,10 +29,14 @@ interface AddRecipeView: ScreenView {
     fun fileUploaded(response: Response<ResponseBody>)
     @Skip
     fun showImage(images: List<RecipeImagesViewModel>)
-    @SingleState
+    @AddToEndSingle
     fun addPhoto()
-    @Skip
+    @AddToEndSingle
     fun showStepImage(images: List<RecipeImagesViewModel>)
-    @Skip
+    @AddToEndSingle
     fun loadStepImages(stepImages: Map<String, List<RecipeImages>>)
+    @AddToEndSingle
+    fun loadTags(tags: List<TagViewModel>)
+    @AddToEndSingle
+    fun photoUploading()
 }

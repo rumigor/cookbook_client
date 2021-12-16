@@ -22,4 +22,5 @@ interface RecipeDetailsView: ScreenView {
     fun loadStepImages(stepImages: Map<String, List<RecipeImages>>)
     @AddToEndSingle
     fun showTags(tags: List<TagViewModel>)
+
 }

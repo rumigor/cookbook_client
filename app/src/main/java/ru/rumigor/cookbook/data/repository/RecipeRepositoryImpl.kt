@@ -158,7 +158,6 @@ class RecipeRepositoryImpl @Inject constructor(
     override fun getRecipeTags(recipeId: String): Observable<List<Tag>> =
         cookbookApi
             .getRecipeTags(recipeId)
-            .map{it.tags}
             .toObservable()
 
     override fun getUsers(): Observable<List<User>> =
@@ -170,4 +169,14 @@ class RecipeRepositoryImpl @Inject constructor(
         cookbookApi
             .getUser(userId)
             .toObservable()
+
+    override fun addTagToRecipe(recipeId: String, tagId: String): Completable =
+        cookbookApi
+            .addTagToRecipe(recipeId, tagId)
+
+
+    override fun removeTagFromRecipe(recipeId: String, tagId: String): Completable =
+        cookbookApi
+            .deleteTagFromRecipe(recipeId, tagId)
+
 }
