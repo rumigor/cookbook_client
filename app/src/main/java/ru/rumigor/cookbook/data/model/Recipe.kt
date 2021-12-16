@@ -15,8 +15,8 @@ data class Recipe(
     val ingredients: List<Ingredients>?,
     @SerializedName("steps")
     val steps: List<Steps>,
-//    @SerializedName("tags")
-//    val tags: List<Tag>,
+    @SerializedName("rating")
+    val rating: Rank?,
     @SerializedName("imagePath")
     val imagePath: String?
 )

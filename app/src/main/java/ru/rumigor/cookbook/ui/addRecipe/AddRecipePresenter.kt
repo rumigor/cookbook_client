@@ -84,7 +84,7 @@ class AddRecipePresenter(
                             user = User("4", "", ""),
                             ingredients = ingredients,
                             steps = steps,
-
+                            rating = Rank(0, 0, 0f)
                             )
                     )
                     .map(RecipeViewModel.Mapper::map)
@@ -107,6 +107,7 @@ class AddRecipePresenter(
                             user = User("4", "", ""),
                             ingredients = ingredients,
                             steps = steps,
+                            rating = Rank(0, 0, 0f)
                         )
                     )
                     .observeOn(schedulers.main())

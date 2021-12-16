@@ -60,6 +60,26 @@ class RecipeDetailsPresenter(
                     viewState::showTags,
                     viewState::showError
                 )
+//        disposables +=
+//            recipeRepository
+//                .getRecipeRating(recipeId)
+//                .map{rates -> rates.map(RatingViewModel.Mapper::map)}
+//                .observeOn(schedulers.main())
+//                .subscribeOn(schedulers.background())
+//                .subscribe(
+//                    viewState::showRating,
+//                    viewState::showError
+//                )
+        disposables +=
+            recipeRepository
+                .getUserGrade(recipeId)
+                .map(RatingViewModel.Mapper::map)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showGrade,
+                    viewState::onGradeGettingError
+                )
 
     }
 
@@ -110,6 +130,42 @@ class RecipeDetailsPresenter(
                     viewState::showError
                 )
 
+    }
+
+    fun addGrade(grade: Int){
+        disposables +=
+            recipeRepository
+                .postUserGrade(recipeId, grade)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::addGrade,
+                    viewState::showError
+                )
+    }
+
+    fun updateGrade(grade: Int){
+        disposables +=
+            recipeRepository
+                .updateGrade(recipeId, grade)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::updateGrade,
+                    viewState::showError
+                )
+    }
+
+    fun removeGrade(){
+        disposables +=
+            recipeRepository
+                .removeGrade(recipeId)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::deleteGrade,
+                    viewState::showError
+                )
     }
 
 }

@@ -8,6 +8,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
+import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.data.api.CookbookApi
 import ru.rumigor.cookbook.data.di.modules.InMemory
 import ru.rumigor.cookbook.data.di.modules.Persisted
@@ -178,5 +179,34 @@ class RecipeRepositoryImpl @Inject constructor(
     override fun removeTagFromRecipe(recipeId: String, tagId: String): Completable =
         cookbookApi
             .deleteTagFromRecipe(recipeId, tagId)
+
+    override fun getRecipeRating(recipeId: String): Observable<List<Rating>> =
+        cookbookApi
+            .getRecipeRating(recipeId)
+            .toObservable()
+
+
+
+    override fun getUserGrade(recipeId: String): Observable<Rating> =
+        cookbookApi
+            .getUserGrade(recipeId, AppPreferences.userId!!)
+            .toObservable()
+
+
+    override fun postUserGrade(recipeId: String, grade: Int): Completable =
+        cookbookApi
+            .postUserGrade(recipeId, AppPreferences.userId!!, Rating(grade))
+
+
+    override fun updateGrade(recipeId: String, grade: Int): Completable =
+        cookbookApi
+            .updateUserGrade(recipeId, AppPreferences.userId!!, Rating(grade))
+
+
+
+    override fun removeGrade(recipeId: String): Completable =
+        cookbookApi
+            .removeUserGrade(recipeId, AppPreferences.userId!!)
+
 
 }

@@ -68,6 +68,16 @@ interface CookbookApi {
     fun deleteTagFromRecipe(@Path("recipe_id")recipeId: String, @Path("tag_id")tagId: String): Completable
     @POST("/api/v1/recipe/{recipe_id}/tag/{tag_id}")
     fun addTagToRecipe(@Path("recipe_id")recipeId: String, @Path("tag_id")tagId: String): Completable
+    @GET ("/api/v1/recipe/{recipe_id}/rating")
+    fun getRecipeRating(@Path("recipe_id")recipeId: String): Single<List<Rating>>
+    @GET ("/api/v1/recipe/{recipe_id}/rating/{user_id}")
+    fun getUserGrade(@Path("recipe_id")recipeId: String, @Path("user_id")userId: String): Single<Rating>
+    @POST("/api/v1/recipe/{recipe_id}/rating/{user_id}")
+    fun postUserGrade(@Path("recipe_id")recipeId: String, @Path("user_id")userId: String, @Body rate: Rating): Completable
+    @PUT("/api/v1/recipe/{recipe_id}/rating/{user_id}")
+    fun updateUserGrade(@Path("recipe_id")recipeId: String, @Path("user_id")userId: String, @Body rate: Rating): Completable
+    @DELETE("/api/v1/recipe/{recipe_id}/rating/{user_id}")
+    fun removeUserGrade(@Path("recipe_id")recipeId: String, @Path("user_id")userId: String): Completable
 
 
 

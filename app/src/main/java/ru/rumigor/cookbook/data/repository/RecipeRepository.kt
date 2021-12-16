@@ -57,6 +57,16 @@ interface RecipeRepository {
 
     fun removeTagFromRecipe(recipeId: String, tagId: String): Completable
 
+    fun getRecipeRating(recipeId: String): Observable<List<Rating>>
+
+    fun getUserGrade(recipeId: String): Observable<Rating>
+
+    fun postUserGrade(recipeId: String, grade: Int): Completable
+
+    fun updateGrade(recipeId: String, grade: Int): Completable
+
+    fun removeGrade(recipeId: String): Completable
+
 
 
 }

@@ -535,25 +535,23 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     }
 
     private fun updatePhotos() {
-        stepFileKeys.remove(mutableListOf())
-        photoCount = fileKeys.size
-        for (i in stepFileKeys){
-            photoCount += i.size
+        for (step in stepFileKeys) {
+            if (step.isEmpty()) {
+                step.add("258b7a0b-8441-4c32-88a8-3194771ba86a.png")
             }
+        }
+        photoCount = fileKeys.size
+        for (i in stepFileKeys) {
+            photoCount += i.size
+        }
         presenter.removePhoto(recipeId, imagesToRemove)
         presenter.removeStepPhoto(recipeId, stepImagesToRemove)
-        if (photoCount > 0) {
-            if (fileKeys.isNotEmpty()) {
-                presenter.addPhoto(recipeId, fileKeys)
-            }
-            if (stepFileKeys.isNotEmpty()) {
-                presenter.addStepPhoto(recipeId, stepFileKeys)
-            }
-        } else {
-            val navController = findNavController()
-            val bundle = Bundle()
-            bundle.putString("RecipeID", recipeId)
-            navController.navigate(R.id.recipeDetailsFragment, bundle)
+        if (fileKeys.isEmpty()) {
+            fileKeys.add("258b7a0b-8441-4c32-88a8-3194771ba86a.png")
+        }
+        presenter.addPhoto(recipeId, fileKeys)
+        if (stepFileKeys.isNotEmpty()) {
+            presenter.addStepPhoto(recipeId, stepFileKeys)
         }
     }
 
@@ -562,7 +560,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             presenter.removeTagFromRecipe(recipeId, tag.id)
         }
         for (i in 0 until ui.tagLayout.childCount) {
-            val tagName = ((((ui.tagLayout.getChildAt(i) as LinearLayout).getChildAt(0)) as Spinner).selectedItem).toString()
+            val tagName =
+                ((((ui.tagLayout.getChildAt(i) as LinearLayout).getChildAt(0)) as Spinner).selectedItem).toString()
             for (t in tagsList) {
                 if (tagName == t.briefName) {
                     presenter.addTagToRecipe(recipeId, t.id)
@@ -706,34 +705,36 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             stepUrls?.let {
                 for (image in it) {
                     val urlParts = image.url.split("/").toTypedArray()
-                    stepFileKeys[i].add(urlParts[urlParts.size - 1])
-                    stepImagesToRemove[i].add(urlParts[urlParts.size - 1])
-                    val exPhoto = ImageView(context)
-                    (((ui.steps.getChildAt(i * 5 + 3) as HorizontalScrollView).getChildAt(0)) as LinearLayout).addView(
-                        exPhoto
-                    )
-                    context?.let { context ->
-                        Glide.with(context)
-                            .load(GlideUrl(image.url, getAuth()))
-                            .apply(
-                                RequestOptions
-                                    .centerCropTransform()
-                                    .override(80.dp(context))
+                    if (urlParts[urlParts.lastIndex] != "258b7a0b-8441-4c32-88a8-3194771ba86a.png") {
+                        stepFileKeys[i].add(urlParts[urlParts.size - 1])
+                        val exPhoto = ImageView(context)
+                        (((ui.steps.getChildAt(i * 5 + 3) as HorizontalScrollView).getChildAt(0)) as LinearLayout).addView(
+                            exPhoto
+                        )
+                        context?.let { context ->
+                            Glide.with(context)
+                                .load(GlideUrl(image.url, getAuth()))
+                                .apply(
+                                    RequestOptions
+                                        .centerCropTransform()
+                                        .override(80.dp(context))
+                                )
+                                .into(exPhoto)
+                        }
+                        exPhoto.setOnLongClickListener { photo ->
+                            stepFileKeys[i].removeAt(
+                                ((ui.steps.getChildAt(i * 5 + 3) as HorizontalScrollView).getChildAt(
+                                    0
+                                ) as LinearLayout).indexOfChild(photo)
                             )
-                            .into(exPhoto)
+                            ((ui.steps.getChildAt(i * 5 + 3) as HorizontalScrollView).getChildAt(0) as LinearLayout).removeView(
+                                photo
+                            )
+                            stepImagesToRemove[i].add(urlParts[urlParts.size - 1])
+                            return@setOnLongClickListener true
+                        }
                     }
-                    exPhoto.setOnLongClickListener { photo ->
-                        stepFileKeys[i].removeAt(
-                            ((ui.steps.getChildAt(i * 5 + 3) as HorizontalScrollView).getChildAt(
-                                0
-                            ) as LinearLayout).indexOfChild(photo)
-                        )
-                        ((ui.steps.getChildAt(i * 5 + 3) as HorizontalScrollView).getChildAt(0) as LinearLayout).removeView(
-                            photo
-                        )
-                        stepImagesToRemove[i].add(urlParts[urlParts.size - 1])
-                        return@setOnLongClickListener true
-                    }
+                    stepImagesToRemove[i].add(urlParts[urlParts.size - 1])
                 }
             }
         }
@@ -781,7 +782,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
 
     override fun photoUploading() {
         photoCount--
-        if (photoCount <= 0){
+        if (photoCount <= 0) {
             val navController = findNavController()
             val bundle = Bundle()
             bundle.putString("RecipeID", recipeId)

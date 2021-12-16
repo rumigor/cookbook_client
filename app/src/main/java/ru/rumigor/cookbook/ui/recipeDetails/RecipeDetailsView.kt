@@ -22,5 +22,17 @@ interface RecipeDetailsView: ScreenView {
     fun loadStepImages(stepImages: Map<String, List<RecipeImages>>)
     @AddToEndSingle
     fun showTags(tags: List<TagViewModel>)
+//    @AddToEndSingle
+//    fun showRating(rates: List<RatingViewModel>)
+    @AddToEndSingle
+    fun showGrade(grade: RatingViewModel)
+    @Skip
+    fun addGrade()
+    @Skip
+    fun updateGrade()
+    @Skip
+    fun deleteGrade()
+    @Skip
+    fun onGradeGettingError(e: Throwable)
 
 }

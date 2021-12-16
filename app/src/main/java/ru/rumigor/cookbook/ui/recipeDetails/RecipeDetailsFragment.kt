@@ -25,13 +25,14 @@ import ru.rumigor.cookbook.databinding.RecipeFragmentBinding
 import ru.rumigor.cookbook.dp
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.setStartDrawableCircleImageFromUri
-import ru.rumigor.cookbook.ui.FavoritesViewModel
-import ru.rumigor.cookbook.ui.RecipeImagesViewModel
-import ru.rumigor.cookbook.ui.RecipeViewModel
-import ru.rumigor.cookbook.ui.TagViewModel
+import ru.rumigor.cookbook.ui.*
 import ru.rumigor.cookbook.ui.abs.AbsFragment
 import ru.rumigor.cookbook.ui.recipeDetails.adapter.ImagesAdapter
 import javax.inject.Inject
+import android.widget.RatingBar
+import android.widget.RatingBar.OnRatingBarChangeListener
+import ru.rumigor.cookbook.AppPreferences
+
 
 private const val ARG_RECIPE_ID = "RecipeID"
 
@@ -73,17 +74,10 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.imagesRecycleView.adapter = imagesAdapter
-
+        println(AppPreferences.username+" "+AppPreferences.password+" "+AppPreferences.userId)
     }
 
     override fun showRecipe(recipe: RecipeViewModel) {
-        favoriteRecipe = FavoriteRecipe(
-            recipe.recipeId,
-            recipe.title,
-            recipe.category.title,
-            recipe.description,
-            ""
-        )
         ui.recipeTitle.text = recipe.title
         loadIngredients(recipe)
         loadSteps(recipe)
@@ -94,6 +88,14 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
         ui.authorEmail.text = getString(R.string.email, recipe.user.email)
         recipeEdit = recipe
+        ui.removeGrade.setOnClickListener {
+            presenter.removeGrade()
+        }
+        recipe.rank?.let{
+            ui.overalRating.text = it.averageRating.toString()
+        }?: run{
+            ui.overalRating.text = "N/A"
+        }
     }
 
     override fun favoriteError(error: Throwable) {
@@ -154,6 +156,51 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             }
             ui.tags.text = getString(R.string.tags, tagsList)
         } else ui.tags.visibility = View.GONE
+    }
+
+//    override fun showRating(rates: List<RatingViewModel>) {
+//        if (rates.isEmpty()){
+//            ui.overalRating.text = "N/A"
+//        } else {
+//            var rating = 0f
+//            for (grade in rates) {
+//                rating += grade.rate
+//            }
+//            ui.overalRating.text = (rating/rates.size).toString()
+//        }
+//    }
+
+    override fun showGrade(grade: RatingViewModel) {
+        ui.ratingBar.rating = grade.rate.toFloat()
+        ui.ratingBar.onRatingBarChangeListener =
+            OnRatingBarChangeListener { _, rating, _ ->
+                presenter.updateGrade(rating.toInt())
+            }
+    }
+
+    override fun addGrade() {
+        Toast.makeText(requireContext(), "Оценка поставлена!", Toast.LENGTH_SHORT).show()
+        ui.removeGrade.visibility = View.VISIBLE
+    }
+
+    override fun updateGrade() {
+        Toast.makeText(requireContext(), "Оценка обновлена!", Toast.LENGTH_SHORT).show()
+        ui.removeGrade.visibility = View.VISIBLE
+    }
+
+    override fun deleteGrade() {
+        Toast.makeText(requireContext(), "Оценка удалена!", Toast.LENGTH_SHORT).show()
+        ui.ratingBar.rating = 0f
+        ui.removeGrade.visibility = View.GONE
+    }
+
+    override fun onGradeGettingError(e: Throwable) {
+        ui.ratingBar.rating = 0f
+        ui.removeGrade.visibility = View.GONE
+        ui.ratingBar.onRatingBarChangeListener =
+            OnRatingBarChangeListener { _, rating, _ ->
+                presenter.addGrade(rating.toInt())
+            }
     }
 
     private fun loadSteps(recipe: RecipeViewModel) {
@@ -252,7 +299,7 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             android.R.id.home -> {
                 val navController = findNavController()
                 val navBuilder = NavOptions.Builder()
-                navController.popBackStack(R.id.recipesListFragment, false)
+                navController.popBackStack()
             }
         }
         return true

@@ -21,6 +21,11 @@ class RecipeHolder(view: View) : RecyclerView.ViewHolder(view) {
             viewBinding.recipeName.text = recipe.title
             viewBinding.description.text = recipe.description
             viewBinding.category.text = recipe.category.title
+            recipe.rank?.let {
+                viewBinding.rank.text = it.averageRating.toString()
+            }?: run{
+                viewBinding.rank.text = "N/A"
+            }
             root.click { delegate?.onRecipePicked(recipe) }
         }
     }
