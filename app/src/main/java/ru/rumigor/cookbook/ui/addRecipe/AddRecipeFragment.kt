@@ -493,20 +493,31 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         for (k in 0..4) {
             ui.steps.removeViewAt(index)
         }
-        stepFileKeys.removeAt(index/5)
+        stepFileKeys.removeAt(index / 5)
     }
 
     override fun showAnswer(recipeViewModel: RecipeViewModel) {
+        recipeId = recipeViewModel.recipeId
         Toast.makeText(requireContext(), "new id: ${recipeViewModel.recipeId}", Toast.LENGTH_LONG)
             .show()
-        for (image in fileKeys) {
-            presenter.addPhoto(recipeViewModel.recipeId, image)
+        for (image in imagesToRemove) {
+            presenter.removePhoto(recipeId, image)
+        }
+        if (fileKeys.isNotEmpty()) {
+            for (i in imagesCount until fileKeys.size) {
+                presenter.addPhoto(recipeId, fileKeys[i])
+            }
+        }
+        for ((index, step) in stepImagesToRemove.withIndex()) {
+            for (image in step) {
+                presenter.removeStepPhoto(recipeId, index, image)
+            }
         }
         if (stepFileKeys.isNotEmpty()) {
             for ((index, step) in stepFileKeys.withIndex()) {
                 if (step.fileKeys.isNotEmpty()) {
                     for (i in 0 until step.fileKeys.size) {
-                        presenter.addStepPhoto(recipeViewModel.recipeId, index, step.fileKeys[i])
+                        presenter.addStepPhoto(recipeId, index, step.fileKeys[i])
                     }
                 }
             }
@@ -514,7 +525,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         val navController = findNavController()
         val bundle = Bundle()
         val navBuilder = NavOptions.Builder()
-        val navOptions: NavOptions = navBuilder.setPopUpTo(R.id.recipesListFragment, true).build()
+        val navOptions: NavOptions = navBuilder.setPopUpTo(R.id.recipesListFragment, false).build()
         bundle.putString("RecipeID", recipeViewModel.recipeId)
         navController.navigate(R.id.recipeDetailsFragment, bundle, navOptions)
     }
@@ -791,6 +802,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                         ((ui.steps.getChildAt(i * 5 + 3) as HorizontalScrollView).getChildAt(0) as LinearLayout).removeView(
                             photo
                         )
+                        stepImagesToRemove[i].add(urlParts[urlParts.size - 1])
+                        stepFileKeys[i].imagesCounter--
                         return@setOnLongClickListener true
                     }
                 }
@@ -835,7 +848,6 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     override fun showError(error: Throwable) {
         Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
         Log.d("ERROR", error.message.toString())
-        println(error.message)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
