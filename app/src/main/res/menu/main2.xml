@@ -9,6 +9,20 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_sortByRank"
+        android:orderInCategory="6"
+        android:title="@string/search"
+        android:iconTint="#FFEBEE"
+        android:icon="@drawable/ic_baseline_sort_24"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_update"
+        android:orderInCategory="7"
+        android:title="@string/search"
+        android:iconTint="#FFEBEE"
+        android:icon="@drawable/ic_baseline_refresh_24"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_baseline_delete_24"
         android:iconTint="#FFEBEE"

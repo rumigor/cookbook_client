@@ -237,7 +237,10 @@ class AddRecipePresenter(
                         .removeStepImage(recipeId, index.toString(), image)
                         .observeOn(schedulers.main())
                         .subscribeOn(schedulers.background())
-                        .subscribe()
+                        .subscribe(
+                            viewState::success,
+                            viewState::showError
+                        )
             }
 
         }
@@ -261,7 +264,10 @@ class AddRecipePresenter(
                     .addTagToRecipe(recipeId, tagId)
                     .observeOn(schedulers.main())
                     .subscribeOn(schedulers.background())
-                    .subscribe()
+                    .subscribe(
+                        viewState::success,
+                        viewState::showError
+                    )
         }
 
         fun removeTagFromRecipe(recipeId: String, tagId: String) {
@@ -270,6 +276,9 @@ class AddRecipePresenter(
                     .removeTagFromRecipe(recipeId, tagId)
                     .observeOn(schedulers.main())
                     .subscribeOn(schedulers.background())
-                    .subscribe()
+                    .subscribe(
+                        viewState::success,
+                        viewState::showError
+                    )
         }
     }

@@ -30,6 +30,8 @@ class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, 
 
     private lateinit var navController: NavController
 
+    private var newRecipes = mutableListOf<RecipeViewModel>()
+
     @Inject
     lateinit var schedulers: Schedulers
 
@@ -63,6 +65,7 @@ class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, 
     }
 
     override fun showRecipes(recipes: List<RecipeViewModel>) {
+        newRecipes.addAll(recipes)
         recipeAdapter.submitList(recipes)
     }
 
@@ -115,11 +118,17 @@ class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, 
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            android.R.id.home -> { requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout)
-                .open()
+        when (item.itemId) {
+            R.id.action_update -> {
+               presenter.loadFavorites()
             }
-
+            R.id.action_sortByRank -> {
+                newRecipes.sortWith(
+                    nullsLast(compareByDescending{
+                        it.rank?.averageRating})
+                )
+                recipeAdapter.submitList(newRecipes)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

@@ -11,32 +11,34 @@ import ru.rumigor.cookbook.ui.*
 interface AddRecipeView: ScreenView {
     @AddToEndSingle
     fun showCategories(categories: List<CategoryViewModel>)
-    @SingleState
+    @Skip
     fun showAnswer(recipeViewModel: RecipeViewModel)
     @AddToEndSingle
     fun showIngredients(ingredients: List<IngredientsViewModel>)
     @AddToEndSingle
     fun showUnits(units: List<UnitViewModel>)
-    @SingleState
+    @Skip
     fun addIngredientToServer(serverResponseViewModel: ServerResponseViewModel)
-    @AddToEndSingle
+    @Skip
     fun loadImage(response: ImageServerResponseViewModel)
-    @SingleState
+    @Skip
     fun showUpdatedRecipe()
     @AddToEndSingle
     fun loadTagsList(tags: List<TagViewModel>)
-    @AddToEndSingle
+    @Skip
     fun fileUploaded(response: Response<ResponseBody>)
     @Skip
     fun showImage(images: List<RecipeImagesViewModel>)
-    @AddToEndSingle
+    @Skip
     fun addPhoto()
-    @AddToEndSingle
+    @Skip
     fun showStepImage(images: List<RecipeImagesViewModel>)
-    @AddToEndSingle
+    @Skip
     fun loadStepImages(stepImages: Map<String, List<RecipeImages>>)
-    @AddToEndSingle
+    @Skip
     fun loadTags(tags: List<TagViewModel>)
-    @AddToEndSingle
+    @Skip
     fun photoUploading()
+    @Skip
+    fun success()
 }

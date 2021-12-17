@@ -18,7 +18,9 @@
         android:label="Описание рецепта">
         <action
             android:id="@+id/action_recipeDetailsFragment_to_addRecipeFragment"
-            app:destination="@id/addRecipeFragment" />
+            app:destination="@id/addRecipeFragment"
+            app:popUpTo="@id/recipesListFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_recipeDetailsFragment_to_dialog"
             app:destination="@id/dialog" />
@@ -53,7 +55,9 @@
         android:label="Закладки">
         <action
             android:id="@+id/action_favoritesFragment_to_recipesListFragment"
-            app:destination="@id/recipesListFragment" />
+            app:destination="@id/recipesListFragment"
+            app:popUpTo="@id/recipesListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -61,6 +65,8 @@
         android:label="Категории">
         <action
             android:id="@+id/action_categoryFragment_to_recipesListFragment"
-            app:destination="@id/recipesListFragment" />
+            app:destination="@id/recipesListFragment"
+            app:popUpTo="@id/recipesListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

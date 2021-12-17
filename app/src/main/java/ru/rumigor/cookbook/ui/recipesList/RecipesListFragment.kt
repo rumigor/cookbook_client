@@ -80,6 +80,7 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
     }
 
     override fun showRecipes(recipes: List<RecipeViewModel>) {
+        newRecipes.addAll(recipes)
         recipeAdapter.submitList(recipes)
     }
 
@@ -132,13 +133,20 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
             ).show()
             Log.d("ERROR", e.message.toString())
         }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout)
-                    .open()
+            R.id.action_update -> {
+               presenter.loadRecipes()
+            }
+            R.id.action_sortByRank -> {
+                newRecipes.sortWith(
+                    nullsLast(compareByDescending{
+                        it.rank?.averageRating})
+                )
+                recipeAdapter.submitList(newRecipes)
             }
         }
         return super.onOptionsItemSelected(item)

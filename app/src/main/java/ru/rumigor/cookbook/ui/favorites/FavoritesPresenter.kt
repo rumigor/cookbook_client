@@ -18,16 +18,8 @@ class FavoritesPresenter(
 
     override fun onFirstViewAttach() {
 
-        disposables +=
-            recipeRepository
-                .loadFavorites(userId)
-                .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::showRecipes,
-                    viewState::showError
-                )
+        loadFavorites()
+
     }
 
     override fun onDestroy() {
@@ -38,6 +30,19 @@ class FavoritesPresenter(
         disposables +=
             recipeRepository
                 .favoriteSearch(userId, query)
+                .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showRecipes,
+                    viewState::showError
+                )
+    }
+
+    fun loadFavorites(){
+        disposables +=
+            recipeRepository
+                .loadFavorites(userId)
                 .map { recipes-> recipes.map(RecipeViewModel.Mapper::map)}
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())

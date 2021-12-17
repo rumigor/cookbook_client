@@ -1,6 +1,7 @@
 package ru.rumigor.cookbook.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Rank (
     @SerializedName("ratings")
@@ -9,4 +10,4 @@ data class Rank (
     val totalRating: Int,
     @SerializedName("averageRating")
     val averageRating: Float
-        )
+        ): Serializable

@@ -158,23 +158,14 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         } else ui.tags.visibility = View.GONE
     }
 
-//    override fun showRating(rates: List<RatingViewModel>) {
-//        if (rates.isEmpty()){
-//            ui.overalRating.text = "N/A"
-//        } else {
-//            var rating = 0f
-//            for (grade in rates) {
-//                rating += grade.rate
-//            }
-//            ui.overalRating.text = (rating/rates.size).toString()
-//        }
-//    }
 
     override fun showGrade(grade: RatingViewModel) {
         ui.ratingBar.rating = grade.rate.toFloat()
+        ui.ratingText.text = getString(R.string.rating, grade.rate)
         ui.ratingBar.onRatingBarChangeListener =
             OnRatingBarChangeListener { _, rating, _ ->
                 presenter.updateGrade(rating.toInt())
+                ui.ratingText.text = getString(R.string.rating, rating.toInt())
             }
     }
 
@@ -196,10 +187,12 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     override fun onGradeGettingError(e: Throwable) {
         ui.ratingBar.rating = 0f
+        ui.ratingText.text = "N/A"
         ui.removeGrade.visibility = View.GONE
         ui.ratingBar.onRatingBarChangeListener =
             OnRatingBarChangeListener { _, rating, _ ->
                 presenter.addGrade(rating.toInt())
+                ui.ratingText.text = getString(R.string.rating, rating.toInt())
             }
     }
 
@@ -279,6 +272,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.findItem(R.id.action_search).isVisible = false
+        menu.findItem(R.id.action_update).isVisible = false
+        menu.findItem(R.id.action_sortByRank).isVisible = false
         if (favorite) menu.findItem(R.id.action_favorites)
             .setIcon(R.drawable.ic_baseline_favorite_24)
         favoriteItem = menu.findItem(R.id.action_favorites)
@@ -298,7 +293,6 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             }
             android.R.id.home -> {
                 val navController = findNavController()
-                val navBuilder = NavOptions.Builder()
                 navController.popBackStack()
             }
         }

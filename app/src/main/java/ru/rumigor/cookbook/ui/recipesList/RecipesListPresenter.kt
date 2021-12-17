@@ -21,42 +21,7 @@ class RecipesListPresenter(
     private val disposables = CompositeDisposable()
 
     override fun onFirstViewAttach() {
-        categoryId?.let {
-            if (categoryId != "") {
-                disposables +=
-                    recipeRepository
-                        .getRecipesByCategory(categoryId)
-                        .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
-                        .observeOn(schedulers.main())
-                        .subscribeOn(schedulers.background())
-                        .subscribe(
-                            viewState::showRecipes,
-                            viewState::showError
-                        )
-            } else {
-                disposables +=
-                    recipeRepository
-                        .getRecipes()
-                        .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
-                        .observeOn(schedulers.main())
-                        .subscribeOn(schedulers.background())
-                        .subscribe(
-                            viewState::showRecipes,
-                            viewState::showError
-                        )
-            }
-        } ?: run {
-            disposables +=
-                recipeRepository
-                    .getRecipes()
-                    .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
-                    .observeOn(schedulers.main())
-                    .subscribeOn(schedulers.background())
-                    .subscribe(
-                        viewState::showRecipes,
-                        viewState::showError
-                    )
-        }
+        loadRecipes()
     }
 
     override fun onDestroy() {
@@ -107,6 +72,45 @@ class RecipesListPresenter(
                     viewState::showImage,
                     viewState::showError
                 )
+    }
+
+    fun loadRecipes(){
+        categoryId?.let {
+            if (categoryId != "") {
+                disposables +=
+                    recipeRepository
+                        .getRecipesByCategory(categoryId)
+                        .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                        .observeOn(schedulers.main())
+                        .subscribeOn(schedulers.background())
+                        .subscribe(
+                            viewState::showRecipes,
+                            viewState::showError
+                        )
+            } else {
+                disposables +=
+                    recipeRepository
+                        .getRecipes()
+                        .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                        .observeOn(schedulers.main())
+                        .subscribeOn(schedulers.background())
+                        .subscribe(
+                            viewState::showRecipes,
+                            viewState::showError
+                        )
+            }
+        } ?: run {
+            disposables +=
+                recipeRepository
+                    .getRecipes()
+                    .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                    .observeOn(schedulers.main())
+                    .subscribeOn(schedulers.background())
+                    .subscribe(
+                        viewState::showRecipes,
+                        viewState::showError
+                    )
+        }
     }
 
 

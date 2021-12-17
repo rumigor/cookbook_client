@@ -16,7 +16,7 @@ interface RecipeDetailsView: ScreenView {
     fun markFavorite(favorites: List<RecipeViewModel>)
     @Skip
     fun onDelete()
-    @Skip
+    @AddToEndSingle
     fun showImage(images: List<RecipeImagesViewModel>)
     @Skip
     fun loadStepImages(stepImages: Map<String, List<RecipeImages>>)

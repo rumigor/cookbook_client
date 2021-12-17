@@ -10,6 +10,6 @@ class BasicAuthorization(
     private var password: String
 ): LazyHeaderFactory{
     override fun buildHeader(): String? {
-        return "Basic " + Base64.encodeToString(("$username:$password").encodeToByteArray(), Base64.NO_WRAP)
+        return "Basic " + encodeToString(("$username:$password").encodeToByteArray(), Base64.NO_WRAP)
     }
 }

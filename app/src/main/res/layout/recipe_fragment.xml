@@ -37,7 +37,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:text="TextView"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -110,15 +109,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <RatingBar
-                android:id="@+id/ratingBar"
-                style="@style/Widget.AppCompat.RatingBar.Indicator"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:isIndicator="false"
-                android:numStars="10"
-                android:progressTint="#EF9A9A"
-                android:stepSize="1" />
+                android:orientation="horizontal">
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="@style/Widget.AppCompat.RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="false"
+                    android:numStars="5"
+                    android:progressTint="#EF9A9A"
+                    android:stepSize="1" />
+
+                <TextView
+                    android:id="@+id/ratingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic"
+                    android:typeface="serif" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/removeGrade"
