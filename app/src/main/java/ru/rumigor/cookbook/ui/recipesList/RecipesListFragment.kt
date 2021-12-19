@@ -22,9 +22,12 @@ import ru.rumigor.cookbook.ui.RecipeViewModel
 import ru.rumigor.cookbook.ui.abs.AbsFragment
 import ru.rumigor.cookbook.ui.recipesList.adapter.RecipeAdapter
 import javax.inject.Inject
+import androidx.appcompat.app.AppCompatActivity
+
 
 private const val ARG_RECIPE_QUERY = "Query"
 private const val ARG_CATEGORY_ID = "CategoryId"
+private const val TOP_RANK = "TOP_RANK"
 
 class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListView,
     RecipeAdapter.Delegate {
@@ -37,6 +40,9 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
         arguments?.getString(ARG_CATEGORY_ID).orEmpty()
     }
 
+    private val topRanked: String by lazy {
+        arguments?.getString(TOP_RANK).orEmpty()
+    }
 
 
     private lateinit var navController: NavController
@@ -57,7 +63,8 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
             schedulers = schedulers,
             recipeRepository = recipeRepository,
             query = query,
-            categoryId = categoryId
+            categoryId = categoryId,
+            topRanked = topRanked
         )
     }
 
@@ -80,13 +87,25 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
     }
 
     override fun showRecipes(recipes: List<RecipeViewModel>) {
+        newRecipes.clear()
         newRecipes.addAll(recipes)
-        recipeAdapter.submitList(recipes)
+        if (topRanked == TOP_RANK) {
+            newRecipes.sortByDescending {
+                it.rank?.averageRating
+            }
+            val rankedRecipes = mutableListOf<RecipeViewModel>()
+            var top = 0
+            top = if (newRecipes.size > 10) 9
+            else newRecipes.size - 1
+            for (i in 0..top) {
+                rankedRecipes.add(newRecipes[i])
+            }
+            recipeAdapter.submitList(rankedRecipes)
+            (activity as AppCompatActivity?)!!.supportActionBar!!.title = "ТОП-10"
+        } else recipeAdapter.submitList(recipes)
+
     }
 
-    override fun showImage(images: List<RecipeImagesViewModel>) {
-
-    }
 
     override fun showError(error: Throwable) {
         Toast.makeText(
@@ -139,14 +158,17 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_update -> {
-               presenter.loadRecipes()
+                presenter.loadRecipes()
             }
             R.id.action_sortByRank -> {
                 newRecipes.sortWith(
-                    nullsLast(compareByDescending{
-                        it.rank?.averageRating})
+                    nullsLast(compareByDescending {
+                        it.rank?.averageRating
+                    })
                 )
-                recipeAdapter.submitList(newRecipes)
+                var rankedRecipes = mutableListOf<RecipeViewModel>()
+                rankedRecipes.addAll(newRecipes)
+                recipeAdapter.submitList(rankedRecipes)
             }
         }
         return super.onOptionsItemSelected(item)

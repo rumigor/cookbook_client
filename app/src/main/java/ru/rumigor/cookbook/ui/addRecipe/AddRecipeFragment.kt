@@ -138,6 +138,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        savedInstanceState
         val recipe = (arguments?.getSerializable(ARG_RECIPE) as RecipeViewModel?)
         recipe?.let {
             recipeId = it.recipeId

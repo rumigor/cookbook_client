@@ -32,16 +32,6 @@ class RecipeDetailsPresenter(
                 )
         disposables +=
             recipeRepository
-                .loadFavorites(userId)
-                .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::markFavorite,
-                    viewState::showError
-                )
-        disposables +=
-            recipeRepository
                 .getImages(recipeId)
                 .map { images -> images.map(RecipeImagesViewModel.Mapper::map) }
                 .observeOn(schedulers.main())
@@ -59,26 +49,6 @@ class RecipeDetailsPresenter(
                 .subscribe(
                     viewState::showTags,
                     viewState::showError
-                )
-//        disposables +=
-//            recipeRepository
-//                .getRecipeRating(recipeId)
-//                .map{rates -> rates.map(RatingViewModel.Mapper::map)}
-//                .observeOn(schedulers.main())
-//                .subscribeOn(schedulers.background())
-//                .subscribe(
-//                    viewState::showRating,
-//                    viewState::showError
-//                )
-        disposables +=
-            recipeRepository
-                .getUserGrade(recipeId)
-                .map(RatingViewModel.Mapper::map)
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::showGrade,
-                    viewState::onGradeGettingError
                 )
 
     }
@@ -164,6 +134,30 @@ class RecipeDetailsPresenter(
                 .subscribeOn(schedulers.background())
                 .subscribe(
                     viewState::deleteGrade,
+                    viewState::showError
+                )
+    }
+    fun getUserGrade(){
+        disposables +=
+            recipeRepository
+                .getUserGrade(recipeId)
+                .map(RatingViewModel.Mapper::map)
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::showGrade,
+                    viewState::onGradeGettingError
+                )
+    }
+    fun markFavorite(){
+        disposables +=
+            recipeRepository
+                .loadFavorites(userId)
+                .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                .observeOn(schedulers.main())
+                .subscribeOn(schedulers.background())
+                .subscribe(
+                    viewState::markFavorite,
                     viewState::showError
                 )
     }

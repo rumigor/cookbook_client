@@ -28,6 +28,8 @@ import ru.rumigor.cookbook.ui.ui.login.LoginActivity
 import ru.rumigor.cookbook.ui.ui.login.LoginPresenter
 import javax.inject.Inject
 
+private const val TOP_RANK = "TOP_RANK"
+
 class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -83,6 +85,13 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
                 }
                 R.id.nav_category-> {
                     navController.navigate(R.id.categoryFragment)
+                    drawerLayout.close()
+                    true
+                }
+                R.id.nav_top->{
+                    val bundle = Bundle()
+                    bundle.putString(TOP_RANK, TOP_RANK)
+                    navController.navigate(R.id.recipesListFragment, bundle)
                     drawerLayout.close()
                     true
                 }

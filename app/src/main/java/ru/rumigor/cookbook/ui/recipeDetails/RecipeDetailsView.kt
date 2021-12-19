@@ -1,5 +1,6 @@
 package ru.rumigor.cookbook.ui.recipeDetails
 
+import moxy.viewstate.strategy.alias.AddToEnd
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import moxy.viewstate.strategy.alias.SingleState
 import moxy.viewstate.strategy.alias.Skip
@@ -14,7 +15,7 @@ interface RecipeDetailsView: ScreenView {
     fun favoriteError(error: Throwable)
     @Skip
     fun markFavorite(favorites: List<RecipeViewModel>)
-    @Skip
+    @AddToEndSingle
     fun onDelete()
     @AddToEndSingle
     fun showImage(images: List<RecipeImagesViewModel>)
@@ -22,8 +23,6 @@ interface RecipeDetailsView: ScreenView {
     fun loadStepImages(stepImages: Map<String, List<RecipeImages>>)
     @AddToEndSingle
     fun showTags(tags: List<TagViewModel>)
-//    @AddToEndSingle
-//    fun showRating(rates: List<RatingViewModel>)
     @AddToEndSingle
     fun showGrade(grade: RatingViewModel)
     @Skip

@@ -47,6 +47,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     private var favorite = false
 
+    private var ranking = 0f
+
     private val imagesAdapter = ImagesAdapter(this)
 
     private lateinit var favoriteItem: MenuItem
@@ -75,6 +77,8 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         super.onViewCreated(view, savedInstanceState)
         ui.imagesRecycleView.adapter = imagesAdapter
         println(AppPreferences.username+" "+AppPreferences.password+" "+AppPreferences.userId)
+        presenter.getUserGrade()
+        presenter.markFavorite()
     }
 
     override fun showRecipe(recipe: RecipeViewModel) {

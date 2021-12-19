@@ -9,7 +9,5 @@ import ru.rumigor.cookbook.ui.ScreenView
 interface RecipesListView: ScreenView {
     @SingleState
     fun showRecipes(recipes: List<RecipeViewModel>)
-    @SingleState
-    fun showImage(images: List<RecipeImagesViewModel>)
 
 }

@@ -15,7 +15,8 @@ class RecipesListPresenter(
     private val recipeRepository: RecipeRepository,
     private val schedulers: Schedulers,
     private val query: String?,
-    private val categoryId: String?
+    private val categoryId: String?,
+    private val topRanked: String?
 ) : MvpPresenter<RecipesListView>() {
 
     private val disposables = CompositeDisposable()
@@ -58,18 +59,6 @@ class RecipesListPresenter(
                 .subscribeOn(schedulers.background())
                 .subscribe(
                     viewState::showRecipes,
-                    viewState::showError
-                )
-    }
-    fun getPhoto(recipeId: String){
-        disposables +=
-            recipeRepository
-                .getImages(recipeId)
-                .map {images -> images.map(RecipeImagesViewModel.Mapper::map)}
-                .observeOn(schedulers.main())
-                .subscribeOn(schedulers.background())
-                .subscribe(
-                    viewState::showImage,
                     viewState::showError
                 )
     }
