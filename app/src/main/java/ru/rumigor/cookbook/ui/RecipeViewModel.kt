@@ -14,6 +14,8 @@ class RecipeViewModel(
     val user: User,
     val rank: Rank?,
     val imagePath: String?,
+    val prepareTime: Int,
+    val comment: String
 ): Serializable {
     object Mapper{
         fun map(recipe: Recipe) =
@@ -26,7 +28,9 @@ class RecipeViewModel(
                 recipe.steps,
                 recipe.user,
                 recipe.rating,
-                recipe.imagePath
+                recipe.imagePath,
+                recipe.prepareTime,
+                recipe.comment
             )
     }
 }

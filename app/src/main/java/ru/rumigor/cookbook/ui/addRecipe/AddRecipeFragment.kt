@@ -140,7 +140,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        savedInstanceState
+        initClocks()
         val recipe = (arguments?.getSerializable(ARG_RECIPE) as RecipeViewModel?)
         recipe?.let {
             recipeId = it.recipeId
@@ -151,7 +151,9 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ui.addRecipeButton.text = "Изменить рецепт"
             newIngredients = it.ingredients as MutableList<Ingredients>
             it.imagePath?.let { url -> imagePath = url }
+            ui.inputComment.setText(it.comment)
             loadSteps(it.steps)
+            loadTime(it.prepareTime)
         }
 
         ui.addIngredient.setOnClickListener {
@@ -226,6 +228,20 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 } else addRecipeToList()
             }
         }
+    }
+
+    private fun initClocks() {
+        val adapter =
+            ArrayAdapter.createFromResource(requireContext(), R.array.time,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        ui.hours.adapter = adapter
+        ui.minutes.adapter = adapter
+    }
+
+    private fun loadTime(prepareTime: Int) {
+        ui.hours.setSelection(prepareTime / 60)
+        ui.minutes.setSelection(prepareTime % 60)
     }
 
     private fun pickStepImage() {
@@ -492,6 +508,8 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         }
         val title = ui.newTitle.text.toString()
         val description = ui.newDescription.text.toString()
+        val time = (ui.hours.selectedItemId*60 + ui.minutes.selectedItemId).toInt()
+        val comment = ui.inputComment.text.toString()
 
         categoryId = ui.chooseCategory.selectedItemPosition + 1
         presenter.saveRecipe(
@@ -501,7 +519,9 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             imagePath,
             categoryId,
             newIngredients,
-            newSteps
+            newSteps,
+            time,
+            comment
         )
     }
 

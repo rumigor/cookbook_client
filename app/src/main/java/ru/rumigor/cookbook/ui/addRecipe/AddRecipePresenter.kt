@@ -70,6 +70,8 @@ class AddRecipePresenter(
         categoryId: Int,
         ingredients: List<Ingredients>,
         steps: List<Steps>,
+        time: Int,
+        comment: String
     ) {
         if (recipeId == "0") {
             disposables +=
@@ -84,7 +86,9 @@ class AddRecipePresenter(
                             user = User("4", "", ""),
                             ingredients = ingredients,
                             steps = steps,
-                            rating = Rank(0, 0, 0f)
+                            rating = Rank(0, 0, 0f),
+                            prepareTime = time,
+                            comment = comment
                             )
                     )
                     .map(RecipeViewModel.Mapper::map)
@@ -107,7 +111,9 @@ class AddRecipePresenter(
                             user = User("4", "", ""),
                             ingredients = ingredients,
                             steps = steps,
-                            rating = Rank(0, 0, 0f)
+                            rating = Rank(0, 0, 0f),
+                            prepareTime = time,
+                            comment = comment
                         )
                     )
                     .observeOn(schedulers.main())

@@ -18,5 +18,9 @@ data class Recipe(
     @SerializedName("rating")
     val rating: Rank?,
     @SerializedName("imagePath")
-    val imagePath: String?
+    val imagePath: String?,
+    @SerializedName("prepareTime")
+    val prepareTime: Int,
+    @SerializedName("comment")
+    val comment: String
 )

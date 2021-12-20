@@ -102,6 +102,19 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         }?: run{
             ui.overalRating.text = "N/A"
         }
+        if (recipe.comment != ""){
+            ui.textView7.visibility = View.VISIBLE
+            ui.recipeComment.text = recipe.comment
+        }
+        if (recipe.prepareTime > 0){
+            ui.time.text = getTimeString(recipe.prepareTime)
+        }
+    }
+
+    private fun getTimeString(time: Int): CharSequence? {
+        val hours = time / 60
+        val minutes = time % 60
+        return "$hours ч. $minutes мин."
     }
 
     override fun favoriteError(error: Throwable) {
