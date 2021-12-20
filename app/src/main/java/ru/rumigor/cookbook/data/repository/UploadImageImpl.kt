@@ -6,14 +6,13 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Response
-
-import ru.rumigor.cookbook.data.api.UploadImageApi
+import ru.rumigor.cookbook.data.api.CookbookApi
 
 import java.io.File
 import javax.inject.Inject
 
 class UploadImageImpl @Inject constructor(
-    private val uploadImageApi: UploadImageApi
+    private val cookbookApi: CookbookApi
 ) : UploadImage {
     override fun uploadImage(filePath: String): Observable<Response<ResponseBody>> {
         val file = File(filePath)
@@ -22,7 +21,7 @@ class UploadImageImpl @Inject constructor(
             "file", file.name,
             file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         )
-        return uploadImageApi
+        return cookbookApi
             .uploadImage(body)
             .toObservable()
     }

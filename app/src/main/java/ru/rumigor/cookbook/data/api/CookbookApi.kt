@@ -5,6 +5,7 @@ import io.reactivex.rxjava3.core.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.*
 import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.model.Tag
@@ -78,6 +79,9 @@ interface CookbookApi {
     fun updateUserGrade(@Path("recipe_id")recipeId: String, @Path("user_id")userId: String, @Body rate: Rating): Completable
     @DELETE("/api/v1/recipe/{recipe_id}/rating/{user_id}")
     fun removeUserGrade(@Path("recipe_id")recipeId: String, @Path("user_id")userId: String): Completable
+    @Multipart
+    @POST("/api/v1/file/upload")
+    fun uploadImage(@Part file: MultipartBody.Part): Single<Response<ResponseBody>>
 
 
 

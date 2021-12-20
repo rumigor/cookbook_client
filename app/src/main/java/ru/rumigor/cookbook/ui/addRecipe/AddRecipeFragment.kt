@@ -3,6 +3,7 @@ package ru.rumigor.cookbook.ui.addRecipe
 import android.app.Activity
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
+import android.content.pm.ActivityInfo
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.InputType
@@ -122,6 +123,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         uploadRecipeImage =

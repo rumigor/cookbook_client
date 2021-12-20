@@ -9,20 +9,18 @@ import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.CookbookApp
-import ru.rumigor.cookbook.data.di.modules.CookBookModule
-import ru.rumigor.cookbook.data.di.modules.CookbookApiModule
-import ru.rumigor.cookbook.data.di.modules.CookbookStorageModule
-import ru.rumigor.cookbook.data.di.modules.UploadImageApiModule
 import ru.rumigor.cookbook.scheduler.Schedulers
 import javax.inject.Singleton
 import android.content.SharedPreferences
 import android.app.Application
+import dagger.Binds
+import ru.rumigor.cookbook.data.di.modules.*
 
 
 @Singleton
 @Component(
     modules = [AndroidInjectionModule::class, CookBookModule::class, CookbookApiModule::class,
-        CookbookStorageModule::class, UploadImageApiModule::class]
+        CookbookStorageModule::class, AuthorizationInterceptorModule::class]
 )
 interface CookbookApplicationComponent : AndroidInjector<CookbookApp> {
     @Component.Builder

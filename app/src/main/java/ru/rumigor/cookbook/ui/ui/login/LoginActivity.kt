@@ -8,10 +8,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.ktx.moxyPresenter
+import okhttp3.Credentials
 import ru.rumigor.cookbook.AppPreferences
+import ru.rumigor.cookbook.CookbookApp
 import ru.rumigor.cookbook.R
+import ru.rumigor.cookbook.data.api.AuthorizationInterceptor
+import ru.rumigor.cookbook.data.di.CookbookApplicationComponent
+import ru.rumigor.cookbook.data.di.modules.CookbookApiModule
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.LoginBinding
+import ru.rumigor.cookbook.scheduler.DefaultSchedulers
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.Main2Activity
 import ru.rumigor.cookbook.ui.UserViewModel
@@ -54,7 +60,7 @@ class LoginActivity : AbsActivity(R.layout.login),  LoginView{
             if (ui.userName.text.toString() != "" && ui.userPassword.text.toString() != ""){
                 AppPreferences.username = ui.userName.text.toString()
                 AppPreferences.password = ui.userPassword.text.toString()
-                AppPreferences.authorized = false
+
                 presenter.logon()
             }
         }

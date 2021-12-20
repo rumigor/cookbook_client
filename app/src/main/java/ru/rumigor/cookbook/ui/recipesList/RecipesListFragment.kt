@@ -1,5 +1,6 @@
 package ru.rumigor.cookbook.ui.recipesList
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -71,7 +72,13 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
     private val ui: RecipesFragmentBinding by viewBinding()
     private val recipeAdapter = RecipeAdapter(delegate = this)
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }

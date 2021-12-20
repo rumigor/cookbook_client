@@ -1,5 +1,6 @@
 package ru.rumigor.cookbook.ui.recipeDetails
 
+import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.graphics.Typeface.ITALIC
 import android.os.Bundle
@@ -73,6 +74,7 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     private val ui: RecipeFragmentBinding by viewBinding()
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.imagesRecycleView.adapter = imagesAdapter
@@ -124,7 +126,18 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
 
     override fun showImage(images: List<RecipeImagesViewModel>) {
         if (images.isNotEmpty()) {
-            imagesAdapter.submitList(images)
+            val newImages = mutableListOf<RecipeImagesViewModel>()
+            for (image in images){
+                var exist = false
+                for (newImage in newImages){
+                    if (newImage.url == image.url){
+                        exist = true
+                        break
+                    }
+                }
+                if (!exist) newImages.add(image)
+            }
+            imagesAdapter.submitList(newImages)
         }
         favoriteRecipe.imagePath = images[0].url
     }
@@ -136,9 +149,19 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             adapterLists.add(mutableListOf())
             val stepUrls = stepImages[i.toString()]
             stepUrls?.let {
+                val newImages = mutableListOf<RecipeImagesViewModel>()
                 for (image in it) {
-                    val stepImage = RecipeImagesViewModel(image.url, image.description)
-                    adapterLists[i].add(stepImage)
+                    var exist = false
+                    for (newImage in newImages){
+                        if (newImage.url == image.url){
+                            exist = true
+                            break
+                        }
+                    }
+                    if (!exist) {
+                        val stepImage = RecipeImagesViewModel(image.url, image.description)
+                        adapterLists[i].add(stepImage)
+                    }
                 }
             }
             val stepImagesRecycleView = RecyclerView(requireContext())
@@ -248,7 +271,12 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
         }
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        super.onViewStateRestored(savedInstanceState)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }

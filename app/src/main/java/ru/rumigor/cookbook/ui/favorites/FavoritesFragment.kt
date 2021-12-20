@@ -1,6 +1,7 @@
 package ru.rumigor.cookbook.ui.favorites
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -49,7 +50,18 @@ class FavoritesFragment: AbsFragment(R.layout.recipes_fragment), FavoritesView, 
     private val ui: RecipesFragmentBinding by viewBinding()
     private val recipeAdapter = FavoritesAdapter(delegate = this)
 
+    override fun onResume() {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        super.onResume()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }

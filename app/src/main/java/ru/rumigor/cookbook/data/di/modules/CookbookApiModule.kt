@@ -26,22 +26,19 @@ class CookbookApiModule {
         "http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/"
 
 
+    @Provides
+    fun provideAppPreferences(ctx: Context): AppPreferences{
+        return AppPreferences
+    }
+
     @Reusable
     @Provides
-    fun provideGitHubApi(@Named("cookbook_api") baseUrl: String): CookbookApi {
-        var user = ""
-        var password = ""
-        AppPreferences.username?.let {
-            user = it
-        }
-        AppPreferences.password?.let {
-            password = it
-        }
+    fun provideCookBookApi(@Named("cookbook_api") baseUrl: String, authBasicInterceptor: AuthorizationInterceptor): CookbookApi {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(
                 OkHttpClient.Builder()
-                    .addInterceptor(AuthorizationInterceptor(user, password))
+                    .addInterceptor(authBasicInterceptor)
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                     })

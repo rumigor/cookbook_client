@@ -1,5 +1,6 @@
 package ru.rumigor.cookbook.ui.category
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -39,7 +40,18 @@ class CategoryFragment: AbsFragment(R.layout.category_fragment_view), CategoryVi
     private val ui: CategoryFragmentViewBinding by viewBinding()
     private val categoryAdapter = CategoryAdapter(this)
 
+    override fun onResume() {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        super.onResume()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
