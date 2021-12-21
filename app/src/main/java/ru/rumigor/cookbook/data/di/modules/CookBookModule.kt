@@ -20,6 +20,7 @@ import javax.inject.Singleton
 import android.app.Application
 import android.content.SharedPreferences
 import ru.rumigor.cookbook.ui.StartActivity
+import ru.rumigor.cookbook.ui.tagFilter.TagsFragment
 
 
 @Module
@@ -37,6 +38,9 @@ interface CookBookModule {
 
     @ContributesAndroidInjector
     fun bindRecipesListFragment(): RecipesListFragment
+
+    @ContributesAndroidInjector
+    fun bindTagsFragment(): TagsFragment
 
     @ContributesAndroidInjector
     fun bindRecipeDetailsFragment(): RecipeDetailsFragment

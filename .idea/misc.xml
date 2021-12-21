@@ -18,6 +18,10 @@
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/recipes_fragment.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/recipeslistfragment_view.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/settings_dialogfragment.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/view_ingredient.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/view_searchbyingredients.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/view_searchbytags.xml" value="0.21041666666666667" />
+        <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/layout/view_tag.xml" value="0.21041666666666667" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/menu/activity_main2_drawer.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/LEP/Documents/cookbook3/app/src/main/res/menu/main2.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/drawable/button_add.xml" value="0.14635416666666667" />
@@ -34,7 +38,7 @@
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/image_view.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/login.xml" value="0.12395833333333334" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/nav_header_main2.xml" value="0.21041666666666667" />
-        <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipe_fragment.xml" value="0.2" />
+        <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipe_fragment.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipe_view.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipeimage_view.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/rumig/AndroidStudioProjects/cookbook_client3/app/src/main/res/layout/recipes_fragment.xml" value="0.13020833333333334" />

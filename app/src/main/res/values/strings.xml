@@ -14,10 +14,10 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="delete">Удалить</string>
     <string name="recipes_list">Список рецептов</string>
-    <string name="cusine">Выбрать кухню</string>
+    <string name="tagFilter">Поиск по тэгам</string>
     <string name="category">Выбрать категорию</string>
     <string name="top10">Топ-10</string>
-    <string name="quickest">10 быстрых рецептов</string>
+    <string name="quickest">Быстрые рецепты</string>
     <string name="favorites">Закладки</string>
     <string name="search">Найти рецепт</string>
     <string name="author">Автор: %s</string>
@@ -35,6 +35,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="rating">%d/5</string>
+    <string name="start_search">Начать поиск</string>
     <string-array name="time">
         <item>0</item>
         <item>1</item>

@@ -29,6 +29,7 @@ import ru.rumigor.cookbook.ui.ui.login.LoginPresenter
 import javax.inject.Inject
 
 private const val TOP_RANK = "TOP_RANK"
+private const val QUICK_RECIPES = "Quick_Recipes"
 
 class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
 
@@ -65,7 +66,7 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
         val navController = findNavController(R.id.nav_host_fragment_content_main2)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_cusine, R.id.nav_category, R.id.nav_top, R.id.nav_quickest,
+                R.id.nav_home, R.id.nav_tagFilter, R.id.nav_category, R.id.nav_top, R.id.nav_quickest,
                 R.id.nav_favorites
             ), drawerLayout
         )
@@ -92,6 +93,18 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
                     val bundle = Bundle()
                     bundle.putString(TOP_RANK, TOP_RANK)
                     navController.navigate(R.id.recipesListFragment, bundle)
+                    drawerLayout.close()
+                    true
+                }
+                R.id.nav_quickest->{
+                    val bundle = Bundle()
+                    bundle.putString(QUICK_RECIPES, QUICK_RECIPES)
+                    navController.navigate(R.id.recipesListFragment, bundle)
+                    drawerLayout.close()
+                    true
+                }
+                R.id.nav_tagFilter->{
+                    navController.navigate(R.id.tagsFragment)
                     drawerLayout.close()
                     true
                 }

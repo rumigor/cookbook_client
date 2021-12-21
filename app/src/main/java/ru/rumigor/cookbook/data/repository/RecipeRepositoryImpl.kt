@@ -186,7 +186,6 @@ class RecipeRepositoryImpl @Inject constructor(
             .toObservable()
 
 
-
     override fun getUserGrade(recipeId: String): Observable<Rating> =
         cookbookApi
             .getUserGrade(recipeId, AppPreferences.userId!!)
@@ -203,10 +202,19 @@ class RecipeRepositoryImpl @Inject constructor(
             .updateUserGrade(recipeId, AppPreferences.userId!!, Rating(grade))
 
 
-
     override fun removeGrade(recipeId: String): Completable =
         cookbookApi
             .removeUserGrade(recipeId, AppPreferences.userId!!)
 
+    override fun loadQuickestRecipes(time: Int): Observable<List<Recipe>> =
+        cookbookApi
+            .loadQuickestRecipes(time)
+            .map { it.recipes }
+            .toObservable()
 
+    override fun findRecipesByTags(filter: String): Observable<List<Recipe>> =
+        cookbookApi
+            .findRecipesByTags(filter)
+            .map { it.recipes }
+            .toObservable()
 }

@@ -82,6 +82,10 @@ interface CookbookApi {
     @Multipart
     @POST("/api/v1/file/upload")
     fun uploadImage(@Part file: MultipartBody.Part): Single<Response<ResponseBody>>
+    @GET("/api/v1/recipe")
+    fun loadQuickestRecipes(@Query("prepareTime")time: Int): Single<Content>
+    @GET("/api/v1/recipe")
+    fun findRecipesByTags(@Query("tags")tags: String): Single<Content>
 
 
 

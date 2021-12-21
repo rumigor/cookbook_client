@@ -67,6 +67,11 @@ interface RecipeRepository {
 
     fun removeGrade(recipeId: String): Completable
 
+    fun loadQuickestRecipes(time: Int): Observable<List<Recipe>>
+
+    fun findRecipesByTags(filter: String): Observable<List<Recipe>>
+
+
 
 
 }

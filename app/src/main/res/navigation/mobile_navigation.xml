@@ -11,6 +11,11 @@
         <action
             android:id="@+id/action_recipesListFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment" />
+        <action
+            android:id="@+id/action_recipesListFragment_to_tagsFragment"
+            app:destination="@id/tagsFragment"
+            app:popUpTo="@id/recipesListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/recipeDetailsFragment"
@@ -69,4 +74,8 @@
             app:popUpTo="@id/recipesListFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/tagsFragment"
+        android:name="ru.rumigor.cookbook.ui.tagFilter.TagsFragment"
+        android:label="Поиск по тэгам" />
 </navigation>

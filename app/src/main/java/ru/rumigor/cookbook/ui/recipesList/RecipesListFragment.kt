@@ -29,6 +29,8 @@ import androidx.appcompat.app.AppCompatActivity
 private const val ARG_RECIPE_QUERY = "Query"
 private const val ARG_CATEGORY_ID = "CategoryId"
 private const val TOP_RANK = "TOP_RANK"
+private const val QUICK_RECIPES = "Quick_Recipes"
+private const val TAG_FILTER = "TAG_FILTER"
 
 class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListView,
     RecipeAdapter.Delegate {
@@ -43,6 +45,14 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
 
     private val topRanked: String by lazy {
         arguments?.getString(TOP_RANK).orEmpty()
+    }
+
+    private val quickRecipes: String by lazy {
+        arguments?.getString(QUICK_RECIPES).orEmpty()
+    }
+
+    private val tagFilter: String by lazy {
+        arguments?.getString(TAG_FILTER).orEmpty()
     }
 
 
@@ -65,7 +75,9 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
             recipeRepository = recipeRepository,
             query = query,
             categoryId = categoryId,
-            topRanked = topRanked
+            topRanked = topRanked,
+            quickRecipes = quickRecipes,
+            tagFilter = tagFilter
         )
     }
 
@@ -96,21 +108,46 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
     override fun showRecipes(recipes: List<RecipeViewModel>) {
         newRecipes.clear()
         newRecipes.addAll(recipes)
-        if (topRanked == TOP_RANK) {
-            newRecipes.sortByDescending {
-                it.rank?.averageRating
+        when {
+            topRanked == TOP_RANK -> {
+                newRecipes.sortByDescending {
+                    it.rank?.averageRating
+                }
+                val rankedRecipes = mutableListOf<RecipeViewModel>()
+                val top = if (newRecipes.size > 10) 9
+                else newRecipes.size - 1
+                for (i in 0..top) {
+                    rankedRecipes.add(newRecipes[i])
+                }
+                recipeAdapter.submitList(rankedRecipes)
+                (activity as AppCompatActivity?)!!.supportActionBar!!.title = "ТОП-10"
             }
-            val rankedRecipes = mutableListOf<RecipeViewModel>()
-            var top = 0
-            top = if (newRecipes.size > 10) 9
-            else newRecipes.size - 1
-            for (i in 0..top) {
-                rankedRecipes.add(newRecipes[i])
+            quickRecipes == QUICK_RECIPES -> {
+                val quickRecipes = mutableListOf<RecipeViewModel>()
+                for (recipe in recipes) {
+                    if (recipe.prepareTime > 0) {
+                        quickRecipes.add(recipe)
+                    }
+                }
+                recipeAdapter.submitList(quickRecipes)
             }
-            recipeAdapter.submitList(rankedRecipes)
-            (activity as AppCompatActivity?)!!.supportActionBar!!.title = "ТОП-10"
-        } else recipeAdapter.submitList(recipes)
-
+            tagFilter != "" -> {
+                val filteredRecipes = mutableListOf<RecipeViewModel>()
+                for (recipe in recipes) {
+                    var exist = false
+                    for (filteredRecipe in filteredRecipes) {
+                        if (recipe.recipeId == filteredRecipe.recipeId) {
+                            exist = true
+                            break
+                        }
+                    }
+                    if (!exist) filteredRecipes.add(recipe)
+                }
+                recipeAdapter.submitList(filteredRecipes)
+                (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Результаты поиска"
+            }
+            else -> recipeAdapter.submitList(recipes)
+        }
     }
 
 

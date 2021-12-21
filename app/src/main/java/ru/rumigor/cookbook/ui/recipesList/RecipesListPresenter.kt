@@ -16,7 +16,9 @@ class RecipesListPresenter(
     private val schedulers: Schedulers,
     private val query: String?,
     private val categoryId: String?,
-    private val topRanked: String?
+    private val topRanked: String?,
+    private val quickRecipes: String?,
+    private val tagFilter: String?
 ) : MvpPresenter<RecipesListView>() {
 
     private val disposables = CompositeDisposable()
@@ -31,7 +33,7 @@ class RecipesListPresenter(
 
     fun search(query: String?) {
         query?.let {
-            categoryId?.let{
+            categoryId?.let {
                 if (categoryId != "") {
                     disposables +=
                         recipeRepository
@@ -44,7 +46,7 @@ class RecipesListPresenter(
                                 viewState::showError
                             )
                 } else findRecipe(query)
-            } ?: run{
+            } ?: run {
                 findRecipe(query)
             }
         }
@@ -63,12 +65,12 @@ class RecipesListPresenter(
                 )
     }
 
-    fun loadRecipes(){
-        categoryId?.let {
-            if (categoryId != "") {
+    fun loadRecipes() {
+        when {
+            categoryId != "" -> {
                 disposables +=
                     recipeRepository
-                        .getRecipesByCategory(categoryId)
+                        .getRecipesByCategory(categoryId!!)
                         .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
                         .observeOn(schedulers.main())
                         .subscribeOn(schedulers.background())
@@ -76,7 +78,32 @@ class RecipesListPresenter(
                             viewState::showRecipes,
                             viewState::showError
                         )
-            } else {
+            }
+            quickRecipes != "" -> {
+                disposables +=
+                    recipeRepository
+                        .loadQuickestRecipes(30)
+                        .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                        .observeOn(schedulers.main())
+                        .subscribeOn(schedulers.background())
+                        .subscribe(
+                            viewState::showRecipes,
+                            viewState::showError
+                        )
+            }
+            tagFilter != "" -> {
+                disposables +=
+                    recipeRepository
+                        .findRecipesByTags(tagFilter!!)
+                        .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
+                        .observeOn(schedulers.main())
+                        .subscribeOn(schedulers.background())
+                        .subscribe(
+                            viewState::showRecipes,
+                            viewState::showError
+                        )
+            }
+            else -> {
                 disposables +=
                     recipeRepository
                         .getRecipes()
@@ -88,22 +115,8 @@ class RecipesListPresenter(
                             viewState::showError
                         )
             }
-        } ?: run {
-            disposables +=
-                recipeRepository
-                    .getRecipes()
-                    .map { recipes -> recipes.map(RecipeViewModel.Mapper::map) }
-                    .observeOn(schedulers.main())
-                    .subscribeOn(schedulers.background())
-                    .subscribe(
-                        viewState::showRecipes,
-                        viewState::showError
-                    )
         }
     }
-
-
-
 }
 
 
