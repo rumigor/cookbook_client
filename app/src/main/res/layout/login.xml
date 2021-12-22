@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFDE7"
     android:orientation="vertical"
-    tools:context=".ui.ui.login.LoginActivity">
+    tools:context=".ui.login.LoginActivity">
 
     <TextView
         android:id="@+id/textView3"
@@ -95,5 +95,14 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#90CAF9"
         android:text="Войти"
+        app:cornerRadius="16dp" />
+
+    <Button
+        android:id="@+id/registrationButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#E57373"
+        android:text="Зарегистрироваться"
         app:cornerRadius="16dp" />
 </LinearLayout>

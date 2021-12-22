@@ -33,20 +33,36 @@ class CookbookApiModule {
 
     @Reusable
     @Provides
-    fun provideCookBookApi(@Named("cookbook_api") baseUrl: String, authBasicInterceptor: AuthorizationInterceptor): CookbookApi {
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(authBasicInterceptor)
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    })
-                    .build()
-            )
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(CookbookApi::class.java)
+    fun provideCookBookApi(@Named("cookbook_api") baseUrl: String, authBasicInterceptor: AuthorizationInterceptor?): CookbookApi {
+        if (authBasicInterceptor != null) {
+            return Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor(authBasicInterceptor)
+                        .addInterceptor(HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BODY
+                        })
+                        .build()
+                )
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(CookbookApi::class.java)
+        } else {
+            return Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor(HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BODY
+                        })
+                        .build()
+                )
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(CookbookApi::class.java)
+        }
     }
 }

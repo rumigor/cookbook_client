@@ -1,4 +1,4 @@
-package ru.rumigor.cookbook.ui.ui.login
+package ru.rumigor.cookbook.ui.login
 
 import moxy.viewstate.strategy.alias.SingleState
 import ru.rumigor.cookbook.ui.ScreenView

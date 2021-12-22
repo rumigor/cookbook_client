@@ -86,6 +86,8 @@ interface CookbookApi {
     fun loadQuickestRecipes(@Query("prepareTime")time: Int): Single<Content>
     @GET("/api/v1/recipe")
     fun findRecipesByTags(@Query("tags")tags: String): Single<Content>
+    @POST("/api/v1/auth/registration")
+    fun registration(@Body form: Registration): Completable
 
 
 

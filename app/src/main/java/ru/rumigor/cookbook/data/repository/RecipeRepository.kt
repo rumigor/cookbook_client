@@ -71,6 +71,8 @@ interface RecipeRepository {
 
     fun findRecipesByTags(filter: String): Observable<List<Recipe>>
 
+    fun registration(username: String, password: String, email: String): Completable
+
 
 
 

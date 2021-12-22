@@ -217,4 +217,8 @@ class RecipeRepositoryImpl @Inject constructor(
             .findRecipesByTags(filter)
             .map { it.recipes }
             .toObservable()
+
+    override fun registration(username: String, password: String, email: String): Completable =
+        cookbookApi
+            .registration(Registration(username, password, password, email))
 }

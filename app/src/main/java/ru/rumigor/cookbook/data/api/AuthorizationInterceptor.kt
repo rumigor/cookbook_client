@@ -7,17 +7,32 @@ import ru.rumigor.cookbook.AppPreferences
 import javax.inject.Inject
 
 
+class AuthorizationInterceptor @Inject constructor() : Interceptor {
 
 
-class AuthorizationInterceptor @Inject constructor(): Interceptor {
-
-
-
-    override fun intercept(chain: Interceptor.Chain): Response =
-        chain.proceed(
+    override fun intercept(chain: Interceptor.Chain): Response {
+        var username = ""
+        var password = ""
+        AppPreferences.username?.let {
+            username = it
+        }
+        AppPreferences.password?.let {
+            password = it
+        }
+        return if (username != "" && password != "") {
+            chain.proceed(
+                chain.request()
+                    .newBuilder()
+                    .addHeader(
+                        "Authorization",
+                        Credentials.basic(username, password)
+                    )
+                    .build()
+            )
+        } else chain.proceed(
             chain.request()
                 .newBuilder()
-                .addHeader("Authorization", Credentials.basic(AppPreferences.username!!, AppPreferences.password!!))
                 .build()
         )
+    }
 }

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.R
-import ru.rumigor.cookbook.ui.ui.login.LoginActivity
+import ru.rumigor.cookbook.ui.login.LoginActivity
 
 const val REQUEST_CODE = 777
 

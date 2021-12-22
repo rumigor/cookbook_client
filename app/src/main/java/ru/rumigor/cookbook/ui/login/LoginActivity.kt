@@ -1,31 +1,23 @@
-package ru.rumigor.cookbook.ui.ui.login
+package ru.rumigor.cookbook.ui.login
 
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.ktx.moxyPresenter
-import okhttp3.Credentials
 import ru.rumigor.cookbook.AppPreferences
-import ru.rumigor.cookbook.CookbookApp
 import ru.rumigor.cookbook.R
-import ru.rumigor.cookbook.data.api.AuthorizationInterceptor
-import ru.rumigor.cookbook.data.di.CookbookApplicationComponent
-import ru.rumigor.cookbook.data.di.modules.CookbookApiModule
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.LoginBinding
-import ru.rumigor.cookbook.scheduler.DefaultSchedulers
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.Main2Activity
 import ru.rumigor.cookbook.ui.UserViewModel
 import ru.rumigor.cookbook.ui.abs.AbsActivity
-import ru.rumigor.cookbook.ui.recipeDetails.RecipeDetailsPresenter
+import ru.rumigor.cookbook.ui.registration.RegistrationActivity
 import javax.inject.Inject
 
-class LoginActivity : AbsActivity(R.layout.login),  LoginView{
+class LoginActivity : AbsActivity(R.layout.login), LoginView {
     @Inject
     lateinit var schedulers: Schedulers
 
@@ -65,6 +57,11 @@ class LoginActivity : AbsActivity(R.layout.login),  LoginView{
             }
         }
 
+        ui.registrationButton.setOnClickListener {
+            startActivity(RegistrationActivity.getStartIntent(this))
+            finish()
+        }
+
     }
 
     override fun login(users: List<UserViewModel>) {
@@ -81,7 +78,7 @@ class LoginActivity : AbsActivity(R.layout.login),  LoginView{
     }
 
     override fun showError(error: Throwable) {
-        Toast.makeText(this, "Ошибка подключения", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Имя/пароль не найдены!", Toast.LENGTH_LONG).show()
         AppPreferences.authorized = false
     }
 

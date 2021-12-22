@@ -1,35 +1,31 @@
-package ru.rumigor.cookbook.ui.ui.login
+package ru.rumigor.cookbook.ui.registration
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import moxy.MvpPresenter
-import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.scheduler.Schedulers
-import ru.rumigor.cookbook.ui.UserViewModel
 
-class LoginPresenter(
+class RegistrationPresenter(
     private val recipeRepository: RecipeRepository,
     private val schedulers: Schedulers,
-) : MvpPresenter<LoginView>() {
-    private val disposables = CompositeDisposable()
+) : MvpPresenter<RegistrationView>() {
 
-    fun logon() {
-        disposables +=
+    private val disposable = CompositeDisposable()
+
+    override fun onDestroy() {
+        disposable.clear()
+    }
+
+    fun registration(username: String, password: String, email: String){
+        disposable +=
             recipeRepository
-                .getUsers()
-                .map { users -> users.map(UserViewModel.Mapper::map) }
+                .registration(username, password, email)
                 .observeOn(schedulers.main())
                 .subscribeOn(schedulers.background())
                 .subscribe(
-                    viewState::login,
+                    viewState::onSuccess,
                     viewState::showError
                 )
     }
-
-    override fun onDestroy() {
-        disposables.clear()
-        super.onDestroy()
-    }
-
 }

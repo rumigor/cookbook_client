@@ -1,5 +1,7 @@
 package ru.rumigor.cookbook.ui.tagFilter
 
+import android.content.pm.ActivityInfo
+import android.content.res.TypedArray
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,6 +18,7 @@ import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.TagViewModel
 import ru.rumigor.cookbook.ui.abs.AbsFragment
 import ru.rumigor.cookbook.ui.tagFilter.adapter.TagsAdapter
+import java.io.Serializable
 import javax.inject.Inject
 
 class TagsFragment: AbsFragment(R.layout.view_searchbytags), TagsView, TagsAdapter.Delegate {
@@ -36,11 +39,25 @@ class TagsFragment: AbsFragment(R.layout.view_searchbytags), TagsView, TagsAdapt
     private val tagsAdapter = TagsAdapter(delegate = this)
     private var stringBuffer = StringBuffer()
 
+    private var filter = false
+
     private var tagList = mutableListOf<TagViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    }
 
     override fun loadTags(tags: List<TagViewModel>) {
         tagList.addAll(tags)
         tagsAdapter.submitList(tagList)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable("TAG_LIST", tagList.toTypedArray())
+        outState.putBoolean("FILTERED", filter)
+        outState.putString("SB", stringBuffer.toString())
     }
 
 
@@ -100,6 +117,7 @@ class TagsFragment: AbsFragment(R.layout.view_searchbytags), TagsView, TagsAdapt
                        }
                    }
                    tagsAdapter.submitList(filteredTags)
+                   filter = true
                }
                 return false
             }
@@ -110,7 +128,31 @@ class TagsFragment: AbsFragment(R.layout.view_searchbytags), TagsView, TagsAdapt
         )
         viewBinding.filter.setOnCloseListener{
             tagsAdapter.submitList(tagList)
+            filter = false
             return@setOnCloseListener true
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        savedInstanceState?.let{
+            val tagArray = it.getSerializable("TAG_LIST")
+            tagList.addAll(tagArray as Array<TagViewModel>)
+            tagsAdapter.submitList(tagList)
+            if (savedInstanceState.getBoolean("FILTERED")){
+                val tagName = viewBinding.filter.query
+                val filteredTags = mutableListOf<TagViewModel>()
+                for (tag in tagList) {
+                    if (tag.briefName.contains(tagName)){
+                        filteredTags.add(tag)
+                    }
+                }
+                tagsAdapter.submitList(filteredTags)
+            }
+            savedInstanceState.getString("SB")?.let{text ->
+                stringBuffer = StringBuffer(text)
+            }
+
         }
     }
 

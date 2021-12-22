@@ -1,5 +1,6 @@
 package ru.rumigor.cookbook.ui
 
+import android.os.Parcelable
 import ru.rumigor.cookbook.data.model.Tag
 import java.io.Serializable
 

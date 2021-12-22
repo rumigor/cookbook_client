@@ -14,8 +14,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.ktx.moxyPresenter
 import ru.rumigor.cookbook.AppPreferences
@@ -24,8 +22,7 @@ import ru.rumigor.cookbook.data.repository.RecipeRepository
 import ru.rumigor.cookbook.databinding.ActivityMain2Binding
 import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.abs.AbsActivity
-import ru.rumigor.cookbook.ui.ui.login.LoginActivity
-import ru.rumigor.cookbook.ui.ui.login.LoginPresenter
+import ru.rumigor.cookbook.ui.login.LoginActivity
 import javax.inject.Inject
 
 private const val TOP_RANK = "TOP_RANK"
