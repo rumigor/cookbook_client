@@ -9,7 +9,7 @@
         android:id="@+id/recipesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFDE7"
+        android:background="#FFF3E0"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -19,7 +19,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_magin"
         android:layout_marginBottom="@dimen/fab_magin"
-        android:backgroundTint="#FFAB91"
+        android:backgroundTint="#FFCCBC"
         android:backgroundTintMode="add"
         android:contentDescription="@string/add_new_recipe"
         android:focusable="true"

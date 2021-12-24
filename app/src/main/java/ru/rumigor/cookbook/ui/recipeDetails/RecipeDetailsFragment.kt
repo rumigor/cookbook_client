@@ -98,7 +98,7 @@ class RecipeDetailsFragment : AbsFragment(R.layout.recipe_fragment), RecipeDetai
             presenter.removeGrade()
         }
         recipe.rank?.let{
-            ui.overalRating.text = it.averageRating.toString()
+            ui.overalRating.text = String.format("%.1f", it.averageRating)
         }?: run{
             ui.overalRating.text = "N/A"
         }

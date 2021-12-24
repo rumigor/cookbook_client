@@ -10,10 +10,35 @@
     android:orientation="vertical">
 
 
-    <ImageView
-        android:id="@+id/recipeImage"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        app:srcCompat="@drawable/ic_baseline_block_24" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/back_button" />
+
+        <ImageView
+            android:id="@+id/recipeImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            app:srcCompat="@drawable/ic_baseline_block_24" />
+
+        <ImageView
+            android:id="@+id/forwardButton"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/forward_button" />
+    </LinearLayout>
+
 </androidx.appcompat.widget.LinearLayoutCompat>

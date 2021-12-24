@@ -34,10 +34,14 @@ class ImagesViewHolder (view: View) : RecyclerView.ViewHolder(view) {
             )
             .into(viewBinding.recipeImage)
 
-
-//            root.click { delegate?.onRecipePicked(recipe) }
         }
+    fun loadBackArrow(){
+        viewBinding.backButton.visibility = View.VISIBLE
+    }
 
+    fun loadForwardArrow(){
+        viewBinding.forwardButton.visibility = View.VISIBLE
+    }
 
 
 

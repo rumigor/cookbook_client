@@ -8,7 +8,7 @@
         <item name="contentPaddingTop">12dp</item>
         <item name="contentPaddingLeft">16dp</item>
         <item name="contentPaddingRight">16dp</item>
-        <item name="cardBackgroundColor">@color/light_green</item>
+        <item name="cardBackgroundColor">@color/ic_launcher_background</item>
         <item name="android:layout_margin">10dp</item>
     </style>
 
