@@ -27,8 +27,10 @@ import javax.inject.Inject
 import android.app.NotificationChannel
 
 import android.app.NotificationManager
+import android.app.PendingIntent
 
 import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -88,7 +90,11 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView, CoroutineS
         val navController = findNavController(R.id.nav_host_fragment_content_main2)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_tagFilter, R.id.nav_category, R.id.nav_top, R.id.nav_quickest,
+                R.id.nav_home,
+                R.id.nav_tagFilter,
+                R.id.nav_category,
+                R.id.nav_top,
+                R.id.nav_quickest,
                 R.id.nav_favorites
             ), drawerLayout
         )
@@ -135,32 +141,37 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView, CoroutineS
         }
 //        val myWorkRequest = PeriodicWorkRequestBuilder<PushWorker>(10, TimeUnit.SECONDS, 5, TimeUnit.SECONDS).build()
 //        WorkManager.getInstance(this).enqueue(myWorkRequest)
-        val client = StompClient(OkHttpWebSocketClient())
-        try {
-            launch {
-                val session: StompSession =
-                    client.connect("http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/stomp/")
-                val jsonStompSession = session.withJsonConversions()
-
-                val subscription: Flow<String> =
-                    session.subscribeText("http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/cookbook/new")
-
-                val collectorJob = launch {
-                    subscription.collect { recipe ->
-                        val intent = Intent()
-                        intent.action = ACTION_SEND_MSG
-                        intent.putExtra(NAME_MSG, recipe)
-                        intent.addFlags(Intent.FLAG_FROM_BACKGROUND)
-                        applicationContext.sendBroadcast(intent)
-                    }
-                }
-            }
-        } catch (e: Throwable) {
-            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-        }
+//        val client = StompClient(OkHttpWebSocketClient())
+//            launch {
+//                val session: StompSession =
+//                    client.connect("ws://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/stomp/websocket", AppPreferences.username, AppPreferences.password)
+//                val jsonStompSession = session.withJsonConversions()
+//                val subscription: Flow<String> =
+//                    session.subscribeText("/cookbook/new")
+//
+//                val collectorJob = launch {
+//                    subscription.collect { recipe ->
+//                        val intent = Intent()
+//                        intent.action = ACTION_SEND_MSG
+//                        intent.putExtra(NAME_MSG, recipe)
+//                        intent.addFlags(Intent.FLAG_FROM_BACKGROUND)
+//                        sendBroadcast(intent)
+//                    }
+//                }
+//
+//                    collectorJob.cancel()
+//
+//                    session.disconnect()
+//        }
         initNotificationChannel()
+        val myWorkRequest = PeriodicWorkRequestBuilder<PushWorker>(15, TimeUnit.MINUTES).build()
+        WorkManager.getInstance(this).enqueue(myWorkRequest)
+        val intent2 = Intent()
+        intent2.action = ACTION_SEND_MSG
+        intent2.putExtra(NAME_MSG, "test")
+        intent2.addFlags(Intent.FLAG_FROM_BACKGROUND)
+        sendBroadcast(intent2)
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

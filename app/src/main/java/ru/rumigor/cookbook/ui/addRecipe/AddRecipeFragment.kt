@@ -151,7 +151,11 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             ui.addRecipeButton.text = "Изменить рецепт"
             newIngredients = it.ingredients as MutableList<Ingredients>
             it.imagePath?.let { url -> imagePath = url }
-            ui.inputComment.setText(it.comment)
+            it.comment?.let{ comment ->
+                ui.inputComment.setText(comment)
+            }?: run {
+                ui.inputComment.setText("")
+            }
             loadSteps(it.steps)
             loadTime(it.prepareTime)
         }

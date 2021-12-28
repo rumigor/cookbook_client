@@ -13,7 +13,7 @@ import ru.rumigor.cookbook.R
 class RecipeReceiver : BroadcastReceiver() {
 
     private val NAME_MSG = "MSG"
-    private val TAG = "MessageBroadcastReceiver"
+    private val TAG = "new_recipe_on_server"
     private var messageId = 0
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -22,7 +22,7 @@ class RecipeReceiver : BroadcastReceiver() {
             val builder: NotificationCompat.Builder = NotificationCompat.Builder(context, "2")
                 .setSmallIcon(R.drawable.cookbook)
                 .setContentTitle("Broadcast Receiver")
-                .setContentText(message)
+                .setContentText(msg)
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(messageId++, builder.build())

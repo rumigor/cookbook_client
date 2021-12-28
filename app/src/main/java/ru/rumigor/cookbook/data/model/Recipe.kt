@@ -22,5 +22,5 @@ data class Recipe(
     @SerializedName("prepareTime")
     val prepareTime: Int,
     @SerializedName("comment")
-    val comment: String
+    val comment: String?
 )

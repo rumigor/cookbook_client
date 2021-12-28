@@ -15,7 +15,7 @@ class RecipeViewModel(
     val rank: Rank?,
     val imagePath: String?,
     val prepareTime: Int,
-    val comment: String
+    val comment: String?
 ): Serializable {
     object Mapper{
         fun map(recipe: Recipe) =

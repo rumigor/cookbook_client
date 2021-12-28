@@ -154,7 +154,7 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
     override fun showError(error: Throwable) {
         Toast.makeText(
             requireContext(),
-            "Sorry, something go wrong(",
+            error.message,
             Toast.LENGTH_LONG
         ).show()
         Log.d("ERROR", error.message.toString())
