@@ -15,6 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cookbook"
         android:usesCleartextTraffic="true">
+        <receiver
+            android:name=".ui.RecipeReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ru.rumigor.cookbook.message" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".ui.registration.RegistrationActivity"
             android:exported="false" />
@@ -31,7 +40,7 @@
             android:name=".ui.login.LoginActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Cookbook.NoActionBar"></activity>
+            android:theme="@style/Theme.Cookbook.NoActionBar" />
         <activity
             android:name=".ui.Main2Activity"
             android:exported="true"

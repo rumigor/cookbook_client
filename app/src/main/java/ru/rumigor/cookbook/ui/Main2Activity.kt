@@ -24,11 +24,36 @@ import ru.rumigor.cookbook.scheduler.Schedulers
 import ru.rumigor.cookbook.ui.abs.AbsActivity
 import ru.rumigor.cookbook.ui.login.LoginActivity
 import javax.inject.Inject
+import android.app.NotificationChannel
+
+import android.app.NotificationManager
+
+import android.os.Build
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import org.hildan.krossbow.stomp.StompClient
+import org.hildan.krossbow.stomp.StompSession
+import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
+import org.hildan.krossbow.stomp.subscribeText
+import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.CoroutineContext
+
 
 private const val TOP_RANK = "TOP_RANK"
 private const val QUICK_RECIPES = "Quick_Recipes"
 
-class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
+class Main2Activity : AbsActivity(R.layout.activity_main2), MainView, CoroutineScope {
+
+    override val coroutineContext: CoroutineContext by lazy {
+        Dispatchers.Main + Job()
+    }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val binding: ActivityMain2Binding by viewBinding()
@@ -70,7 +95,7 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navView.setNavigationItemSelectedListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.nav_home -> {
                     navController.navigate(R.id.recipesListFragment)
                     drawerLayout.close()
@@ -81,26 +106,26 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
                     drawerLayout.close()
                     true
                 }
-                R.id.nav_category-> {
+                R.id.nav_category -> {
                     navController.navigate(R.id.categoryFragment)
                     drawerLayout.close()
                     true
                 }
-                R.id.nav_top->{
+                R.id.nav_top -> {
                     val bundle = Bundle()
                     bundle.putString(TOP_RANK, TOP_RANK)
                     navController.navigate(R.id.recipesListFragment, bundle)
                     drawerLayout.close()
                     true
                 }
-                R.id.nav_quickest->{
+                R.id.nav_quickest -> {
                     val bundle = Bundle()
                     bundle.putString(QUICK_RECIPES, QUICK_RECIPES)
                     navController.navigate(R.id.recipesListFragment, bundle)
                     drawerLayout.close()
                     true
                 }
-                R.id.nav_tagFilter->{
+                R.id.nav_tagFilter -> {
                     navController.navigate(R.id.tagsFragment)
                     drawerLayout.close()
                     true
@@ -108,7 +133,32 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
                 else -> true
             }
         }
+//        val myWorkRequest = PeriodicWorkRequestBuilder<PushWorker>(10, TimeUnit.SECONDS, 5, TimeUnit.SECONDS).build()
+//        WorkManager.getInstance(this).enqueue(myWorkRequest)
+        val client = StompClient(OkHttpWebSocketClient())
+        try {
+            launch {
+                val session: StompSession =
+                    client.connect("http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/stomp/")
+                val jsonStompSession = session.withJsonConversions()
 
+                val subscription: Flow<String> =
+                    session.subscribeText("http://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/cookbook/new")
+
+                val collectorJob = launch {
+                    subscription.collect { recipe ->
+                        val intent = Intent()
+                        intent.action = ACTION_SEND_MSG
+                        intent.putExtra(NAME_MSG, recipe)
+                        intent.addFlags(Intent.FLAG_FROM_BACKGROUND)
+                        applicationContext.sendBroadcast(intent)
+                    }
+                }
+            }
+        } catch (e: Throwable) {
+            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+        }
+        initNotificationChannel()
     }
 
 
@@ -147,6 +197,12 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
         Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
     }
 
+    private fun initNotificationChannel() {
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val importance = NotificationManager.IMPORTANCE_LOW
+        val channel = NotificationChannel("2", "name", importance)
+        notificationManager.createNotificationChannel(channel)
+    }
 
 
 }
