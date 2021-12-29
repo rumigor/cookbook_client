@@ -14,10 +14,88 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="delete">Удалить</string>
     <string name="recipes_list">Список рецептов</string>
-    <string name="cusine">Выбрать кухню</string>
+    <string name="tagFilter">Поиск по тэгам</string>
     <string name="category">Выбрать категорию</string>
     <string name="top10">Топ-10</string>
-    <string name="quickest">10 быстрых рецептов</string>
+    <string name="quickest">Быстрые рецепты</string>
     <string name="favorites">Закладки</string>
     <string name="search">Найти рецепт</string>
+    <string name="author">Автор: %s</string>
+    <string name="email">E-mail: %s</string>
+    <string name="stage">Этап № %d</string>
+    <string name="ingredient">: %d %s</string>
+    <string name="tags">Тэги: %s</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="rating">%d/5</string>
+    <string name="start_search">Начать поиск</string>
+    <string-array name="time">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+    </string-array>
 </resources>

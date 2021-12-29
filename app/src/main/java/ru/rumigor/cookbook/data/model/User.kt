@@ -2,6 +2,7 @@ package ru.rumigor.cookbook.data.model
 
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class User(
     @PrimaryKey
@@ -11,4 +12,4 @@ data class User(
     val username: String,
     @SerializedName("email")
     val email: String
-)
+): Serializable

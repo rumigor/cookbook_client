@@ -4,13 +4,16 @@ import ru.rumigor.cookbook.data.model.ServerResponse
 
 class ServerResponseViewModel (
     val id: Long,
-    val timestamp: Long
+    val briefName: String,
+    val name: String
+
         ) {
     object Mapper {
         fun map(serverResponse: ServerResponse) =
             ServerResponseViewModel(
                 serverResponse.id,
-                serverResponse.timestamp
+                serverResponse.briefName,
+                serverResponse.name
             )
     }
 }

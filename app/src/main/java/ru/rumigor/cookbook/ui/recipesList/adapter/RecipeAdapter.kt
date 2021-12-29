@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.ListAdapter
 import ru.rumigor.cookbook.R
 import ru.rumigor.cookbook.ui.RecipeViewModel
 
-class RecipeAdapter(private val delegate: Delegate): ListAdapter<RecipeViewModel, RecipeHolder>(RecipeDiff) {
+
+class RecipeAdapter(private val delegate: Delegate): ListAdapter<RecipeViewModel, RecipeHolder>(
+    RecipeDiff
+) {
+
 
     interface Delegate{
         fun onRecipePicked(recipe: RecipeViewModel)
@@ -20,7 +24,7 @@ class RecipeAdapter(private val delegate: Delegate): ListAdapter<RecipeViewModel
         )
 
     override fun onBindViewHolder(holder: RecipeHolder, position: Int) {
-        holder.bind(getItem(position), delegate)
+        holder.bind(getItem(position), delegate = delegate)
     }
 
 

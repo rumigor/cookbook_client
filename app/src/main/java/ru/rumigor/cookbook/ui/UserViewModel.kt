@@ -1,12 +1,13 @@
 package ru.rumigor.cookbook.ui
 
 import ru.rumigor.cookbook.data.model.User
+import java.io.Serializable
 
 class UserViewModel(
-    id: String,
-    username: String,
-    email: String
-) {
+    val id: String,
+    val username: String,
+    val email: String
+): Serializable {
     object Mapper{
         fun map(user: User) =
             UserViewModel(

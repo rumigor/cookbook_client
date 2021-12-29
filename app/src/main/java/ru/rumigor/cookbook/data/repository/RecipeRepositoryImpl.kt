@@ -1,35 +1,33 @@
 package ru.rumigor.cookbook.data.repository
 
+import androidx.room.PrimaryKey
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
+import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.data.api.CookbookApi
-import ru.rumigor.cookbook.data.model.Category
-import ru.rumigor.cookbook.data.model.Recipe
-import ru.rumigor.cookbook.data.model.ServerResponse
+import ru.rumigor.cookbook.data.di.modules.InMemory
+import ru.rumigor.cookbook.data.di.modules.Persisted
+import ru.rumigor.cookbook.data.model.*
+import ru.rumigor.cookbook.data.model.Unit
+import ru.rumigor.cookbook.data.model.UploadImage
+import ru.rumigor.cookbook.data.storage.CookbookDatabase
+import java.io.File
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
-    private val cookbookApi: CookbookApi
-) : RecipeRepository
-{
-
-//    private val recipes = mutableListOf(
-//        Recipe("1", "1", "Борщ с говядиной", "Вкусный красный борщ с говядиной приготовить очень легко",
-//            "говядина, свекла, картофель, капуста белокочанная, морковь, лук репчатый, томат-паста, масло растительное, уксус, соль, перец чёрный горошком, лавровый лист, вода", "Igor", "https://img1.russianfood.com/dycontent/images_upl/64/sm_63397.jpg"),
-//        Recipe("2", "2", "Азу из свинины", "Азу - это традиционное блюдо татарской кухни, которое готовят из говядины или баранины, с картофелем и солеными огурцами. В этом рецепте, как вариации на тему азу, используется свинина.",
-//        "свинина, огурцы солёные, томат-паста, картофель, лук репчатый, чеснок, масло сливочное, соль, перец чёрный молотый", "Igor", "https://img1.russianfood.com/dycontent/images_upl/217/sm_216478.jpg"),
-//        Recipe("3", "3", "Грибы маринованные", "Наша семья на протяжении многих лет делает маринованные грибы по этому рецепту. Очень вкусно.",
-//        "грибы, соль, вода, соль, песок сахарный, лавровый лист, перец чёрный горошком, гвоздика, эссенция уксусная", "Igor", "https://img1.russianfood.com/dycontent/images_upl/274/sm_273143.jpg"),
-//        Recipe("4", "4","Бургер классический", "Бургер классический – это разрезанная пополам булочка с жареной котлетой из мясного фарша в середине. Если приготовить бургер дома из натуральных и свежих продуктов, то фаст-фуд превратится не только во вкусную, но еще и полезную еду.",
-//        " булочка, фарш мясной, сыр твёрдый, помидоры, огурцы солёные, лук фиолетовый, салат листовой, майонез, кетчуп, перец чёрный, соль, масло подсолнечное",
-//        "Igor", "https://img1.russianfood.com/dycontent/images_upl/137/sm_136343.jpg"),
-//        Recipe("5", "5", "Панкейки (американские блинчики)", "Мягкие, сладкие, вкусные американские блинчики, которые еще называют панкейки (pancakes), отлично сочетаются с медом. Панкейки понравятся и взрослым, и детям. Блинчики на молоке станут отличным завтраком.",
-//        "яйца, молоко, мука пшеничная, разрыхлитель, сахар, сахар ванильный", "Igor", "https://img1.russianfood.com/dycontent/images_upl/124/sm_123944.jpg")
-//    )
+    private val cookbookApi: CookbookApi,
+    @Persisted private val cookbookDatabase: CookbookDatabase
+) : RecipeRepository {
 
     override fun getRecipes(): Observable<List<Recipe>> =
         cookbookApi
             .getRecipes()
+            .map { it.recipes }
             .toObservable()
 
     override fun getRecipe(recipeID: String): Observable<Recipe> =
@@ -43,18 +41,184 @@ class RecipeRepositoryImpl @Inject constructor(
             .toObservable()
 
 
-    override fun addRecipe(recipe: Recipe): Observable<ServerResponse> =
+    override fun addRecipe(recipe: Recipe): Observable<Recipe> =
         cookbookApi
             .addRecipe(recipe)
             .toObservable()
 
-    override fun updateRecipe(recipe: Recipe): Observable<ServerResponse> =
+    override fun updateRecipe(recipe: Recipe): Completable =
         cookbookApi
-            .updateRecipe(recipe)
-            .toObservable()
+            .updateRecipe(recipe.id, recipe)
 
-    override fun deleteRecipe(recipeId: String): Observable<ServerResponse> =
+    override fun deleteRecipe(recipeId: String): Completable =
         cookbookApi
             .deleteRecipe(recipeId)
+
+    override fun getIngredients(): Observable<List<Ingredient>> =
+        cookbookApi
+            .getIngredients()
             .toObservable()
+
+    override fun getUnits(): Observable<List<Unit>> =
+        cookbookApi
+            .getUnits()
+            .toObservable()
+
+    override fun addIngredient(ingredient: Ingredient): Observable<ServerResponse> =
+        cookbookApi
+            .addIngredient(ingredient = ingredient)
+            .toObservable()
+
+    override fun loadFavorites(userId: String): Observable<List<Recipe>> =
+        cookbookApi
+            .getFavorites(userId)
+            .toObservable()
+
+    override fun loadFavoriteRecipe(recipeId: String): Observable<FavoriteRecipe> =
+        cookbookDatabase
+            .cookbookDao()
+            .loadFavoriteRecipe(recipeId)
+            .toObservable()
+
+    override fun addToFavorites(userId: String, recipeId: String): Completable =
+        cookbookApi
+            .addToFavorites(userId, recipeId)
+
+    override fun favoriteSearch(userId: String, name: String): Observable<List<Recipe>> =
+        cookbookApi
+            .findInFavorites(userId, name)
+            .toObservable()
+
+    override fun deleteFromFavorites(userId: String, recipeId: String): Completable =
+        cookbookApi
+            .deleteFromFavorites(userId, recipeId)
+
+    override fun getRecipesByCategory(categoryId: String): Observable<List<Recipe>> =
+        cookbookApi
+            .getRecipesByCategory(categoryId)
+            .map { it.recipes }
+            .toObservable()
+
+    override fun findRecipeByName(title: String): Observable<List<Recipe>> =
+        cookbookApi
+            .findRecipeByName(title)
+            .map { it.recipes }
+            .toObservable()
+
+    override fun findRecipeByName(categoryId: String, title: String): Observable<List<Recipe>> =
+        cookbookApi
+            .findRecipeByNameInCategory(categoryId, title)
+            .map { it.recipes }
+            .toObservable()
+
+    override fun getTags(): Observable<List<Tag>> =
+        cookbookApi
+            .getTags()
+            .toObservable()
+
+    override fun getImages(recipeId: String): Observable<List<RecipeImages>> =
+        cookbookApi
+            .getImage(recipeId)
+            .map { it.files }
+            .toObservable()
+
+    override fun addImage(
+        recipeId: String,
+        image: UploadImage
+    ): Completable =
+        cookbookApi
+            .addImage(recipeId, image)
+
+    override fun addStepImage(
+        recipeId: String,
+        stepNumber: String,
+        image: UploadImage
+    ): Completable =
+        cookbookApi
+            .addStepImage(recipeId, stepNumber, image)
+
+
+    override fun deleteImage(recipeId: String, fileKey: String): Completable =
+        cookbookApi
+            .removeImage(recipeId, fileKey)
+
+    override fun removeStepImage(
+        recipeId: String,
+        stepNumber: String,
+        fileKey: String
+    ): Completable =
+        cookbookApi
+            .removeStepImage(stepNumber, recipeId, fileKey)
+
+    override fun getStepImages(recipeId: String): Observable<Map<String, List<RecipeImages>>> =
+        cookbookApi
+            .getImage(recipeId)
+            .map { it.stepImages }
+            .toObservable()
+
+    override fun getRecipeTags(recipeId: String): Observable<List<Tag>> =
+        cookbookApi
+            .getRecipeTags(recipeId)
+            .toObservable()
+
+    override fun getUsers(): Observable<List<User>> =
+        cookbookApi
+            .getUsers()
+            .toObservable()
+
+    override fun getUser(userId: String): Observable<User> =
+        cookbookApi
+            .getUser(userId)
+            .toObservable()
+
+    override fun addTagToRecipe(recipeId: String, tagId: String): Completable =
+        cookbookApi
+            .addTagToRecipe(recipeId, tagId)
+
+
+    override fun removeTagFromRecipe(recipeId: String, tagId: String): Completable =
+        cookbookApi
+            .deleteTagFromRecipe(recipeId, tagId)
+
+    override fun getRecipeRating(recipeId: String): Observable<List<Rating>> =
+        cookbookApi
+            .getRecipeRating(recipeId)
+            .toObservable()
+
+
+    override fun getUserGrade(recipeId: String): Observable<Rating> =
+        cookbookApi
+            .getUserGrade(recipeId, AppPreferences.userId!!)
+            .toObservable()
+
+
+    override fun postUserGrade(recipeId: String, grade: Int): Completable =
+        cookbookApi
+            .postUserGrade(recipeId, AppPreferences.userId!!, Rating(grade))
+
+
+    override fun updateGrade(recipeId: String, grade: Int): Completable =
+        cookbookApi
+            .updateUserGrade(recipeId, AppPreferences.userId!!, Rating(grade))
+
+
+    override fun removeGrade(recipeId: String): Completable =
+        cookbookApi
+            .removeUserGrade(recipeId, AppPreferences.userId!!)
+
+    override fun loadQuickestRecipes(time: Int): Observable<List<Recipe>> =
+        cookbookApi
+            .loadQuickestRecipes(time)
+            .map { it.recipes }
+            .toObservable()
+
+    override fun findRecipesByTags(filter: String): Observable<List<Recipe>> =
+        cookbookApi
+            .findRecipesByTags(filter)
+            .map { it.recipes }
+            .toObservable()
+
+    override fun registration(username: String, password: String, email: String): Completable =
+        cookbookApi
+            .registration(Registration(username, password, password, email))
 }

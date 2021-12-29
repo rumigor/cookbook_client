@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyCardViewStyle" parent="Theme.AppCompat.Light">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">6dp</item>
+        <item name="cardMaxElevation">10dp</item>
+        <item name="contentPaddingBottom">12dp</item>
+        <item name="contentPaddingTop">12dp</item>
+        <item name="contentPaddingLeft">16dp</item>
+        <item name="contentPaddingRight">16dp</item>
+        <item name="cardBackgroundColor">@color/ic_launcher_background</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="ImageCardViewStyle" parent="Theme.AppCompat.Light">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">6dp</item>
+        <item name="cardMaxElevation">10dp</item>
+        <item name="contentPaddingBottom">2dp</item>
+        <item name="contentPaddingTop">2dp</item>
+        <item name="contentPaddingLeft">2dp</item>
+        <item name="contentPaddingRight">2dp</item>
+        <item name="cardBackgroundColor">#FFFDE7</item>
+        <item name="android:layout_margin">4dp</item>
+    </style>
+
+    <style name="buttonAdd" parent="Theme.AppCompat.Light">
+        <item name="background">@drawable/button_shape</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="contentPaddingBottom">2dp</item>
+        <item name="contentPaddingTop">2dp</item>
+        <item name="contentPaddingLeft">2dp</item>
+        <item name="contentPaddingRight">2dp</item>
+    </style>
+
+
+
+</resources>

@@ -1,8 +1,6 @@
 package ru.rumigor.cookbook.ui
 
-import ru.rumigor.cookbook.data.model.Category
-import ru.rumigor.cookbook.data.model.Recipe
-import ru.rumigor.cookbook.data.model.User
+import ru.rumigor.cookbook.data.model.*
 import java.io.Serializable
 
 
@@ -11,9 +9,13 @@ class RecipeViewModel(
     val category: Category,
     val title: String,
     val description: String,
-    val recipe: String,
+    val ingredients: List<Ingredients>?,
+    val steps: List<Steps>,
     val user: User,
-    val imagePath: String
+    val rank: Rank?,
+    val imagePath: String?,
+    val prepareTime: Int,
+    val comment: String?
 ): Serializable {
     object Mapper{
         fun map(recipe: Recipe) =
@@ -22,9 +24,13 @@ class RecipeViewModel(
                 recipe.category,
                 recipe.title,
                 recipe.description,
-                recipe.recipe,
+                recipe.ingredients,
+                recipe.steps,
                 recipe.user,
-                recipe.imagePath
+                recipe.rating,
+                recipe.imagePath,
+                recipe.prepareTime,
+                recipe.comment
             )
     }
 }

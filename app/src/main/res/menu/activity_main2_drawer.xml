@@ -9,9 +9,9 @@
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="@string/recipes_list" />
         <item
-            android:id="@+id/nav_cusine"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/cusine" />
+            android:id="@+id/nav_tagFilter"
+            android:icon="@drawable/ic_baseline_discount_24"
+            android:title="@string/tagFilter" />
         <item
             android:id="@+id/nav_category"
             android:icon="@android:drawable/ic_dialog_dialer"

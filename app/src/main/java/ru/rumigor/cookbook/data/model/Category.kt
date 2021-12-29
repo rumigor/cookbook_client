@@ -3,6 +3,8 @@ package ru.rumigor.cookbook.data.model
 import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
+
 
 data class Category(
     @PrimaryKey
@@ -10,5 +12,5 @@ data class Category(
     val id: Int,
     @ColumnInfo(name = "title")
     @SerializedName("title")
-    val title: String,
-)
+    val title: String
+): Serializable

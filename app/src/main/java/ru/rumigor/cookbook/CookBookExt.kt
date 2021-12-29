@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
@@ -21,11 +22,24 @@ fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
     return this
 }
 
-
+fun getAuth(): LazyHeaders {
+    var user = ""
+    var password = ""
+    AppPreferences.username?.let {
+        user = it
+    }
+    AppPreferences.password?.let {
+        password = it
+    }
+    return LazyHeaders.Builder()
+        .addHeader("Authorization", BasicAuthorization(user, password))
+        .build()
+}
 
 @Suppress("IMPLICIT_CAST_TO_ANY")
-fun TextView.setStartDrawableCircleImageFromUri(uri: String, placeholder: Int = 0) {
-    val glideUrl = if (uri.isEmpty()) placeholder else GlideUrl(uri)
+fun TextView.setStartDrawableCircleImageFromUri(uri: String, placeholder: Int = R.drawable.ic_baseline_block_24) {
+
+    val glideUrl = if (uri.isEmpty()) placeholder else GlideUrl(uri, getAuth())
 
     Glide.with(context)
         .load(glideUrl)
@@ -50,6 +64,7 @@ fun TextView.setStartDrawableCircleImageFromUri(uri: String, placeholder: Int = 
             }
 
         })
+
 }
 
 fun TextView.setCompoundDrawable(
