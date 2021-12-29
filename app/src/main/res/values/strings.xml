@@ -36,6 +36,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="rating">%d/5</string>
     <string name="start_search">Начать поиск</string>
+    <string name="myRecipes">Мои рецепты</string>
     <string-array name="time">
         <item>0</item>
         <item>1</item>

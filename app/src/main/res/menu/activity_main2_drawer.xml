@@ -9,6 +9,10 @@
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="@string/recipes_list" />
         <item
+            android:id="@+id/nav_myRecipes"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="@string/myRecipes" />
+        <item
             android:id="@+id/nav_tagFilter"
             android:icon="@drawable/ic_baseline_discount_24"
             android:title="@string/tagFilter" />

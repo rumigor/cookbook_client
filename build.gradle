@@ -2,9 +2,11 @@
 buildscript {
     repositories {
         google()
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
     dependencies {
+
         classpath "com.android.tools.build:gradle:7.0.4"
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
         classpath 'com.google.gms:google-services:4.3.10'
@@ -14,7 +16,6 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
 
 task clean(type: Delete) {
     delete rootProject.buildDir

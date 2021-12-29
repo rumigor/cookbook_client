@@ -20,7 +20,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="ru.rumigor.cookbook.message" />
+                <action android:name="ru.rumigor.cookbook.NEW_RECIPE" />
             </intent-filter>
         </receiver>
 

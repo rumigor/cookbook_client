@@ -24,6 +24,7 @@ import ru.rumigor.cookbook.ui.abs.AbsFragment
 import ru.rumigor.cookbook.ui.recipesList.adapter.RecipeAdapter
 import javax.inject.Inject
 import androidx.appcompat.app.AppCompatActivity
+import ru.rumigor.cookbook.AppPreferences
 
 
 private const val ARG_RECIPE_QUERY = "Query"
@@ -31,6 +32,7 @@ private const val ARG_CATEGORY_ID = "CategoryId"
 private const val TOP_RANK = "TOP_RANK"
 private const val QUICK_RECIPES = "Quick_Recipes"
 private const val TAG_FILTER = "TAG_FILTER"
+private const val MY_RECIPES = "MY_RECIPES"
 
 class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListView,
     RecipeAdapter.Delegate {
@@ -54,6 +56,11 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
     private val tagFilter: String by lazy {
         arguments?.getString(TAG_FILTER).orEmpty()
     }
+
+    private val myRecipes: String by lazy {
+        arguments?.getString(MY_RECIPES).orEmpty()
+    }
+
 
 
     private lateinit var navController: NavController
@@ -145,6 +152,16 @@ class RecipesListFragment : AbsFragment(R.layout.recipes_fragment), RecipesListV
                 }
                 recipeAdapter.submitList(filteredRecipes)
                 (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Результаты поиска"
+            }
+            myRecipes == "YES" -> {
+                val myRecipesList = mutableListOf<RecipeViewModel>()
+                for (recipe in recipes){
+                    if (recipe.user.id == AppPreferences.userId){
+                        myRecipesList.add(recipe)
+                    }
+                }
+                (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Мои рецепты"
+                recipeAdapter.submitList(myRecipesList)
             }
             else -> recipeAdapter.submitList(recipes)
         }

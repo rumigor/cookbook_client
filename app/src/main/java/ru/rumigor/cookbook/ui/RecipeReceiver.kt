@@ -13,7 +13,6 @@ import ru.rumigor.cookbook.R
 class RecipeReceiver : BroadcastReceiver() {
 
     private val NAME_MSG = "MSG"
-    private val TAG = "new_recipe_on_server"
     private var messageId = 0
 
     override fun onReceive(context: Context, intent: Intent) {

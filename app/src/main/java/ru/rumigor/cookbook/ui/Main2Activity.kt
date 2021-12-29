@@ -28,6 +28,7 @@ import android.app.NotificationChannel
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.IntentFilter
 
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -39,23 +40,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import org.hildan.krossbow.stomp.StompClient
-import org.hildan.krossbow.stomp.StompSession
-import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
-import org.hildan.krossbow.stomp.subscribeText
-import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
+import ru.rumigor.cookbook.data.stomp.Stomp
+import ru.rumigor.cookbook.data.stomp.Subscription
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
+import ru.rumigor.cookbook.data.stomp.ListenerWSNetwork
+
+
+
 
 
 private const val TOP_RANK = "TOP_RANK"
 private const val QUICK_RECIPES = "Quick_Recipes"
+private const val MY_RECIPES = "MY_RECIPES"
 
-class Main2Activity : AbsActivity(R.layout.activity_main2), MainView, CoroutineScope {
 
-    override val coroutineContext: CoroutineContext by lazy {
-        Dispatchers.Main + Job()
-    }
+class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
+
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val binding: ActivityMain2Binding by viewBinding()
@@ -136,41 +137,36 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView, CoroutineS
                     drawerLayout.close()
                     true
                 }
+                R.id.nav_myRecipes ->{
+                    val bundle = Bundle()
+                    bundle.putString(MY_RECIPES, "YES")
+                    navController.navigate(R.id.recipesListFragment, bundle)
+                    drawerLayout.close()
+                    true
+                }
                 else -> true
             }
         }
-//        val myWorkRequest = PeriodicWorkRequestBuilder<PushWorker>(10, TimeUnit.SECONDS, 5, TimeUnit.SECONDS).build()
-//        WorkManager.getInstance(this).enqueue(myWorkRequest)
-//        val client = StompClient(OkHttpWebSocketClient())
-//            launch {
-//                val session: StompSession =
-//                    client.connect("ws://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/stomp/websocket", AppPreferences.username, AppPreferences.password)
-//                val jsonStompSession = session.withJsonConversions()
-//                val subscription: Flow<String> =
-//                    session.subscribeText("/cookbook/new")
-//
-//                val collectorJob = launch {
-//                    subscription.collect { recipe ->
-//                        val intent = Intent()
-//                        intent.action = ACTION_SEND_MSG
-//                        intent.putExtra(NAME_MSG, recipe)
-//                        intent.addFlags(Intent.FLAG_FROM_BACKGROUND)
-//                        sendBroadcast(intent)
-//                    }
-//                }
-//
-//                    collectorJob.cancel()
-//
-//                    session.disconnect()
-//        }
+
         initNotificationChannel()
         val myWorkRequest = PeriodicWorkRequestBuilder<PushWorker>(15, TimeUnit.MINUTES).build()
         WorkManager.getInstance(this).enqueue(myWorkRequest)
-        val intent2 = Intent()
-        intent2.action = ACTION_SEND_MSG
-        intent2.putExtra(NAME_MSG, "test")
-        intent2.addFlags(Intent.FLAG_FROM_BACKGROUND)
-        sendBroadcast(intent2)
+        val headersSetup: Map<String, String> = HashMap()
+        val stomp = Stomp(
+            "ws://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/stomp/websocket", headersSetup, ListenerWSNetwork {  }
+        )
+        stomp.connect()
+
+        stomp.subscribe(Subscription(
+            "cookboo/new"
+        ) { headers, body ->
+            body?.let{
+                val intent = Intent()
+                intent.action = ACTION_SEND_MSG
+                intent.putExtra(NAME_MSG, it)
+                applicationContext.sendBroadcast(intent)
+            }
+        })
     }
 
 
@@ -214,6 +210,12 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView, CoroutineS
         val channel = NotificationChannel("2", "name", importance)
         notificationManager.createNotificationChannel(channel)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+
 
 
 }
