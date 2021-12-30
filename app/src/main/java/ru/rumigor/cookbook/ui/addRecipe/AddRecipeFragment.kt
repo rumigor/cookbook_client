@@ -262,13 +262,15 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                         as TextView).text.toString()
             )
             if (ingredientId == 0) {
+                ingredientsList.add((((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
+                        as TextView).text.toString())
                 presenter.addIngredient(
                     Ingredient(
                         0,
                         (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
                                 as TextView).text.toString(),
                         (((ui.ingredients.getChildAt(k)) as TableRow).getChildAt(1)
-                                as TextView).text.toString()
+                                as TextView).text.toString(), false, ""
                     )
                 )
                 ingredientIndex = k
@@ -493,10 +495,13 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
         loadIngredients(newIngredients)
     }
 
-    override fun addIngredientToServer(serverResponseViewModel: ServerResponseViewModel) {
-        ingredientsIds.add(serverResponseViewModel.id.toInt())
-        ingredientsList.add(serverResponseViewModel.name)
-        if (checkIngredients()) addRecipe()
+    override fun addIngredientToServer(response: Response<ResponseBody>) {
+        val ingredientUrl = response.headers()["Location"]
+        ingredientUrl?.let { it ->
+            val id = it.split("/").toTypedArray().last()
+            ingredientsIds.add(id.toInt())
+            if (checkIngredients()) addRecipe()
+        }
     }
 
     private fun addRecipeToList() {
@@ -538,7 +543,7 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
             val unitName = unitsList[(((ui.ingredients.getChildAt(k)) as TableRow)
                 .getChildAt(3) as Spinner).selectedItemId.toInt()]
             val newIngredient = Ingredients(
-                Ingredient(ingredientId, "", ""), Unit(getUnitIndex(unitName), "", ""),
+                Ingredient(ingredientId, "", "", false, ""), Unit(getUnitIndex(unitName), "", ""),
                 (((ui.ingredients.getChildAt(k)
                         as TableRow).getChildAt(2)) as TextView).text.toString().toInt()
             )
@@ -567,15 +572,16 @@ class AddRecipeFragment : AbsFragment(R.layout.addrecipe_view), AddRecipeView {
                 step.add("258b7a0b-8441-4c32-88a8-3194771ba86a.png")
             }
         }
+        if (fileKeys.isEmpty()) {
+            fileKeys.add("258b7a0b-8441-4c32-88a8-3194771ba86a.png")
+        }
         photoCount = fileKeys.size
         for (i in stepFileKeys) {
             photoCount += i.size
         }
+
         presenter.removePhoto(recipeId, imagesToRemove)
         presenter.removeStepPhoto(recipeId, stepImagesToRemove)
-        if (fileKeys.isEmpty()) {
-            fileKeys.add("258b7a0b-8441-4c32-88a8-3194771ba86a.png")
-        }
         presenter.addPhoto(recipeId, fileKeys)
         if (stepFileKeys.isNotEmpty()) {
             presenter.addStepPhoto(recipeId, stepFileKeys)

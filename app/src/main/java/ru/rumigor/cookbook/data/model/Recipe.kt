@@ -1,8 +1,9 @@
 package ru.rumigor.cookbook.data.model
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
-
+@Serializable
 data class Recipe(
     @SerializedName("id")
     val id: String,

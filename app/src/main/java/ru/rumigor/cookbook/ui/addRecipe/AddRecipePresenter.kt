@@ -135,7 +135,6 @@ class AddRecipePresenter(
             recipeRepository
                 .addIngredient(ingredient)
                 .observeOn(schedulers.main())
-                .map(ServerResponseViewModel.Mapper::map)
                 .subscribeOn(schedulers.main())
                 .subscribe(
                     viewState::addIngredientToServer,

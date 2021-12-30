@@ -18,7 +18,7 @@ interface AddRecipeView: ScreenView {
     @AddToEndSingle
     fun showUnits(units: List<UnitViewModel>)
     @Skip
-    fun addIngredientToServer(serverResponseViewModel: ServerResponseViewModel)
+    fun addIngredientToServer(response: Response<ResponseBody>)
     @Skip
     fun loadImage(response: ImageServerResponseViewModel)
     @Skip

@@ -40,11 +40,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import ru.rumigor.cookbook.data.stomp.Stomp
-import ru.rumigor.cookbook.data.stomp.Subscription
+
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
-import ru.rumigor.cookbook.data.stomp.ListenerWSNetwork
+
 
 
 
@@ -151,22 +150,6 @@ class Main2Activity : AbsActivity(R.layout.activity_main2), MainView {
         initNotificationChannel()
         val myWorkRequest = PeriodicWorkRequestBuilder<PushWorker>(15, TimeUnit.MINUTES).build()
         WorkManager.getInstance(this).enqueue(myWorkRequest)
-        val headersSetup: Map<String, String> = HashMap()
-        val stomp = Stomp(
-            "ws://cookbook-env.eba-ggumuimp.ap-south-1.elasticbeanstalk.com/stomp/websocket", headersSetup, ListenerWSNetwork {  }
-        )
-        stomp.connect()
-
-        stomp.subscribe(Subscription(
-            "cookboo/new"
-        ) { headers, body ->
-            body?.let{
-                val intent = Intent()
-                intent.action = ACTION_SEND_MSG
-                intent.putExtra(NAME_MSG, it)
-                applicationContext.sendBroadcast(intent)
-            }
-        })
     }
 
 

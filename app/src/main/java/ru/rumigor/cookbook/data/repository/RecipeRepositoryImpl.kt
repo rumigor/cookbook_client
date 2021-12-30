@@ -8,6 +8,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
+import retrofit2.Response
 import ru.rumigor.cookbook.AppPreferences
 import ru.rumigor.cookbook.data.api.CookbookApi
 import ru.rumigor.cookbook.data.di.modules.InMemory
@@ -64,7 +65,7 @@ class RecipeRepositoryImpl @Inject constructor(
             .getUnits()
             .toObservable()
 
-    override fun addIngredient(ingredient: Ingredient): Observable<ServerResponse> =
+    override fun addIngredient(ingredient: Ingredient): Observable<Response<ResponseBody>> =
         cookbookApi
             .addIngredient(ingredient = ingredient)
             .toObservable()

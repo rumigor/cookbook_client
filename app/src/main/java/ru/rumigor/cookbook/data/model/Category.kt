@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-
+@kotlinx.serialization.Serializable
 data class Category(
     @PrimaryKey
     @SerializedName("id")

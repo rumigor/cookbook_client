@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import okhttp3.ResponseBody
+import retrofit2.Response
 import ru.rumigor.cookbook.data.model.*
 import ru.rumigor.cookbook.data.model.Unit
 import ru.rumigor.cookbook.data.model.UploadImage
@@ -17,7 +18,7 @@ interface RecipeRepository {
     fun deleteRecipe(recipeId: String): Completable
     fun getIngredients(): Observable<List<Ingredient>>
     fun getUnits(): Observable<List<Unit>>
-    fun addIngredient(ingredient: Ingredient): Observable<ServerResponse>
+    fun addIngredient(ingredient: Ingredient): Observable<Response<ResponseBody>>
 
     fun loadFavorites(userId: String): Observable<List<Recipe>>
     fun loadFavoriteRecipe(recipeId: String): Observable<FavoriteRecipe>

@@ -1,6 +1,7 @@
 package ru.rumigor.cookbook.data.api
 
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -30,7 +31,7 @@ interface CookbookApi {
     @GET("/api/v1/unit")
     fun getUnits(): Single<List<Unit>>
     @POST("/api/v1/ingredient")
-    fun addIngredient(@Body ingredient: Ingredient): Single<ServerResponse>
+    fun addIngredient(@Body ingredient: Ingredient): Single<Response<ResponseBody>>
     @GET("/api/v1/recipe")
     fun getRecipesByCategory(@Query("categoryId")categoryId: String): Single<Content>
     @GET("/api/v1/recipe")

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-
+@kotlinx.serialization.Serializable
 data class Ingredient(
     @PrimaryKey
     @SerializedName("id")
@@ -15,6 +15,13 @@ data class Ingredient(
     val briefName: String,
     @ColumnInfo(name = "name")
     @SerializedName("name")
-    val name: String
+    val name: String,
+    @ColumnInfo(name = "group")
+    @SerializedName("group")
+    val group: Boolean,
+    @ColumnInfo(name = "imagePath")
+    @SerializedName("imagePath")
+    val imagePath: String
+
 
 ) : Serializable
